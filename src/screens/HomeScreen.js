@@ -25,16 +25,22 @@ import {
   GolfImageSvg,
 } from '../assets/images';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState('My');
   const [activeCategory, setActiveCategory] = useState('Sale');
+
+  const handleSearchPress = () => {
+    if (navigation) {
+      navigation.navigate('Search');
+    }
+  };
 
   const mainTabs = [
     { id: 'My', name: 'My' },
     { id: 'Men', name: 'Men' },
     { id: 'Women', name: 'Women' },
     { id: 'Kids', name: 'Kids' },
-    { id: 'ExX', name: 'E×X' },
+    { id: 'EyX', name: 'EyX' },
   ];
 
   const categories = [
@@ -104,7 +110,7 @@ const HomeScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Shop</Text>
         <View style={styles.headerIcons}>
-          <TouchableOpacity style={styles.iconButton}>
+          <TouchableOpacity style={styles.iconButton} onPress={handleSearchPress}>
             <SearchIconSvg width={24} height={24} color="#000000" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconButton}>

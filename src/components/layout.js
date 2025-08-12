@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import BottomNavigationBar from './bottomnavigationbar';
 import { Colors, FontSizes, FontWeights, Spacing } from '../constants';
-import { HomeScreen, ShopScreen, CollectionScreen, RewardsScreen, ProfileScreen, OrdersScreen, EditProfile, SettingsScreen, DeliveryAddressesSettings, CommunicationPreferences, LinkedAccountScreen, DeleteAccount, ProfileVisibilityScreen, ContactUsScreen, InvoiceScreen, LoveUsRateUs, FAQScreen } from '../screens';
+import { HomeScreen, ShopScreen, CollectionScreen, RewardsScreen, ProfileScreen, SearchScreen, OrdersScreen, EditProfile, SettingsScreen, DeliveryAddressesSettings, CommunicationPreferences, LinkedAccountScreen, DeleteAccount, ProfileVisibilityScreen, ContactUsScreen, InvoiceScreen, LoveUsRateUs, FAQScreen } from '../screens';
 
 // Navigation context for handling screen navigation
 const createNavigation = (setCurrentScreen, setActiveTab) => ({
@@ -28,7 +28,7 @@ const createNavigation = (setCurrentScreen, setActiveTab) => ({
 });
 
 // Placeholder content components for each tab
-const HomeContent = () => <HomeScreen />;
+const HomeContent = ({ navigation }) => <HomeScreen navigation={navigation} />;
 const ShopContent = () => <ShopScreen />;
 const CollectionContent = () => <CollectionScreen />;
 const RewardsContent = () => <RewardsScreen />;
@@ -51,7 +51,7 @@ const EnhancedLayout = () => {
   const renderContent = () => {
     switch (currentScreen) {
       case 'Home':
-        return <HomeContent />;
+        return <HomeContent navigation={navigation} />;
       case 'Shop':
         return <ShopContent />;
       case 'Collection':
@@ -78,6 +78,8 @@ const EnhancedLayout = () => {
         return <DeleteAccount navigation={navigation} />;
       case 'ContactUs':
         return <ContactUsScreen navigation={navigation} />;
+      case 'Search':
+        return <SearchScreen navigation={navigation} onClose={() => navigation.goBack()} />;
       case 'Invoice':
         return <InvoiceScreen navigation={navigation} />;
       case 'LoveUsRateUs':
