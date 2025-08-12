@@ -89,7 +89,7 @@ const EnhancedLayout = () => {
   };
 
   const shouldShowBottomNav = ['Home', 'Shop', 'Collection', 'Rewards', 'Profile'].includes(currentScreen);
-  const shouldShowHeader = ['Home', 'Shop', 'Rewards', 'Profile'].includes(currentScreen);
+  const shouldShowHeader = ['Home', 'Rewards', 'Profile'].includes(currentScreen);
 
   return (
     <View style={styles.container}>
