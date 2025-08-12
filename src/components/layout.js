@@ -100,9 +100,6 @@ const EnhancedLayout = () => {
         {shouldShowHeader && (
           <View style={styles.header}>
             <Text style={styles.headerTitle}>{headerTitle}</Text>
-            {activeTab === 'Home' && (
-              <Text style={styles.headerSubtitle}>Fashion Forward</Text>
-            )}
           </View>
         )}
 

@@ -44,7 +44,6 @@ const TopNavigationBar = ({
         {/* Center Section - Logo/Title */}
         <View style={styles.centerSection}>
           <Text style={styles.logo}>{title}</Text>
-          <Text style={styles.tagline}>Fashion Forward</Text>
         </View>
 
         {/* Right Section - Action Icons */}
