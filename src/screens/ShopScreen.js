@@ -118,9 +118,15 @@ const SALE_CATEGORIES = [
 
 const TABS = ['Men', 'Women', 'Kids'];
 
-const ShopScreen = () => {
+const ShopScreen = ({ navigation }) => {
   const [selectedTab, setSelectedTab] = useState('Men');
   const [favorites, setFavorites] = useState(new Set());
+
+  const handleSearchPress = () => {
+    if (navigation && navigation.navigate) {
+      navigation.navigate('Search');
+    }
+  };
 
   const toggleFavorite = (productId) => {
     const newFavorites = new Set(favorites);
@@ -182,7 +188,7 @@ const ShopScreen = () => {
         <TouchableOpacity style={styles.backButton}>
           <BackIcon />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.searchButton}>
+        <TouchableOpacity style={styles.searchButton} onPress={handleSearchPress}>
           <SearchIcon />
         </TouchableOpacity>
       </View>

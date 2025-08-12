@@ -250,7 +250,7 @@ const FILTER_OPTIONS = {
   kidsSizes: ['BOY', 'GIRL'],
 };
 
-const CollectionScreen = () => {
+const CollectionScreen = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState('TOP WEAR');
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [products, setProducts] = useState(SAMPLE_PRODUCTS);
@@ -259,6 +259,12 @@ const CollectionScreen = () => {
   const [selectedSort, setSelectedSort] = useState('ASCENDING PRICE');
 
   const slideAnim = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
+
+  const handleSearchPress = () => {
+    if (navigation && navigation.navigate) {
+      navigation.navigate('Search');
+    }
+  };
 
   const filteredProducts = products.filter(product => 
     activeTab === 'TOP WEAR' ? product.category === 'TOP WEAR' : product.category === 'BOTTOM WEAR'
@@ -334,7 +340,7 @@ const CollectionScreen = () => {
           <TouchableOpacity style={styles.backButton}>
             <Text style={styles.backButtonText}>‹</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.searchButton}>
+          <TouchableOpacity style={styles.searchButton} onPress={handleSearchPress}>
             <SearchIcon size={20} />
           </TouchableOpacity>
         </View>

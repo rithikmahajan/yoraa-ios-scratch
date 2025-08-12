@@ -12,25 +12,34 @@ import { Colors, FontSizes, FontWeights, Spacing } from '../constants';
 import { HomeScreen, ShopScreen, CollectionScreen, RewardsScreen, ProfileScreen, SearchScreen, OrdersScreen, EditProfile, SettingsScreen, DeliveryAddressesSettings, CommunicationPreferences, LinkedAccountScreen, DeleteAccount, ProfileVisibilityScreen, ContactUsScreen, InvoiceScreen, LoveUsRateUs, FAQScreen } from '../screens';
 
 // Navigation context for handling screen navigation
-const createNavigation = (setCurrentScreen, setActiveTab) => ({
+const createNavigation = (setCurrentScreen, setActiveTab, navigationHistory, setNavigationHistory) => ({
   navigate: (screenName, params) => {
     if (['Home', 'Shop', 'Collection', 'Rewards', 'Profile'].includes(screenName)) {
       setActiveTab(screenName);
       setCurrentScreen(screenName);
+      // Update navigation history
+      setNavigationHistory({ previousScreen: navigationHistory.currentScreen, currentScreen: screenName });
     } else {
+      // For non-tab screens like Search, remember where we came from
       setCurrentScreen(screenName);
+      setNavigationHistory({ previousScreen: navigationHistory.currentScreen, currentScreen: screenName });
     }
   },
   goBack: () => {
-    setCurrentScreen('Profile');
-    setActiveTab('Profile');
+    // Go back to the previous screen
+    const targetScreen = navigationHistory.previousScreen || 'Home';
+    setCurrentScreen(targetScreen);
+    if (['Home', 'Shop', 'Collection', 'Rewards', 'Profile'].includes(targetScreen)) {
+      setActiveTab(targetScreen);
+    }
+    setNavigationHistory({ previousScreen: 'Home', currentScreen: targetScreen });
   },
 });
 
 // Placeholder content components for each tab
 const HomeContent = ({ navigation }) => <HomeScreen navigation={navigation} />;
-const ShopContent = () => <ShopScreen />;
-const CollectionContent = () => <CollectionScreen />;
+const ShopContent = ({ navigation }) => <ShopScreen navigation={navigation} />;
+const CollectionContent = ({ navigation }) => <CollectionScreen navigation={navigation} />;
 const RewardsContent = () => <RewardsScreen />;
 const ProfileContent = ({ navigation }) => <ProfileScreen navigation={navigation} />;
 
@@ -38,11 +47,13 @@ const ProfileContent = ({ navigation }) => <ProfileScreen navigation={navigation
 const EnhancedLayout = () => {
   const [activeTab, setActiveTab] = useState('Home');
   const [currentScreen, setCurrentScreen] = useState('Home');
+  const [navigationHistory, setNavigationHistory] = useState({ previousScreen: 'Home', currentScreen: 'Home' });
   const [headerTitle, setHeaderTitle] = useState('YORAA');
 
-  const navigation = createNavigation(setCurrentScreen, setActiveTab);
+  const navigation = createNavigation(setCurrentScreen, setActiveTab, navigationHistory, setNavigationHistory);
 
   const handleTabChange = (tabName) => {
+    setNavigationHistory({ previousScreen: activeTab, currentScreen: tabName });
     setActiveTab(tabName);
     setCurrentScreen(tabName);
     setHeaderTitle(tabName === 'Home' ? 'YORAA' : tabName);
@@ -53,9 +64,9 @@ const EnhancedLayout = () => {
       case 'Home':
         return <HomeContent navigation={navigation} />;
       case 'Shop':
-        return <ShopContent />;
+        return <ShopContent navigation={navigation} />;
       case 'Collection':
-        return <CollectionContent />;
+        return <CollectionContent navigation={navigation} />;
       case 'Rewards':
         return <RewardsContent />;
       case 'Profile':

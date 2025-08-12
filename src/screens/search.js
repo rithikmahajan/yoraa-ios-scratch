@@ -14,7 +14,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { Colors, FontSizes, FontWeights, Spacing, BorderRadius } from '../constants';
-import { MicrophoneIcon, CameraIcon, ScanBarcodeIcon, ClearIcon } from '../assets/icons';
+import { MicrophoneIcon, CameraIcon, ScanBarcodeIcon, SearchIcon } from '../assets/icons';
 
 // Sample search suggestions - moved outside component to prevent re-renders
 const ALL_SUGGESTIONS = [
@@ -72,7 +72,11 @@ const SearchScreen = ({ navigation, onClose }) => {
       duration: 250,
       useNativeDriver: true,
     }).start(() => {
-      onClose && onClose();
+      if (navigation && navigation.goBack) {
+        navigation.goBack();
+      } else if (onClose) {
+        onClose();
+      }
     });
   };
 
@@ -129,11 +133,6 @@ const SearchScreen = ({ navigation, onClose }) => {
     handleCloseCameraModal();
   };
 
-  const clearSearch = () => {
-    setSearchText('');
-    setSearchSuggestions([]);
-  };
-
   const renderSuggestionItem = ({ item }) => (
     <TouchableOpacity
       style={styles.suggestionItem}
@@ -157,7 +156,7 @@ const SearchScreen = ({ navigation, onClose }) => {
         <View style={styles.header}>
           <View style={styles.searchInputContainer}>
             <View style={styles.searchIcon}>
-              <Text style={styles.searchIconText}>🔍</Text>
+              <SearchIcon size={20} color={Colors.textTertiary} />
             </View>
             
             <TextInput
@@ -167,19 +166,11 @@ const SearchScreen = ({ navigation, onClose }) => {
               value={searchText}
               onChangeText={setSearchText}
               autoFocus={true}
+              returnKeyType="search"
             />
             
-            {searchText ? (
-              <TouchableOpacity onPress={clearSearch} style={styles.clearButton}>
-                <ClearIcon color={Colors.textTertiary} width={16} height={16} />
-              </TouchableOpacity>
-            ) : null}
-            
             <TouchableOpacity 
-              style={[
-                styles.micButton,
-                isRecording && styles.micButtonActive
-              ]}
+              style={styles.micButton}
               onPress={handleVoiceSearch}
             >
               <MicrophoneIcon 
@@ -198,12 +189,12 @@ const SearchScreen = ({ navigation, onClose }) => {
         {/* Action Buttons */}
         <View style={styles.actionButtons}>
           <TouchableOpacity style={styles.actionButton} onPress={handleCameraPress}>
-            <CameraIcon color={Colors.textSecondary} width={20} height={20} />
+            <CameraIcon color={Colors.textPrimary} width={24} height={24} />
             <Text style={styles.actionButtonText}>Camera</Text>
           </TouchableOpacity>
           
           <TouchableOpacity style={styles.actionButton} onPress={handleScanBarcode}>
-            <ScanBarcodeIcon color={Colors.textSecondary} width={20} height={20} />
+            <ScanBarcodeIcon color={Colors.textPrimary} width={24} height={24} />
             <Text style={styles.actionButtonText}>Scan Barcode</Text>
           </TouchableOpacity>
         </View>
@@ -286,24 +277,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderLight,
+    paddingTop: Spacing.xl,
   },
   searchInputContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.backgroundSecondary,
-    borderRadius: BorderRadius.lg,
-    paddingHorizontal: Spacing.md,
-    marginRight: Spacing.md,
-    height: 44,
+    backgroundColor: '#F5F5F5',
+    borderRadius: BorderRadius.xl,
+    paddingHorizontal: Spacing.lg,
+    marginRight: Spacing.lg,
+    height: 48,
   },
   searchIcon: {
-    marginRight: Spacing.sm,
-  },
-  searchIconText: {
-    fontSize: FontSizes.lg,
+    marginRight: Spacing.md,
   },
   searchInput: {
     flex: 1,
@@ -311,16 +298,9 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     fontWeight: FontWeights.normal,
   },
-  clearButton: {
-    padding: Spacing.xs,
-    marginRight: Spacing.xs,
-  },
   micButton: {
     padding: Spacing.xs,
-    borderRadius: BorderRadius.sm,
-  },
-  micButtonActive: {
-    backgroundColor: Colors.primaryLight,
+    marginLeft: Spacing.sm,
   },
   cancelButton: {
     paddingVertical: Spacing.sm,
@@ -333,23 +313,26 @@ const styles = StyleSheet.create({
   actionButtons: {
     flexDirection: 'row',
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    gap: Spacing.md,
+    paddingVertical: Spacing.xl,
+    gap: Spacing.lg,
   },
   actionButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.backgroundSecondary,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
+    justifyContent: 'center',
+    backgroundColor: Colors.background,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.lg,
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
     borderColor: Colors.border,
+    flex: 1,
+    minHeight: 52,
   },
   actionButtonText: {
     fontSize: FontSizes.md,
-    color: Colors.textSecondary,
-    fontWeight: FontWeights.normal,
+    color: Colors.textPrimary,
+    fontWeight: FontWeights.medium,
     marginLeft: Spacing.sm,
   },
   suggestionsList: {
