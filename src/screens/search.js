@@ -114,7 +114,9 @@ const SearchScreen = ({ navigation, onClose }) => {
   };
 
   const handleScanBarcode = () => {
-    Alert.alert('Barcode Scanner', 'Barcode scanning functionality would be implemented here');
+    if (navigation && navigation.navigate) {
+      navigation.navigate('ScanBarcode');
+    }
   };
 
   const handleSuggestionPress = (suggestion) => {

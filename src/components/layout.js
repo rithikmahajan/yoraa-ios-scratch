@@ -5,11 +5,10 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
-  Platform,
 } from 'react-native';
 import BottomNavigationBar from './bottomnavigationbar';
 import { Colors, FontSizes, FontWeights, Spacing } from '../constants';
-import { HomeScreen, ShopScreen, CollectionScreen, RewardsScreen, ProfileScreen, SearchScreen, OrdersScreen, EditProfile, SettingsScreen, DeliveryAddressesSettings, CommunicationPreferences, LinkedAccountScreen, DeleteAccount, ProfileVisibilityScreen, ContactUsScreen, InvoiceScreen, LoveUsRateUs, FAQScreen } from '../screens';
+import { HomeScreen, ShopScreen, CollectionScreen, RewardsScreen, ProfileScreen, SearchScreen, OrdersScreen, EditProfile, SettingsScreen, DeliveryAddressesSettings, CommunicationPreferences, LinkedAccountScreen, DeleteAccount, ProfileVisibilityScreen, ContactUsScreen, InvoiceScreen, LoveUsRateUs, FAQScreen, ScanBarcodeFlow } from '../screens';
 
 // Navigation context for handling screen navigation
 const createNavigation = (setCurrentScreen, setActiveTab, navigationHistory, setNavigationHistory) => ({
@@ -91,6 +90,8 @@ const EnhancedLayout = () => {
         return <ContactUsScreen navigation={navigation} />;
       case 'Search':
         return <SearchScreen navigation={navigation} onClose={() => navigation.goBack()} />;
+      case 'ScanBarcode':
+        return <ScanBarcodeFlow navigation={navigation} />;
       case 'Invoice':
         return <InvoiceScreen navigation={navigation} />;
       case 'LoveUsRateUs':
