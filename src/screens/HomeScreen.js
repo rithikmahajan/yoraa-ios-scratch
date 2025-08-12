@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   View,
@@ -10,6 +11,11 @@ import { FontSizes, FontWeights, Spacing, BorderRadius } from '../constants';
 import SearchIconSvg from '../assets/icons/SearchIconSvg';
 import HeartIconSvg from '../assets/icons/HeartIconSvg';
 import CartIconSvg from '../assets/icons/CartIconSvg';
+import {
+  GlobalShippingIcon,
+  RiskFreePurchaseIcon,
+  OnlineAssistanceIcon,
+} from '../assets/icons';
 import {
   SaleImageSvg,
   LifestyleImageSvg,
@@ -28,16 +34,16 @@ const HomeScreen = () => {
     { id: 'Men', name: 'Men' },
     { id: 'Women', name: 'Women' },
     { id: 'Kids', name: 'Kids' },
-    { id: 'Eyx', name: 'E×X' },
+    { id: 'ExX', name: 'E×X' },
   ];
 
   const categories = [
-    { id: 'Sale', name: 'Sale', color: '#CA3327', image: SaleImageSvg },
-    { id: 'Lifestyle', name: 'Lifestyle', color: '#000000', image: LifestyleImageSvg },
-    { id: 'Running', name: 'Running', color: '#000000', image: RunningImageSvg },
-    { id: 'Soccer', name: 'Soccer', color: '#000000', image: SoccerImageSvg },
-    { id: 'Tennis', name: 'Tennis', color: '#000000', image: TennisImageSvg },
-    { id: 'Golf', name: 'Golf', color: '#000000', image: GolfImageSvg },
+    { id: 'Sale', name: 'Sale', color: '#CA3327', image: SaleImageSvg, fontWeight: FontWeights.semiBold },
+    { id: 'Lifestyle', name: 'Lifestyle', color: '#000000', image: LifestyleImageSvg, fontWeight: FontWeights.normal },
+    { id: 'Running', name: 'Running', color: '#000000', image: RunningImageSvg, fontWeight: FontWeights.normal },
+    { id: 'Soccer', name: 'Soccer', color: '#000000', image: SoccerImageSvg, fontWeight: FontWeights.normal },
+    { id: 'Tennis', name: 'Tennis', color: '#000000', image: TennisImageSvg, fontWeight: FontWeights.normal },
+    { id: 'Golf', name: 'Golf', color: '#000000', image: GolfImageSvg, fontWeight: FontWeights.normal },
   ];
 
   const renderTabItem = ({ item }) => (
@@ -75,7 +81,13 @@ const HomeScreen = () => {
           <ImageComponent width={70} height={70} />
         </View>
         <View style={styles.categoryContent}>
-          <Text style={[styles.categoryName, { color: item.color }]}>
+          <Text style={[
+            styles.categoryName, 
+            { 
+              color: item.color,
+              fontWeight: item.fontWeight || FontWeights.normal
+            }
+          ]}>
             {item.name}
           </Text>
         </View>
@@ -128,7 +140,9 @@ const HomeScreen = () => {
       {/* Info Section */}
       <View style={styles.infoSection}>
         <View style={styles.infoItem}>
-          <View style={styles.infoImagePlaceholder} />
+          <View style={styles.infoImageContainer}>
+            <GlobalShippingIcon width={80} height={80} color="#000000" />
+          </View>
           <View style={styles.infoContent}>
             <Text style={styles.infoTitle}>GLOBAL SHIPPING</Text>
             <Text style={styles.infoDescription}>
@@ -137,18 +151,22 @@ const HomeScreen = () => {
           </View>
         </View>
 
-        <View style={styles.infoItem}>
+        <View style={[styles.infoItem, styles.infoItemReverse]}>
           <View style={styles.infoContent}>
             <Text style={styles.infoTitle}>RISK-FREE PURCHASE</Text>
             <Text style={styles.infoDescription}>
               We offer 4 days to exchange or return your product, ensuring a seamless shopping experience for our valued customers.
             </Text>
           </View>
-          <View style={styles.infoImagePlaceholder} />
+          <View style={styles.infoImageContainer}>
+            <RiskFreePurchaseIcon width={80} height={80} color="#000000" />
+          </View>
         </View>
 
         <View style={styles.infoItem}>
-          <View style={styles.infoImagePlaceholder} />
+          <View style={styles.infoImageContainer}>
+            <OnlineAssistanceIcon width={80} height={80} color="#000000" />
+          </View>
           <View style={styles.infoContent}>
             <Text style={styles.infoTitle}>ONLINE ASSISTANCE</Text>
             <Text style={styles.infoDescription}>
@@ -160,6 +178,9 @@ const HomeScreen = () => {
 
       {/* Footer */}
       <View style={styles.footer}>
+        <View style={styles.footerLogo}>
+          <Text style={styles.footerLogoText}>YORAA</Text>
+        </View>
         <Text style={styles.footerText}>Thanks for being with us.</Text>
       </View>
     </View>
@@ -234,7 +255,7 @@ const styles = StyleSheet.create({
   // Categories Styles
   categoriesList: {
     flex: 1,
-    paddingTop: Spacing.sm,
+    paddingTop: Spacing.xs, // Reduced padding to match Figma
   },
   categoryItem: {
     flexDirection: 'row',
@@ -243,6 +264,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.lg,
     borderBottomWidth: 1,
     borderBottomColor: '#E4E4E4',
+    backgroundColor: '#FFFFFF', // Explicit white background
   },
   activeCategoryItem: {
     backgroundColor: '#F8F8F8',
@@ -256,12 +278,13 @@ const styles = StyleSheet.create({
   categoryName: {
     fontSize: 14,
     letterSpacing: -0.14,
+    fontWeight: FontWeights.normal, // Ensure normal weight for non-sale items
   },
   categoryArrow: {
     marginLeft: Spacing.sm,
   },
   arrowIcon: {
-    fontSize: 20,
+    fontSize: 18, // Slightly smaller to match Figma
     color: '#292526',
     fontWeight: '300',
   },
@@ -270,12 +293,22 @@ const styles = StyleSheet.create({
   infoSection: {
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.xl,
-    gap: Spacing.xl,
+    gap: Spacing.xxxl, // Increased gap to match Figma spacing
   },
   infoItem: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start', // Changed to flex-start for better text alignment
     gap: Spacing.lg,
+    paddingVertical: Spacing.md,
+  },
+  infoItemReverse: {
+    flexDirection: 'row-reverse',
+  },
+  infoImageContainer: {
+    width: 80,
+    height: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   infoImagePlaceholder: {
     width: 80,
@@ -285,23 +318,35 @@ const styles = StyleSheet.create({
   },
   infoContent: {
     flex: 1,
+    paddingTop: Spacing.xs, // Small padding to align with icon
   },
   infoTitle: {
     fontSize: 12,
     fontWeight: FontWeights.bold,
     color: '#000000',
     marginBottom: Spacing.xs,
+    letterSpacing: 0.5, // Added letter spacing for better readability
   },
   infoDescription: {
     fontSize: 12,
     color: '#000000',
-    lineHeight: 24,
+    lineHeight: 20, // Reduced line height to match Figma more closely
   },
 
   // Footer Styles
   footer: {
     alignItems: 'center',
     paddingVertical: Spacing.xl,
+    paddingBottom: Spacing.xxxl, // Extra padding for bottom
+  },
+  footerLogo: {
+    marginBottom: Spacing.lg,
+  },
+  footerLogoText: {
+    fontSize: 20,
+    fontWeight: FontWeights.bold,
+    color: '#000000',
+    letterSpacing: 1.5,
   },
   footerText: {
     fontSize: 14,

@@ -4,8 +4,9 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
+  Platform,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, FontSizes, FontWeights, FontFamilies, Spacing, Shadows } from '../constants';
 import {
   HomeIcon,
@@ -17,6 +18,7 @@ import {
 
 const BottomNavigationBar = ({ activeTab = 'Home', onTabChange }) => {
   const [internalActiveTab, setInternalActiveTab] = useState('Home');
+  const insets = useSafeAreaInsets();
   
   // Use external activeTab if provided, otherwise use internal state
   const currentActiveTab = activeTab || internalActiveTab;
@@ -62,8 +64,13 @@ const BottomNavigationBar = ({ activeTab = 'Home', onTabChange }) => {
   };
 
       return (
-        <SafeAreaView style={styles.container}>
-          <View style={styles.navigationBar}>
+        <View style={styles.container}>
+          <View style={[
+            styles.navigationBar, 
+            { 
+              paddingBottom: Platform.OS === 'ios' ? Math.max(insets.bottom, 20) : 10 
+            }
+          ]}>
             {tabs.map((tab) => {
               const isActive = currentActiveTab === tab.name;
               
@@ -87,7 +94,7 @@ const BottomNavigationBar = ({ activeTab = 'Home', onTabChange }) => {
           );
         })}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -95,22 +102,25 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.background,
     ...Shadows.medium,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
   },
   navigationBar: {
     flexDirection: 'row',
     backgroundColor: Colors.background,
-    paddingTop: Spacing.md,
-    paddingBottom: Spacing.sm,
-    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.lg,
+    paddingHorizontal: Spacing.md,
     borderTopWidth: 1,
     borderTopColor: Colors.borderLight,
+    minHeight: 70,
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.xs,
     position: 'relative',
+    minHeight: 50,
   },
   tabLabel: {
     fontSize: FontSizes.xs,
@@ -127,7 +137,7 @@ const styles = StyleSheet.create({
   },
   activeIndicator: {
     position: 'absolute',
-    top: -2,
+    top: 2,
     width: 24,
     height: 3,
     backgroundColor: Colors.primary,

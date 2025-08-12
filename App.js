@@ -4,19 +4,22 @@ import {
   StatusBar,
   StyleSheet,
 } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Colors } from './src/constants';
 import { EnhancedLayout } from './src/components/layout';
 
 const App = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar 
-        barStyle="dark-content" 
-        backgroundColor={Colors.background} 
-        translucent={false}
-      />
-      <EnhancedLayout />
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <StatusBar 
+          barStyle="dark-content" 
+          backgroundColor={Colors.background} 
+          translucent={false}
+        />
+        <EnhancedLayout />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 

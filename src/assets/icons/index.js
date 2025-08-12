@@ -7,3 +7,6 @@ export { default as ShoppingBagIcon } from './ShoppingBagIcon';
 export { default as SearchIcon } from './SearchIcon';
 export { default as FilterIcon } from './FilterIcon';
 export { default as HeartIcon } from './HeartIcon';
+export { default as GlobalShippingIcon } from './GlobalShippingIcon';
+export { default as RiskFreePurchaseIcon } from './RiskFreePurchaseIcon';
+export { default as OnlineAssistanceIcon } from './OnlineAssistanceIcon';

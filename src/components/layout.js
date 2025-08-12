@@ -5,6 +5,7 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
+  Platform,
 } from 'react-native';
 import BottomNavigationBar from './bottomnavigationbar';
 import { Colors, FontSizes, FontWeights, Spacing } from '../constants';
@@ -89,7 +90,7 @@ const EnhancedLayout = () => {
   };
 
   const shouldShowBottomNav = ['Home', 'Shop', 'Collection', 'Rewards', 'Profile'].includes(currentScreen);
-  const shouldShowHeader = ['Home', 'Rewards', 'Profile'].includes(currentScreen);
+  const shouldShowHeader = ['Rewards', 'Profile'].includes(currentScreen);
 
   return (
     <View style={styles.container}>
@@ -104,12 +105,12 @@ const EnhancedLayout = () => {
         )}
 
         {/* Main Content Area */}
-        <View style={styles.mainContent}>
+        <View style={[styles.mainContent, shouldShowBottomNav && styles.mainContentWithBottomNav]}>
           {renderContent()}
         </View>
       </SafeAreaView>
 
-      {/* Bottom Navigation - Only show for main tabs */}
+      {/* Bottom Navigation - Fixed at bottom */}
       {shouldShowBottomNav && (
         <BottomNavigationBar 
           activeTab={activeTab}
@@ -152,6 +153,9 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     backgroundColor: Colors.backgroundSecondary,
+  },
+  mainContentWithBottomNav: {
+    paddingBottom: 0, // Remove padding since we're not using absolute positioning
   },
 });
 
