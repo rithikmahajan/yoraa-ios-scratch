@@ -11,6 +11,8 @@ import {
   Image,
   SafeAreaView,
   StatusBar,
+  TextInput,
+  Easing,
 } from 'react-native';
 
 const { height: screenHeight } = Dimensions.get('window');
@@ -44,16 +46,26 @@ const BagScreen = ({ navigation, route }) => {
   const [quantityModalVisible, setQuantityModalVisible] = useState(false);
   const [sizeModalVisible, setSizeModalVisible] = useState(false);
   const [sizeChartModalVisible, setSizeChartModalVisible] = useState(false);
+  const [promoSuccessModalVisible, setPromoSuccessModalVisible] = useState(false);
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState('M');
   const [sizeChartActiveTab, setSizeChartActiveTab] = useState('chart');
   const [selectedUnit, setSelectedUnit] = useState('cm');
+  const [pointsApplied, setPointsApplied] = useState(false);
+  const [promoCode, setPromoCode] = useState('');
+  const [appliedPromoCode, setAppliedPromoCode] = useState(null);
+  
+  // Swipe to delete states
+  const [swipeAnimations, setSwipeAnimations] = useState({});
+  const [swipeStates, setSwipeStates] = useState({});
 
   // Animation refs
   const quantitySlideAnim = useRef(new Animated.Value(screenHeight)).current;
   const sizeSlideAnim = useRef(new Animated.Value(screenHeight)).current;
   const sizeChartSlideAnim = useRef(new Animated.Value(screenHeight)).current;
+  const promoSuccessSlideAnim = useRef(new Animated.Value(screenHeight)).current;
+  const promoSuccessOpacityAnim = useRef(new Animated.Value(0)).current;
   const quantityPanY = useRef(new Animated.Value(0)).current;
   const sizePanY = useRef(new Animated.Value(0)).current;
   const sizeChartPanY = useRef(new Animated.Value(0)).current;
@@ -62,6 +74,7 @@ const BagScreen = ({ navigation, route }) => {
     // Get data from route params if available
     const { selectedSize: routeSize, product } = route.params || {};
     
+    let initialItems = [];
     if (product) {
       const newItem = {
         id: Date.now(),
@@ -73,11 +86,154 @@ const BagScreen = ({ navigation, route }) => {
         price: Number(product.price) || 10.00,
         image: product.image || null,
       };
-      setCartItems([newItem, ...sampleCartItems]);
+      initialItems = [newItem, ...sampleCartItems];
     } else {
-      setCartItems(sampleCartItems);
+      initialItems = sampleCartItems;
     }
+    
+    setCartItems(initialItems);
+    
+    // Initialize swipe animations for each item
+    const animations = {};
+    const states = {};
+    initialItems.forEach(item => {
+      animations[item.id] = {
+        translateX: new Animated.Value(0),
+        opacity: new Animated.Value(1),
+      };
+      states[item.id] = {
+        isSwipedLeft: false,
+        isDeleting: false,
+      };
+    });
+    setSwipeAnimations(animations);
+    setSwipeStates(states);
   }, [route.params]);
+
+  // Swipe to delete functions
+  const createSwipePanResponder = (itemId) => {
+    return PanResponder.create({
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
+        return Math.abs(gestureState.dx) > 10 && Math.abs(gestureState.dy) < 50;
+      },
+      onPanResponderGrant: () => {
+        // Reset other items when starting a new swipe
+        Object.keys(swipeAnimations).forEach(id => {
+          if (id !== itemId.toString() && swipeStates[id]?.isSwipedLeft) {
+            resetSwipe(id);
+          }
+        });
+      },
+      onPanResponderMove: (evt, gestureState) => {
+        const { dx } = gestureState;
+        const animation = swipeAnimations[itemId];
+        
+        if (animation && dx < 0) { // Only allow left swipe
+          const translateX = Math.max(dx, -120); // Limit swipe distance
+          animation.translateX.setValue(translateX);
+          
+          // Fade the item as it's swiped
+          const opacity = 1 - Math.abs(translateX) / 120 * 0.3;
+          animation.opacity.setValue(Math.max(opacity, 0.7));
+        }
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        const { dx } = gestureState;
+        const animation = swipeAnimations[itemId];
+        
+        if (animation && dx < -60) { // If swiped more than 60px, show delete
+          // Snap to delete position
+          Animated.parallel([
+            Animated.spring(animation.translateX, {
+              toValue: -120,
+              useNativeDriver: true,
+              tension: 150,
+              friction: 8,
+            }),
+            Animated.spring(animation.opacity, {
+              toValue: 0.7,
+              useNativeDriver: true,
+              tension: 150,
+              friction: 8,
+            })
+          ]).start();
+          
+          setSwipeStates(prev => ({
+            ...prev,
+            [itemId]: { ...prev[itemId], isSwipedLeft: true }
+          }));
+        } else {
+          // Snap back to original position
+          resetSwipe(itemId);
+        }
+      },
+    });
+  };
+
+  const resetSwipe = (itemId) => {
+    const animation = swipeAnimations[itemId];
+    if (animation) {
+      Animated.parallel([
+        Animated.spring(animation.translateX, {
+          toValue: 0,
+          useNativeDriver: true,
+          tension: 150,
+          friction: 8,
+        }),
+        Animated.spring(animation.opacity, {
+          toValue: 1,
+          useNativeDriver: true,
+          tension: 150,
+          friction: 8,
+        })
+      ]).start();
+      
+      setSwipeStates(prev => ({
+        ...prev,
+        [itemId]: { ...prev[itemId], isSwipedLeft: false }
+      }));
+    }
+  };
+
+  const deleteItem = (itemId) => {
+    const animation = swipeAnimations[itemId];
+    if (animation) {
+      setSwipeStates(prev => ({
+        ...prev,
+        [itemId]: { ...prev[itemId], isDeleting: true }
+      }));
+      
+      // Animate item deletion
+      Animated.parallel([
+        Animated.timing(animation.translateX, {
+          toValue: -400,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(animation.opacity, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        })
+      ]).start(() => {
+        // Remove item from cart
+        setCartItems(prev => prev.filter(item => item.id !== itemId));
+        
+        // Clean up animations
+        setSwipeAnimations(prev => {
+          const newAnimations = { ...prev };
+          delete newAnimations[itemId];
+          return newAnimations;
+        });
+        
+        setSwipeStates(prev => {
+          const newStates = { ...prev };
+          delete newStates[itemId];
+          return newStates;
+        });
+      });
+    }
+  };
 
   // Quantity Modal PanResponder
   const quantityPanResponder = PanResponder.create({
@@ -210,6 +366,68 @@ const BagScreen = ({ navigation, route }) => {
     });
   };
 
+  const openPromoSuccessModal = () => {
+    setPromoSuccessModalVisible(true);
+    Animated.parallel([
+      Animated.timing(promoSuccessSlideAnim, {
+        toValue: 0,
+        duration: 250,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }),
+      Animated.timing(promoSuccessOpacityAnim, {
+        toValue: 1,
+        duration: 250,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      })
+    ]).start();
+  };
+
+  const closePromoSuccessModal = () => {
+    Animated.parallel([
+      Animated.timing(promoSuccessSlideAnim, {
+        toValue: screenHeight,
+        duration: 250,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }),
+      Animated.timing(promoSuccessOpacityAnim, {
+        toValue: 0,
+        duration: 250,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      })
+    ]).start(() => {
+      setPromoSuccessModalVisible(false);
+    });
+  };
+
+  const applyPromoCode = () => {
+    if (promoCode.trim() === '') {
+      return;
+    }
+    
+    // Simulate promo code validation
+    const validPromoCodes = ['FIRST30', '30OFF', 'WELCOME'];
+    if (validPromoCodes.includes(promoCode.toUpperCase())) {
+      setAppliedPromoCode({
+        code: promoCode.toUpperCase(),
+        discount: 30,
+        discountAmount: calculateTotal() * 0.3
+      });
+      openPromoSuccessModal();
+      setPromoCode('');
+    } else {
+      // Invalid promo code - you could show an error message here
+      setPromoCode('');
+    }
+  };
+
+  const togglePoints = () => {
+    setPointsApplied(!pointsApplied);
+  };
+
   const updateQuantity = (quantity) => {
     if (selectedItemIndex !== null) {
       const updatedItems = [...cartItems];
@@ -242,45 +460,76 @@ const BagScreen = ({ navigation, route }) => {
     closeSizeModal();
   };
 
-  const renderCartItem = (item, index) => (
-    <View key={item.id} style={styles.cartItem}>
-      <View style={styles.itemImageContainer}>
-        {item.image ? (
-          <Image source={item.image} style={styles.itemImage} />
-        ) : (
-          <View style={styles.itemImagePlaceholder}>
-            <Text style={styles.placeholderText}>👟</Text>
-          </View>
-        )}
-      </View>
-      <View style={styles.itemDetails}>
-        <Text style={styles.itemName}>{item.name}</Text>
-        <Text style={styles.itemDescription}>{item.description}</Text>
-        <Text style={styles.itemSize}>{item.size}</Text>
-        <Text style={styles.itemColor}>{item.color}</Text>
-        
-        <View style={styles.itemControls}>
+  const renderCartItem = (item, index) => {
+    const animation = swipeAnimations[item.id];
+    const swipeState = swipeStates[item.id];
+    
+    if (!animation || !swipeState) {
+      return null; // Item is being deleted or animations not ready
+    }
+    
+    return (
+      <View key={item.id} style={styles.cartItemContainer}>
+        {/* Delete Button Background */}
+        <View style={styles.deleteButtonContainer}>
           <TouchableOpacity 
-            style={styles.quantityContainer}
-            onPress={() => openQuantityModal(index)}
+            style={styles.deleteButton}
+            onPress={() => deleteItem(item.id)}
           >
-            <Text style={styles.quantityText}>Qty {item.quantity}</Text>
-            <Text style={styles.dropdownIcon}>▼</Text>
+            <Text style={styles.deleteButtonText}>Delete</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={styles.sizeContainer}
-            onPress={() => openSizeModal(index)}
-          >
-            <Text style={styles.sizeText}>{item.size.split(' ')[0]}</Text>
-            <Text style={styles.dropdownIcon}>▼</Text>
-          </TouchableOpacity>
-          
-          <Text style={styles.itemPrice}>US${(Number(item.price) || 0).toFixed(2)}</Text>
         </View>
+        
+        {/* Cart Item */}
+        <Animated.View 
+          style={[
+            styles.cartItem,
+            {
+              transform: [{ translateX: animation.translateX }],
+              opacity: animation.opacity,
+            }
+          ]}
+          {...createSwipePanResponder(item.id).panHandlers}
+        >
+          <View style={styles.itemImageContainer}>
+            {item.image ? (
+              <Image source={item.image} style={styles.itemImage} />
+            ) : (
+              <View style={styles.itemImagePlaceholder}>
+                <Text style={styles.placeholderText}>👟</Text>
+              </View>
+            )}
+          </View>
+          <View style={styles.itemDetails}>
+            <Text style={styles.itemName}>{item.name}</Text>
+            <Text style={styles.itemDescription}>{item.description}</Text>
+            <Text style={styles.itemSize}>{item.size}</Text>
+            <Text style={styles.itemColor}>{item.color}</Text>
+            
+            <View style={styles.itemControls}>
+              <TouchableOpacity 
+                style={styles.quantityContainer}
+                onPress={() => openQuantityModal(index)}
+              >
+                <Text style={styles.quantityText}>Qty {item.quantity}</Text>
+                <Text style={styles.dropdownIcon}>▼</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={styles.sizeContainer}
+                onPress={() => openSizeModal(index)}
+              >
+                <Text style={styles.sizeText}>{item.size.split(' ')[0]}</Text>
+                <Text style={styles.dropdownIcon}>▼</Text>
+              </TouchableOpacity>
+              
+              <Text style={styles.itemPrice}>US${(Number(item.price) || 0).toFixed(2)}</Text>
+            </View>
+          </View>
+        </Animated.View>
       </View>
-    </View>
-  );
+    );
+  };
 
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => total + ((Number(item.price) || 0) * item.quantity), 0);
@@ -312,27 +561,57 @@ const BagScreen = ({ navigation, route }) => {
         <View style={styles.deliverySection}>
           <Text style={styles.deliveryTitle}>Delivery</Text>
           <Text style={styles.deliveryText}>Arrives Wed, 11 May</Text>
-          <Text style={styles.deliveryLocation}>📍 Pin to PM Location</Text>
+          <View style={styles.deliveryLocationContainer}>
+            <Text style={styles.deliveryLocationIcon}>📍</Text>
+            <Text style={styles.deliveryLocationText}>Pin to PM Location</Text>
+            <TouchableOpacity style={styles.editLocationButton}>
+              <Text style={styles.editLocationText}>Edit location</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Points Section */}
         <View style={styles.pointsSection}>
-          <TouchableOpacity style={styles.pointsContainer}>
-            <Text style={styles.pointsIcon}>✓</Text>
+          <TouchableOpacity style={styles.pointsContainer} onPress={togglePoints}>
+            <View style={[styles.checkbox, pointsApplied && styles.checkboxChecked]}>
+              {pointsApplied && <Text style={styles.checkmark}>✓</Text>}
+            </View>
             <Text style={styles.pointsText}>Apply ✓ Points</Text>
+            <Text style={styles.pointsSubtext}>Available: 1500 points</Text>
           </TouchableOpacity>
         </View>
 
         {/* Promo Code Section */}
         <View style={styles.promoSection}>
           <Text style={styles.promoTitle}>Have a Promo Code?</Text>
-          <View style={styles.promoContainer}>
-            <Text style={styles.promoDiscount}>30% OFF</Text>
-            <Text style={styles.promoCode}>FIRST30</Text>
-            <TouchableOpacity>
-              <Text style={styles.promoApply}>Apply</Text>
+          <View style={styles.promoInputContainer}>
+            <TextInput
+              style={styles.promoInput}
+              placeholder="Enter promo code"
+              value={promoCode}
+              onChangeText={setPromoCode}
+              autoCapitalize="characters"
+            />
+            <TouchableOpacity 
+              style={[styles.applyButton, promoCode.trim() === '' && styles.applyButtonDisabled]}
+              onPress={applyPromoCode}
+              disabled={promoCode.trim() === ''}
+            >
+              <Text style={[styles.applyButtonText, promoCode.trim() === '' && styles.applyButtonTextDisabled]}>
+                Apply
+              </Text>
             </TouchableOpacity>
           </View>
+          {appliedPromoCode && (
+            <View style={styles.appliedPromoContainer}>
+              <Text style={styles.appliedPromoText}>
+                {appliedPromoCode.discount}% OFF - {appliedPromoCode.code}
+              </Text>
+              <TouchableOpacity onPress={() => setAppliedPromoCode(null)}>
+                <Text style={styles.removePromoText}>Remove</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
 
         {/* Summary Section */}
@@ -345,24 +624,33 @@ const BagScreen = ({ navigation, route }) => {
             <Text style={styles.summaryLabel}>International Delivery</Text>
             <Text style={styles.summaryValue}>Standard - $200</Text>
           </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Promo</Text>
-            <Text style={styles.summaryValue}>US$10</Text>
-          </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Points Discount</Text>
-            <Text style={styles.summaryValue}>-$5.00</Text>
-          </View>
+          {appliedPromoCode && (
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryLabel}>Promo ({appliedPromoCode.code})</Text>
+              <Text style={styles.summaryValue}>-US${appliedPromoCode.discountAmount.toFixed(2)}</Text>
+            </View>
+          )}
+          {pointsApplied && (
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryLabel}>Points Discount</Text>
+              <Text style={styles.summaryValue}>-$5.00</Text>
+            </View>
+          )}
           <View style={[styles.summaryRow, styles.totalRow]}>
             <Text style={styles.totalLabel}>Total</Text>
-            <Text style={styles.totalValue}>US${calculateTotal().toFixed(2)}</Text>
+            <Text style={styles.totalValue}>
+              US${(calculateTotal() + 200 - (appliedPromoCode ? appliedPromoCode.discountAmount : 0) - (pointsApplied ? 5 : 0)).toFixed(2)}
+            </Text>
           </View>
         </View>
       </ScrollView>
 
       {/* Checkout Button */}
       <View style={styles.checkoutContainer}>
-        <TouchableOpacity style={styles.checkoutButton}>
+        <TouchableOpacity 
+          style={styles.checkoutButton}
+          onPress={() => navigation.navigate('Delivery')}
+        >
           <Text style={styles.checkoutText}>Checkout</Text>
         </TouchableOpacity>
       </View>
@@ -593,6 +881,47 @@ const BagScreen = ({ navigation, route }) => {
           </Animated.View>
         </View>
       )}
+
+      {/* Promo Success Modal */}
+      {promoSuccessModalVisible && (
+        <Animated.View 
+          style={[
+            styles.modalOverlay,
+            {
+              opacity: promoSuccessOpacityAnim
+            }
+          ]}
+        >
+          <Animated.View 
+            style={[
+              styles.promoSuccessModalContainer,
+              {
+                transform: [{ translateY: promoSuccessSlideAnim }]
+              }
+            ]}
+          >
+            <View style={styles.promoSuccessContent}>
+              <View style={styles.successIconContainer}>
+                <View style={styles.successIcon}>
+                  <Text style={styles.successCheckmark}>✓</Text>
+                </View>
+              </View>
+              
+              <Text style={styles.promoSuccessTitle}>Promo code Applied</Text>
+              <Text style={styles.promoSuccessDescription}>
+                {appliedPromoCode?.discount}% OFF applied to the total bag items
+              </Text>
+              
+              <TouchableOpacity 
+                style={styles.promoSuccessDoneButton} 
+                onPress={closePromoSuccessModal}
+              >
+                <Text style={styles.promoSuccessDoneButtonText}>Done</Text>
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
+        </Animated.View>
+      )}
     </SafeAreaView>
   );
 };
@@ -634,13 +963,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cartContainer: {
-    paddingHorizontal: 16,
+    // Removed paddingHorizontal since we handle it in individual items
   },
   cartItem: {
     flexDirection: 'row',
     paddingVertical: 16,
+    paddingHorizontal: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#F6F6F6',
+    backgroundColor: '#FFFFFF',
+    zIndex: 2,
   },
   itemImageContainer: {
     width: 80,
@@ -751,6 +1083,29 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#767676',
   },
+  deliveryLocationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  deliveryLocationIcon: {
+    fontSize: 14,
+    marginRight: 4,
+  },
+  deliveryLocationText: {
+    fontSize: 14,
+    color: '#767676',
+    flex: 1,
+  },
+  editLocationButton: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  editLocationText: {
+    fontSize: 14,
+    color: '#000000',
+    fontWeight: '500',
+    textDecorationLine: 'underline',
+  },
   pointsSection: {
     paddingHorizontal: 16,
     paddingVertical: 16,
@@ -761,6 +1116,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: '#BABABA',
+    marginRight: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkboxChecked: {
+    backgroundColor: '#4CAF50',
+    borderColor: '#4CAF50',
+  },
+  checkmark: {
+    fontSize: 12,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+  },
   pointsIcon: {
     fontSize: 16,
     color: '#000000',
@@ -769,6 +1143,12 @@ const styles = StyleSheet.create({
   pointsText: {
     fontSize: 14,
     color: '#000000',
+    fontWeight: '500',
+    flex: 1,
+  },
+  pointsSubtext: {
+    fontSize: 12,
+    color: '#767676',
   },
   promoSection: {
     paddingHorizontal: 16,
@@ -782,31 +1162,55 @@ const styles = StyleSheet.create({
     color: '#000000',
     marginBottom: 12,
   },
-  promoContainer: {
+  promoInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
     backgroundColor: '#F6F6F6',
     borderRadius: 8,
-    borderStyle: 'dashed',
-    borderWidth: 1,
-    borderColor: '#BABABA',
+    paddingHorizontal: 16,
+    paddingVertical: 4,
   },
-  promoDiscount: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#000000',
-    marginRight: 8,
-  },
-  promoCode: {
-    fontSize: 14,
-    color: '#767676',
+  promoInput: {
     flex: 1,
+    fontSize: 14,
+    color: '#000000',
+    paddingVertical: 12,
   },
-  promoApply: {
+  applyButton: {
+    backgroundColor: '#000000',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 6,
+  },
+  applyButtonDisabled: {
+    backgroundColor: '#BABABA',
+  },
+  applyButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000000',
+    color: '#FFFFFF',
+  },
+  applyButtonTextDisabled: {
+    color: '#FFFFFF',
+  },
+  appliedPromoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 12,
+    padding: 12,
+    backgroundColor: '#E8F5E8',
+    borderRadius: 8,
+  },
+  appliedPromoText: {
+    fontSize: 14,
+    color: '#4CAF50',
+    fontWeight: '500',
+  },
+  removePromoText: {
+    fontSize: 14,
+    color: '#FF5252',
+    fontWeight: '500',
   },
   summarySection: {
     paddingHorizontal: 16,
@@ -1080,6 +1484,95 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#767676',
     lineHeight: 20,
+  },
+  // Promo Success Modal Styles
+  promoSuccessModalContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  promoSuccessContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 32,
+    alignItems: 'center',
+    maxWidth: 300,
+    width: '100%',
+  },
+  successIconContainer: {
+    marginBottom: 24,
+  },
+  successIcon: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#4CAF50',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  successCheckmark: {
+    fontSize: 24,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+  },
+  promoSuccessTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#000000',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  promoSuccessDescription: {
+    fontSize: 14,
+    color: '#767676',
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 24,
+  },
+  promoSuccessDoneButton: {
+    backgroundColor: '#000000',
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 8,
+    width: '100%',
+    alignItems: 'center',
+  },
+  promoSuccessDoneButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  // Swipe to delete styles
+  cartItemContainer: {
+    position: 'relative',
+    marginBottom: 16,
+  },
+  deleteButtonContainer: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    width: 120,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FF5252',
+    zIndex: 1,
+  },
+  deleteButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    width: '100%',
+  },
+  deleteButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
 });
 

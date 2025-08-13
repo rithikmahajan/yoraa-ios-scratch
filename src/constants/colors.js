@@ -6,6 +6,7 @@ export const Colors = {
   primaryLighter: '#FFF5F5',
   
   // Text Colors
+  text: '#1A1A1A',
   textPrimary: '#1A1A1A',
   textSecondary: '#666666',
   textTertiary: '#999999',
@@ -15,6 +16,11 @@ export const Colors = {
   background: '#FFFFFF',
   backgroundSecondary: '#F8F9FA',
   backgroundTertiary: '#F5F5F5',
+  white: '#FFFFFF',
+  
+  // Neutral Colors
+  black: '#000000',
+  lightGray: '#F5F5F5',
   
   // Border Colors
   border: '#E0E0E0',
