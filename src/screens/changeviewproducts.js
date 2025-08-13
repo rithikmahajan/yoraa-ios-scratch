@@ -299,6 +299,14 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
     }
   };
 
+  const handleProductPress = (product) => {
+    if (navigation) {
+      navigation.navigate('ProductDetail', { 
+        product: product 
+      });
+    }
+  };
+
   const handleBackPress = () => {
     if (navigation) {
       navigation.goBack();
@@ -363,7 +371,11 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
     const isStaggered = viewMode === 1;
 
     return (
-      <View style={cardStyle}>
+      <TouchableOpacity 
+        style={cardStyle}
+        onPress={() => handleProductPress(item)}
+        activeOpacity={0.8}
+      >
         <TouchableOpacity
           style={styles.favoriteButton}
           onPress={() => toggleFavorite(item.id)}
@@ -410,7 +422,7 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -631,6 +643,12 @@ const styles = StyleSheet.create({
   },
   cartButton: {
     padding: Spacing.xs,
+  },
+  debugText: {
+    textAlign: 'center',
+    fontSize: FontSizes.xs,
+    color: '#666',
+    marginBottom: Spacing.sm,
   },
 });
 

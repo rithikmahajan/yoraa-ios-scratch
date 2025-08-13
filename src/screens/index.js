@@ -19,3 +19,5 @@ export { default as LoveUsRateUs } from './loveusrateus';
 export { default as FAQScreen } from './faq';
 export { default as FavouritesScreen } from './favourites';
 export { default as ChangeViewProducts } from './changeviewproducts';
+export { default as ProductDetailScreen } from './productdetail';
+export { default as ReviewsScreen } from './reviewsscreen';
