@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import BottomNavigationBar from './bottomnavigationbar';
 import { Colors, FontSizes, FontWeights, Spacing } from '../constants';
-import { HomeScreen, ShopScreen, CollectionScreen, RewardsScreen, ProfileScreen, SearchScreen, OrdersScreen, EditProfile, SettingsScreen, DeliveryAddressesSettings, CommunicationPreferences, LinkedAccountScreen, DeleteAccount, ProfileVisibilityScreen, ContactUsScreen, InvoiceScreen, LoveUsRateUs, FAQScreen, ScanBarcodeFlow, FavouritesScreen, ChangeViewProducts, ProductDetailScreen, ReviewsScreen } from '../screens';
+import { HomeScreen, ShopScreen, CollectionScreen, RewardsScreen, ProfileScreen, SearchScreen, OrdersScreen, EditProfile, SettingsScreen, DeliveryAddressesSettings, CommunicationPreferences, LinkedAccountScreen, DeleteAccount, ProfileVisibilityScreen, ContactUsScreen, InvoiceScreen, LoveUsRateUs, FAQScreen, ScanBarcodeFlow, FavouritesScreen, ChangeViewProducts, ProductDetailScreen, ReviewsScreen, BuyNowScreen, SizeChartScreen } from '../screens';
 
 // Navigation context for handling screen navigation
 const createNavigation = (setCurrentScreen, setActiveTab, navigationHistory, setNavigationHistory) => ({
@@ -106,6 +106,10 @@ const EnhancedLayout = () => {
         return <ProductDetailScreen navigation={navigation} route={{ params: navigationHistory.params }} />;
       case 'Reviews':
         return <ReviewsScreen navigation={navigation} route={{ params: navigationHistory.params }} />;
+      case 'BuyNow':
+        return <BuyNowScreen navigation={navigation} route={{ params: navigationHistory.params }} />;
+      case 'SizeChart':
+        return <SizeChartScreen navigation={navigation} route={{ params: navigationHistory.params }} />;
       default:
         return <HomeContent />;
     }

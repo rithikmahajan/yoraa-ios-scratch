@@ -425,7 +425,10 @@ const ProductDetailScreen = ({ navigation, route }) => {
   );
 
   const renderBuyNowButton = () => (
-    <TouchableOpacity style={styles.buyNowButton}>
+    <TouchableOpacity 
+      style={styles.buyNowButton}
+      onPress={() => navigation.navigate('BuyNow', { product: productData })}
+    >
       <Text style={styles.buyNowText}>Buy Now</Text>
     </TouchableOpacity>
   );
