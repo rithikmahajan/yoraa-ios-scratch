@@ -25,3 +25,5 @@ export { default as BuyNowScreen } from './buynow';
 export { default as SizeChartScreen } from './sizechart';
 export { default as BagScreen } from './bag';
 export { default as DeliveryScreen } from './delivery';
+export { default as LanguageScreen } from './language';
+export { default as RegionScreen } from './region';

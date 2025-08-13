@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -6,14 +6,19 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  Image,
   FlatList,
   Modal,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
   Alert,
   Dimensions,
 } from 'react-native';
 import moment from 'moment';
+import { FontSizes, FontWeights, Spacing, BorderRadius, Shadows } from '../constants';
 
-const { height: DEVICE_HEIGHT } = Dimensions.get('window');
+const { height: DEVICE_HEIGHT, width: DEVICE_WIDTH } = Dimensions.get('window');
 
 // OrderManager class for managing orders
 export class OrderManager {
@@ -379,7 +384,7 @@ const ConfirmationModal = ({ visible, onClose, title, message, buttonText }) => 
         
         <TouchableOpacity
           onPress={onClose}
-          style={[styles.modalButton, styles.primaryButton, styles.confirmationButton]}
+          style={[styles.modalButton, styles.primaryButton, { width: '70%' }]}
         >
           <Text style={styles.primaryButtonText}>{buttonText}</Text>
         </TouchableOpacity>
@@ -473,8 +478,10 @@ const ReturnOptionsModal = ({ visible, onClose, onOptionSelect }) => {
                   key={item.value}
                   style={[
                     styles.optionItem,
-                    index === RETURN_OPTIONS.length - 1 && styles.lastOptionItem,
-                    selectedOption === item.value && styles.selectedOptionItem
+                    { 
+                      borderBottomWidth: index === RETURN_OPTIONS.length - 1 ? 0 : 0.7,
+                      backgroundColor: selectedOption === item.value ? "#F5F5F5" : "transparent"
+                    }
                   ]}
                 >
                   <Text style={styles.optionText}>{item.label}</Text>
@@ -1065,13 +1072,6 @@ const styles = StyleSheet.create({
   optionItem: {
     padding: 15,
     borderBottomColor: '#E0E0E0',
-    borderBottomWidth: 0.7,
-  },
-  lastOptionItem: {
-    borderBottomWidth: 0,
-  },
-  selectedOptionItem: {
-    backgroundColor: '#F5F5F5',
   },
   optionText: {
     fontSize: 14,
@@ -1082,9 +1082,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#666',
     marginBottom: 20,
-  },
-  confirmationButton: {
-    width: '70%',
   },
 });
 

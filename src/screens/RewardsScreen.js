@@ -27,11 +27,17 @@ const LEVELS = [
 const SHOPPING_PREFERENCES = ['Women', 'Men'];
 const ADDITIONAL_PREFERENCES = ['Boy', 'Women', 'Mens', 'Girls'];
 
-const RewardsScreen = () => {
+const RewardsScreen = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState('giveaways'); // Default to giveaways as per requirement
   const [selectedShoppingPreference, setSelectedShoppingPreference] = useState('Women');
   const [selectedAdditionalPreferences, setSelectedAdditionalPreferences] = useState(['Boy']);
   const scrollY = useRef(new Animated.Value(0)).current;
+
+  const handleLanguagePress = () => {
+    if (navigation && navigation.navigate) {
+      navigation.navigate('Language');
+    }
+  };
 
   const renderTabButtons = () => (
     <View style={styles.tabContainer}>
@@ -164,7 +170,7 @@ const RewardsScreen = () => {
           <View style={styles.preferencesSection}>
             <Text style={styles.sectionTitle}>Language and region</Text>
             
-            <TouchableOpacity style={styles.preferenceItem}>
+            <TouchableOpacity style={styles.preferenceItem} onPress={handleLanguagePress}>
               <View style={styles.preferenceLeft}>
                 <Text style={styles.flagIcon}>🌐</Text>
                 <View>
@@ -175,7 +181,10 @@ const RewardsScreen = () => {
               <Text style={styles.chevron}>›</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.preferenceItem}>
+            <TouchableOpacity 
+              style={styles.preferenceItem}
+              onPress={() => navigation.navigate('Region')}
+            >
               <View style={styles.preferenceLeft}>
                 <Text style={styles.flagIcon}>🇮🇳</Text>
                 <View>

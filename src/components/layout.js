@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import BottomNavigationBar from './bottomnavigationbar';
 import { Colors, FontSizes, FontWeights, Spacing } from '../constants';
-import { HomeScreen, ShopScreen, CollectionScreen, RewardsScreen, ProfileScreen, SearchScreen, OrdersScreen, EditProfile, SettingsScreen, DeliveryAddressesSettings, CommunicationPreferences, LinkedAccountScreen, DeleteAccount, ProfileVisibilityScreen, ContactUsScreen, InvoiceScreen, LoveUsRateUs, FAQScreen, ScanBarcodeFlow, FavouritesScreen, ChangeViewProducts, ProductDetailScreen, ReviewsScreen, BuyNowScreen, SizeChartScreen, BagScreen, DeliveryScreen } from '../screens';
+import { HomeScreen, ShopScreen, CollectionScreen, RewardsScreen, ProfileScreen, SearchScreen, OrdersScreen, EditProfile, SettingsScreen, DeliveryAddressesSettings, CommunicationPreferences, LinkedAccountScreen, DeleteAccount, ProfileVisibilityScreen, ContactUsScreen, InvoiceScreen, LoveUsRateUs, FAQScreen, ScanBarcodeFlow, FavouritesScreen, ChangeViewProducts, ProductDetailScreen, ReviewsScreen, BuyNowScreen, SizeChartScreen, BagScreen, DeliveryScreen, LanguageScreen, RegionScreen } from '../screens';
 
 // Navigation context for handling screen navigation
 const createNavigation = (setCurrentScreen, setActiveTab, navigationHistory, setNavigationHistory) => ({
@@ -39,7 +39,7 @@ const createNavigation = (setCurrentScreen, setActiveTab, navigationHistory, set
 const HomeContent = ({ navigation }) => <HomeScreen navigation={navigation} />;
 const ShopContent = ({ navigation }) => <ShopScreen navigation={navigation} />;
 const CollectionContent = ({ navigation }) => <CollectionScreen navigation={navigation} />;
-const RewardsContent = () => <RewardsScreen />;
+const RewardsContent = ({ navigation }) => <RewardsScreen navigation={navigation} />;
 const ProfileContent = ({ navigation }) => <ProfileScreen navigation={navigation} />;
 
 // Enhanced Layout with improved navigation handling
@@ -67,7 +67,7 @@ const EnhancedLayout = () => {
       case 'Collection':
         return <CollectionContent navigation={navigation} />;
       case 'Rewards':
-        return <RewardsContent />;
+        return <RewardsContent navigation={navigation} />;
       case 'Profile':
         return <ProfileContent navigation={navigation} />;
       case 'Orders':
@@ -114,6 +114,10 @@ const EnhancedLayout = () => {
         return <BagScreen navigation={navigation} route={{ params: navigationHistory.params }} />;
       case 'Delivery':
         return <DeliveryScreen navigation={navigation} route={{ params: navigationHistory.params }} />;
+      case 'Language':
+        return <LanguageScreen navigation={navigation} />;
+      case 'Region':
+        return <RegionScreen navigation={navigation} />;
       default:
         return <HomeContent />;
     }
