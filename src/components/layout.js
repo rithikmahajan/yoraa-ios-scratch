@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import BottomNavigationBar from './bottomnavigationbar';
 import { Colors, FontSizes, FontWeights, Spacing } from '../constants';
-import { HomeScreen, ShopScreen, CollectionScreen, RewardsScreen, ProfileScreen, SearchScreen, OrdersScreen, EditProfile, SettingsScreen, DeliveryAddressesSettings, CommunicationPreferences, LinkedAccountScreen, DeleteAccount, ProfileVisibilityScreen, ContactUsScreen, InvoiceScreen, LoveUsRateUs, FAQScreen, ScanBarcodeFlow, FavouritesScreen } from '../screens';
+import { HomeScreen, ShopScreen, CollectionScreen, RewardsScreen, ProfileScreen, SearchScreen, OrdersScreen, EditProfile, SettingsScreen, DeliveryAddressesSettings, CommunicationPreferences, LinkedAccountScreen, DeleteAccount, ProfileVisibilityScreen, ContactUsScreen, InvoiceScreen, LoveUsRateUs, FAQScreen, ScanBarcodeFlow, FavouritesScreen, ChangeViewProducts } from '../screens';
 
 // Navigation context for handling screen navigation
 const createNavigation = (setCurrentScreen, setActiveTab, navigationHistory, setNavigationHistory) => ({
@@ -21,7 +21,7 @@ const createNavigation = (setCurrentScreen, setActiveTab, navigationHistory, set
     } else {
       // For non-tab screens like Search, remember where we came from
       setCurrentScreen(screenName);
-      setNavigationHistory({ previousScreen: navigationHistory.currentScreen, currentScreen: screenName });
+      setNavigationHistory({ previousScreen: navigationHistory.currentScreen, currentScreen: screenName, params });
     }
   },
   goBack: () => {
@@ -100,6 +100,8 @@ const EnhancedLayout = () => {
         return <FAQScreen navigation={navigation} />;
       case 'Favourites':
         return <FavouritesScreen navigation={navigation} />;
+      case 'ChangeViewProducts':
+        return <ChangeViewProducts navigation={navigation} category={navigationHistory.params?.category} />;
       default:
         return <HomeContent />;
     }

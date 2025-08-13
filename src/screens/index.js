@@ -18,3 +18,4 @@ export { default as InvoiceScreen } from './invoice';
 export { default as LoveUsRateUs } from './loveusrateus';
 export { default as FAQScreen } from './faq';
 export { default as FavouritesScreen } from './favourites';
+export { default as ChangeViewProducts } from './changeviewproducts';

@@ -73,6 +73,13 @@ const HomeScreen = ({ navigation }) => {
     </TouchableOpacity>
   );
 
+  const handleCategoryPress = (categoryId) => {
+    setActiveCategory(categoryId);
+    if (navigation) {
+      navigation.navigate('ChangeViewProducts', { category: categoryId });
+    }
+  };
+
   const renderCategoryItem = ({ item }) => {
     const ImageComponent = item.image;
     
@@ -82,7 +89,7 @@ const HomeScreen = ({ navigation }) => {
           styles.categoryItem,
           activeCategory === item.id && styles.activeCategoryItem,
         ]}
-        onPress={() => setActiveCategory(item.id)}
+        onPress={() => handleCategoryPress(item.id)}
       >
         <View style={styles.categoryImageContainer}>
           <ImageComponent width={70} height={70} />
