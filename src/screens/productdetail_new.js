@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
+import { colors } from '../constants/colors';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -278,7 +279,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
             {/* Image placeholder */}
             <View style={[
               styles.imagePlaceholder,
-              styles.imageBackgroundGray
+              { backgroundColor: '#F5F5F5' }
             ]}>
               {/* Nike logo or product representation */}
               <View style={styles.imageContent}>
@@ -333,13 +334,6 @@ const ProductDetailScreen = ({ navigation, route }) => {
     </View>
   );
 
-  const getVariantStyle = (variant, index) => {
-    return {
-      backgroundColor: variant.color,
-      borderColor: variant.color === '#FFFFFF' ? '#DDD' : variant.color
-    };
-  };
-
   const renderVariantSelector = () => (
     <View style={styles.variantContainer}>
       <ScrollView
@@ -359,7 +353,10 @@ const ProductDetailScreen = ({ navigation, route }) => {
             <View
               style={[
                 styles.variantColor,
-                getVariantStyle(variant, index),
+                { 
+                  backgroundColor: variant.color,
+                  borderColor: variant.color === '#FFFFFF' ? '#DDD' : variant.color
+                },
                 selectedVariant === index && styles.selectedVariantColor,
                 !variant.inStock && styles.outOfStockVariant
               ]}
@@ -717,9 +714,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  imageBackgroundGray: {
-    backgroundColor: '#F5F5F5',
   },
   imageContent: {
     width: '100%',
