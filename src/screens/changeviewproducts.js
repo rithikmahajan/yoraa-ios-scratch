@@ -17,9 +17,9 @@ import FilterIconNew from '../assets/icons/FilterIconNew';
 const { width: screenWidth } = Dimensions.get('window');
 
 // Custom Grid Icon that changes based on view mode
-const CustomGridIcon = ({ width = 24, height = 24, color = '#000000', isStaggered = false }) => (
+const CustomGridIcon = ({ width = 24, height = 24, color = '#000000', viewMode = 0 }) => (
   <Svg width={width} height={height} viewBox="0 0 24 24" fill="none">
-    {!isStaggered ? (
+    {viewMode === 0 ? (
       // Regular 2x2 grid icon
       <>
         <Path
@@ -51,7 +51,7 @@ const CustomGridIcon = ({ width = 24, height = 24, color = '#000000', isStaggere
           strokeLinejoin="round"
         />
       </>
-    ) : (
+    ) : viewMode === 1 ? (
       // Staggered grid icon - different sizes
       <>
         <Path
@@ -77,6 +77,73 @@ const CustomGridIcon = ({ width = 24, height = 24, color = '#000000', isStaggere
         />
         <Path
           d="M3 16H10V21H3V16Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </>
+    ) : (
+      // Third grid view - 3x3 grid icon
+      <>
+        <Path
+          d="M3 3H8V8H3V3Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <Path
+          d="M10 3H15V8H10V3Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <Path
+          d="M17 3H22V8H17V3Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <Path
+          d="M3 10H8V15H3V10Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <Path
+          d="M10 10H15V15H10V10Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <Path
+          d="M17 10H22V15H17V10Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <Path
+          d="M3 17H8V22H3V17Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <Path
+          d="M10 17H15V22H10V17Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <Path
+          d="M17 17H22V22H17V17Z"
           stroke={color}
           strokeWidth="2"
           strokeLinecap="round"
@@ -208,7 +275,7 @@ const productData = {
 const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
   const [products, setProducts] = useState([]);
   const [favorites, setFavorites] = useState(new Set());
-  const [viewMode, setViewMode] = useState(0); // 0: default 2-column, 1: staggered view
+  const [viewMode, setViewMode] = useState(0); // 0: default 2-column, 1: staggered view, 2: compact 3-column
 
   useEffect(() => {
     // Set products based on category
@@ -217,7 +284,9 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
   }, [category]);
 
   const handleGridToggle = () => {
-    setViewMode(prev => prev === 0 ? 1 : 0);
+    const newViewMode = (viewMode + 1) % 3;
+    console.log('Switching view mode from', viewMode, 'to', newViewMode);
+    setViewMode(newViewMode); // Cycle through 0, 1, 2
   };
 
   const handleSearchPress = () => {
@@ -275,16 +344,23 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
       item.backgroundColor === '#FFFFFF' && styles.whiteProductImage,
     ];
 
-    // For staggered view, make cards smaller and vary heights
-    const isStaggered = viewMode === 1;
+    // Different card styles for different view modes
     let cardStyle = styles.productCard;
     let imageHeight = 150;
     
-    if (isStaggered) {
+    if (viewMode === 1) {
+      // Staggered view
       cardStyle = [styles.productCard, styles.staggeredCard];
       // Alternate heights for staggered effect
       imageHeight = index % 3 === 1 ? 180 : 140;
+    } else if (viewMode === 2) {
+      // Compact 3-column view
+      cardStyle = [styles.productCard, styles.compactCard];
+      imageHeight = 120; // Smaller images for compact view
     }
+
+    const isCompact = viewMode === 2;
+    const isStaggered = viewMode === 1;
 
     return (
       <View style={cardStyle}>
@@ -293,8 +369,8 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
           onPress={() => toggleFavorite(item.id)}
         >
           <HeartIconSvg
-            width={20}
-            height={18}
+            width={isCompact ? 16 : 20}
+            height={isCompact ? 14 : 18}
             color={favorites.has(item.id) ? '#FF0000' : '#000000'}
           />
         </TouchableOpacity>
@@ -302,21 +378,33 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
         <View style={[imageStyle, { height: imageHeight }]} />
         
         <View style={styles.productInfo}>
-          <Text style={[styles.productName, isStaggered && styles.smallerText]}>
+          <Text style={[
+            styles.productName, 
+            (isStaggered || isCompact) && styles.smallerText,
+            isCompact && styles.compactText
+          ]}>
             {item.name}
           </Text>
-          <Text style={[styles.productSubtitle, isStaggered && styles.smallerText]}>
+          <Text style={[
+            styles.productSubtitle, 
+            (isStaggered || isCompact) && styles.smallerText,
+            isCompact && styles.compactText
+          ]}>
             {item.subtitle}
           </Text>
-          {renderColorDots(item.colors)}
+          {!isCompact && renderColorDots(item.colors)}
           <View style={styles.priceContainer}>
-            <Text style={[styles.productPrice, isStaggered && styles.smallerText]}>
+            <Text style={[
+              styles.productPrice, 
+              (isStaggered || isCompact) && styles.smallerText,
+              isCompact && styles.compactText
+            ]}>
               {item.price}
             </Text>
             <TouchableOpacity style={styles.cartButton}>
               <CartIconSvg 
-                width={20} 
-                height={15} 
+                width={isCompact ? 16 : 20} 
+                height={isCompact ? 12 : 15} 
                 color="#000000" 
               />
             </TouchableOpacity>
@@ -331,6 +419,7 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
       // Staggered view - simplified approach
       return (
         <FlatList
+          key="staggered-view"
           data={products}
           numColumns={2}
           keyExtractor={(item) => item.id}
@@ -340,10 +429,25 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
           columnWrapperStyle={styles.staggeredRow}
         />
       );
+    } else if (viewMode === 2) {
+      // Compact 3-column view
+      return (
+        <FlatList
+          key="compact-view"
+          data={products}
+          numColumns={3}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => renderProductCard({ item, index })}
+          contentContainerStyle={styles.compactContainer}
+          showsVerticalScrollIndicator={false}
+          columnWrapperStyle={styles.compactRow}
+        />
+      );
     } else {
       // Default 2-column grid
       return (
         <FlatList
+          key="default-view"
           data={products}
           numColumns={2}
           keyExtractor={(item) => item.id}
@@ -369,13 +473,16 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
             <SearchIconSvg width={24} height={24} color="#000000" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconButton} onPress={handleGridToggle}>
-            <CustomGridIcon width={24} height={24} color="#000000" isStaggered={viewMode === 1} />
+            <CustomGridIcon width={24} height={24} color="#000000" viewMode={viewMode} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconButton}>
             <FilterIconNew width={24} height={24} color="#000000" />
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Debug view mode indicator */}
+      <Text style={styles.debugText}>View Mode: {viewMode} ({viewMode === 0 ? '2-col' : viewMode === 1 ? 'staggered' : '3-col'})</Text>
 
       {/* Product Grid */}
       {renderGridView()}
@@ -418,6 +525,9 @@ const styles = StyleSheet.create({
   staggeredContainer: {
     padding: Spacing.md,
   },
+  compactContainer: {
+    padding: Spacing.md,
+  },
   row: {
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.xs,
@@ -425,6 +535,10 @@ const styles = StyleSheet.create({
   staggeredRow: {
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.xs,
+  },
+  compactRow: {
+    justifyContent: 'space-between',
+    paddingHorizontal: 0,
   },
   productCard: {
     width: (screenWidth - Spacing.md * 3) / 2,
@@ -441,6 +555,10 @@ const styles = StyleSheet.create({
   staggeredCard: {
     width: (screenWidth - Spacing.md * 3) / 2,
     marginBottom: Spacing.md,
+  },
+  compactCard: {
+    width: (screenWidth - Spacing.md * 2 - Spacing.sm * 2) / 3,
+    marginBottom: Spacing.sm,
   },
   favoriteButton: {
     position: 'absolute',
@@ -476,6 +594,10 @@ const styles = StyleSheet.create({
   },
   smallerText: {
     fontSize: FontSizes.xs * 0.9,
+  },
+  compactText: {
+    fontSize: FontSizes.xs * 0.8,
+    lineHeight: FontSizes.xs * 0.9,
   },
   colorDotsContainer: {
     flexDirection: 'row',
