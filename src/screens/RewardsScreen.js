@@ -95,7 +95,7 @@ const RewardsScreen = ({ navigation }) => {
         </Text>
         
         <View style={styles.pointsSection}>
-          <TouchableOpacity onPress={() => console.log('Current points pressed')}>
+          <TouchableOpacity onPress={() => navigation.navigate('PointsHistory')}>
             <Text style={styles.currentPointsLabel}>Current Points</Text>
           </TouchableOpacity>
           <View style={styles.pointsRow}>
