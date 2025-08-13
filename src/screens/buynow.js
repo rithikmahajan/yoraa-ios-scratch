@@ -108,11 +108,11 @@ const BuyNowScreen = ({ navigation, route }) => {
     }
   };
 
-  const handleGoToBag = () => {
+    const handleGoToBag = () => {
     // Navigate to bag/cart screen
-    navigation.navigate('Home', { 
-      addedProduct: { ...product, selectedSize },
-      message: 'Product added to bag'
+    navigation.navigate('Bag', { 
+      selectedSize: selectedSize,
+      product: product 
     });
   };
 

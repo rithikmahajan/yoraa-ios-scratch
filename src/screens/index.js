@@ -23,3 +23,4 @@ export { default as ProductDetailScreen } from './productdetail';
 export { default as ReviewsScreen } from './reviewsscreen';
 export { default as BuyNowScreen } from './buynow';
 export { default as SizeChartScreen } from './sizechart';
+export { default as BagScreen } from './bag';
