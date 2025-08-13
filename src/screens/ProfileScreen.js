@@ -58,7 +58,9 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   const handleOrders = () => {
-    console.log('Orders pressed');
+    if (navigation && navigation.navigate) {
+      navigation.navigate('Orders');
+    }
   };
 
   const handleContactUs = () => {
