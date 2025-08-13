@@ -27,3 +27,4 @@ export { default as BagScreen } from './bag';
 export { default as DeliveryScreen } from './delivery';
 export { default as LanguageScreen } from './language';
 export { default as RegionScreen } from './region';
+export { default as MembersExclusive } from './membersexclusive';

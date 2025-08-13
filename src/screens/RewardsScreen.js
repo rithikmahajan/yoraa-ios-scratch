@@ -147,7 +147,10 @@ const RewardsScreen = ({ navigation }) => {
       {/* Static content below - this stays in place */}
       <View style={styles.staticContent}>
         {/* Membership Exclusive Button - Always visible */}
-        <TouchableOpacity style={styles.membersExclusiveButton}>
+        <TouchableOpacity 
+          style={styles.membersExclusiveButton}
+          onPress={() => navigation.navigate('MembersExclusive')}
+        >
           <Text style={styles.membersExclusiveText}>MEMBERS EXCLUSIVE</Text>
         </TouchableOpacity>
 
