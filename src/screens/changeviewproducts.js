@@ -6,16 +6,86 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
-  Image,
 } from 'react-native';
+import Svg, { Path } from 'react-native-svg';
 import { FontSizes, FontWeights, Spacing } from '../constants';
 import SearchIconSvg from '../assets/icons/SearchIconSvg';
 import HeartIconSvg from '../assets/icons/HeartIconSvg';
 import CartIconSvg from '../assets/icons/CartIconSvg';
-import GridViewIcon from '../assets/icons/GridViewIcon';
 import FilterIconNew from '../assets/icons/FilterIconNew';
 
 const { width: screenWidth } = Dimensions.get('window');
+
+// Custom Grid Icon that changes based on view mode
+const CustomGridIcon = ({ width = 24, height = 24, color = '#000000', isStaggered = false }) => (
+  <Svg width={width} height={height} viewBox="0 0 24 24" fill="none">
+    {!isStaggered ? (
+      // Regular 2x2 grid icon
+      <>
+        <Path
+          d="M3 3H11V11H3V3Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <Path
+          d="M13 3H21V11H13V3Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <Path
+          d="M13 13H21V21H13V13Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <Path
+          d="M3 13H11V21H3V13Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </>
+    ) : (
+      // Staggered grid icon - different sizes
+      <>
+        <Path
+          d="M3 3H10V12H3V3Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <Path
+          d="M14 3H21V8H14V3Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <Path
+          d="M14 12H21V21H14V12Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <Path
+          d="M3 16H10V21H3V16Z"
+          stroke={color}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </>
+    )}
+  </Svg>
+);
 
 // Product data for different categories
 const productData = {
@@ -138,12 +208,17 @@ const productData = {
 const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
   const [products, setProducts] = useState([]);
   const [favorites, setFavorites] = useState(new Set());
+  const [viewMode, setViewMode] = useState(0); // 0: default 2-column, 1: staggered view
 
   useEffect(() => {
     // Set products based on category
     const categoryProducts = productData[category] || productData.Sale;
     setProducts(categoryProducts);
   }, [category]);
+
+  const handleGridToggle = () => {
+    setViewMode(prev => prev === 0 ? 1 : 0);
+  };
 
   const handleSearchPress = () => {
     if (navigation) {
@@ -193,15 +268,26 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
     </View>
   );
 
-  const renderProductCard = ({ item }) => {
+  const renderProductCard = ({ item, index }) => {
     const imageStyle = [
       styles.productImage, 
       { backgroundColor: item.backgroundColor },
       item.backgroundColor === '#FFFFFF' && styles.whiteProductImage,
     ];
 
+    // For staggered view, make cards smaller and vary heights
+    const isStaggered = viewMode === 1;
+    let cardStyle = styles.productCard;
+    let imageHeight = 150;
+    
+    if (isStaggered) {
+      cardStyle = [styles.productCard, styles.staggeredCard];
+      // Alternate heights for staggered effect
+      imageHeight = index % 3 === 1 ? 180 : 140;
+    }
+
     return (
-      <View style={styles.productCard}>
+      <View style={cardStyle}>
         <TouchableOpacity
           style={styles.favoriteButton}
           onPress={() => toggleFavorite(item.id)}
@@ -213,18 +299,18 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
           />
         </TouchableOpacity>
         
-        <View style={imageStyle} />
+        <View style={[imageStyle, { height: imageHeight }]} />
         
         <View style={styles.productInfo}>
-          <Text style={styles.productName}>
+          <Text style={[styles.productName, isStaggered && styles.smallerText]}>
             {item.name}
           </Text>
-          <Text style={styles.productSubtitle}>
+          <Text style={[styles.productSubtitle, isStaggered && styles.smallerText]}>
             {item.subtitle}
           </Text>
           {renderColorDots(item.colors)}
           <View style={styles.priceContainer}>
-            <Text style={styles.productPrice}>
+            <Text style={[styles.productPrice, isStaggered && styles.smallerText]}>
               {item.price}
             </Text>
             <TouchableOpacity style={styles.cartButton}>
@@ -240,6 +326,36 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
     );
   };
 
+  const renderGridView = () => {
+    if (viewMode === 1) {
+      // Staggered view - simplified approach
+      return (
+        <FlatList
+          data={products}
+          numColumns={2}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => renderProductCard({ item, index })}
+          contentContainerStyle={styles.staggeredContainer}
+          showsVerticalScrollIndicator={false}
+          columnWrapperStyle={styles.staggeredRow}
+        />
+      );
+    } else {
+      // Default 2-column grid
+      return (
+        <FlatList
+          data={products}
+          numColumns={2}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => renderProductCard({ item, index })}
+          contentContainerStyle={styles.gridContainer}
+          showsVerticalScrollIndicator={false}
+          columnWrapperStyle={styles.row}
+        />
+      );
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -252,8 +368,8 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
           <TouchableOpacity style={styles.iconButton} onPress={handleSearchPress}>
             <SearchIconSvg width={24} height={24} color="#000000" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
-            <GridViewIcon width={24} height={24} color="#000000" />
+          <TouchableOpacity style={styles.iconButton} onPress={handleGridToggle}>
+            <CustomGridIcon width={24} height={24} color="#000000" isStaggered={viewMode === 1} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconButton}>
             <FilterIconNew width={24} height={24} color="#000000" />
@@ -262,15 +378,7 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
       </View>
 
       {/* Product Grid */}
-      <FlatList
-        data={products}
-        numColumns={2}
-        keyExtractor={(item) => item.id}
-        renderItem={renderProductCard}
-        contentContainerStyle={styles.gridContainer}
-        showsVerticalScrollIndicator={false}
-        columnWrapperStyle={styles.row}
-      />
+      {renderGridView()}
     </View>
   );
 };
@@ -307,7 +415,14 @@ const styles = StyleSheet.create({
   gridContainer: {
     padding: Spacing.md,
   },
+  staggeredContainer: {
+    padding: Spacing.md,
+  },
   row: {
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.xs,
+  },
+  staggeredRow: {
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.xs,
   },
@@ -322,6 +437,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+  },
+  staggeredCard: {
+    width: (screenWidth - Spacing.md * 3) / 2,
+    marginBottom: Spacing.md,
   },
   favoriteButton: {
     position: 'absolute',
@@ -354,6 +473,9 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.xs,
     color: '#767676',
     marginBottom: Spacing.xs,
+  },
+  smallerText: {
+    fontSize: FontSizes.xs * 0.9,
   },
   colorDotsContainer: {
     flexDirection: 'row',
