@@ -7,15 +7,10 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import { FontSizes, FontWeights, Spacing, BorderRadius } from '../constants';
+import { FontSizes, FontWeights, Spacing } from '../constants';
 import SearchIconSvg from '../assets/icons/SearchIconSvg';
 import HeartIconSvg from '../assets/icons/HeartIconSvg';
 import CartIconSvg from '../assets/icons/CartIconSvg';
-import {
-  GlobalShippingIcon,
-  RiskFreePurchaseIcon,
-  OnlineAssistanceIcon,
-} from '../assets/icons';
 import {
   SaleImageSvg,
   LifestyleImageSvg,
@@ -148,53 +143,6 @@ const HomeScreen = ({ navigation }) => {
         style={styles.categoriesList}
         showsVerticalScrollIndicator={false}
       />
-
-      {/* Info Section */}
-      <View style={styles.infoSection}>
-        <View style={styles.infoItem}>
-          <View style={styles.infoImageContainer}>
-            <GlobalShippingIcon width={80} height={80} color="#000000" />
-          </View>
-          <View style={styles.infoContent}>
-            <Text style={styles.infoTitle}>GLOBAL SHIPPING</Text>
-            <Text style={styles.infoDescription}>
-              We offer fast and reliable free shipping options both within India, ensuring your order reaches you in a timely manner.
-            </Text>
-          </View>
-        </View>
-
-        <View style={[styles.infoItem, styles.infoItemReverse]}>
-          <View style={styles.infoContent}>
-            <Text style={styles.infoTitle}>RISK-FREE PURCHASE</Text>
-            <Text style={styles.infoDescription}>
-              We offer 4 days to exchange or return your product, ensuring a seamless shopping experience for our valued customers.
-            </Text>
-          </View>
-          <View style={styles.infoImageContainer}>
-            <RiskFreePurchaseIcon width={80} height={80} color="#000000" />
-          </View>
-        </View>
-
-        <View style={styles.infoItem}>
-          <View style={styles.infoImageContainer}>
-            <OnlineAssistanceIcon width={80} height={80} color="#000000" />
-          </View>
-          <View style={styles.infoContent}>
-            <Text style={styles.infoTitle}>ONLINE ASSISTANCE</Text>
-            <Text style={styles.infoDescription}>
-              Our friendly and knowledgeable customer support team is available to assist you with any queries.
-            </Text>
-          </View>
-        </View>
-      </View>
-
-      {/* Footer */}
-      <View style={styles.footer}>
-        <View style={styles.footerLogo}>
-          <Text style={styles.footerLogoText}>YORAA</Text>
-        </View>
-        <Text style={styles.footerText}>Thanks for being with us.</Text>
-      </View>
     </View>
   );
 };
@@ -299,71 +247,6 @@ const styles = StyleSheet.create({
     fontSize: 18, // Slightly smaller to match Figma
     color: '#292526',
     fontWeight: '300',
-  },
-
-  // Info Section Styles
-  infoSection: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.xl,
-    gap: Spacing.xxxl, // Increased gap to match Figma spacing
-  },
-  infoItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start', // Changed to flex-start for better text alignment
-    gap: Spacing.lg,
-    paddingVertical: Spacing.md,
-  },
-  infoItemReverse: {
-    flexDirection: 'row-reverse',
-  },
-  infoImageContainer: {
-    width: 80,
-    height: 80,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  infoImagePlaceholder: {
-    width: 80,
-    height: 80,
-    backgroundColor: '#EEE',
-    borderRadius: BorderRadius.md,
-  },
-  infoContent: {
-    flex: 1,
-    paddingTop: Spacing.xs, // Small padding to align with icon
-  },
-  infoTitle: {
-    fontSize: 12,
-    fontWeight: FontWeights.bold,
-    color: '#000000',
-    marginBottom: Spacing.xs,
-    letterSpacing: 0.5, // Added letter spacing for better readability
-  },
-  infoDescription: {
-    fontSize: 12,
-    color: '#000000',
-    lineHeight: 20, // Reduced line height to match Figma more closely
-  },
-
-  // Footer Styles
-  footer: {
-    alignItems: 'center',
-    paddingVertical: Spacing.xl,
-    paddingBottom: Spacing.xxxl, // Extra padding for bottom
-  },
-  footerLogo: {
-    marginBottom: Spacing.lg,
-  },
-  footerLogoText: {
-    fontSize: 20,
-    fontWeight: FontWeights.bold,
-    color: '#000000',
-    letterSpacing: 1.5,
-  },
-  footerText: {
-    fontSize: 14,
-    fontWeight: FontWeights.medium,
-    color: '#000000',
   },
 });
 
