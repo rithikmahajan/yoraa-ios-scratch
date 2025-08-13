@@ -43,15 +43,20 @@ const BagScreen = ({ navigation, route }) => {
   const [cartItems, setCartItems] = useState([]);
   const [quantityModalVisible, setQuantityModalVisible] = useState(false);
   const [sizeModalVisible, setSizeModalVisible] = useState(false);
+  const [sizeChartModalVisible, setSizeChartModalVisible] = useState(false);
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState('M');
+  const [sizeChartActiveTab, setSizeChartActiveTab] = useState('chart');
+  const [selectedUnit, setSelectedUnit] = useState('cm');
 
   // Animation refs
   const quantitySlideAnim = useRef(new Animated.Value(screenHeight)).current;
   const sizeSlideAnim = useRef(new Animated.Value(screenHeight)).current;
+  const sizeChartSlideAnim = useRef(new Animated.Value(screenHeight)).current;
   const quantityPanY = useRef(new Animated.Value(0)).current;
   const sizePanY = useRef(new Animated.Value(0)).current;
+  const sizeChartPanY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     // Get data from route params if available
@@ -118,6 +123,28 @@ const BagScreen = ({ navigation, route }) => {
     },
   });
 
+  // Size Chart Modal PanResponder
+  const sizeChartPanResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: (evt, gestureState) => {
+      return Math.abs(gestureState.dy) > 10;
+    },
+    onPanResponderMove: (evt, gestureState) => {
+      if (gestureState.dy > 0) {
+        sizeChartPanY.setValue(gestureState.dy);
+      }
+    },
+    onPanResponderRelease: (evt, gestureState) => {
+      if (gestureState.dy > 100) {
+        closeSizeChartModal();
+      } else {
+        Animated.spring(sizeChartPanY, {
+          toValue: 0,
+          useNativeDriver: true,
+        }).start();
+      }
+    },
+  });
+
   const openQuantityModal = (itemIndex) => {
     setSelectedItemIndex(itemIndex);
     setSelectedQuantity(cartItems[itemIndex].quantity);
@@ -159,6 +186,27 @@ const BagScreen = ({ navigation, route }) => {
     }).start(() => {
       setSizeModalVisible(false);
       sizePanY.setValue(0);
+    });
+  };
+
+  const openSizeChartModal = () => {
+    setSizeChartModalVisible(true);
+    setSizeChartActiveTab('chart');
+    Animated.timing(sizeChartSlideAnim, {
+      toValue: 0,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const closeSizeChartModal = () => {
+    Animated.timing(sizeChartSlideAnim, {
+      toValue: screenHeight,
+      duration: 250,
+      useNativeDriver: true,
+    }).start(() => {
+      setSizeChartModalVisible(false);
+      sizeChartPanY.setValue(0);
     });
   };
 
@@ -403,13 +451,144 @@ const BagScreen = ({ navigation, route }) => {
               </ScrollView>
               <TouchableOpacity 
                 style={styles.sizeChartLink}
-                onPress={() => navigation.navigate('SizeChart')}
+                onPress={openSizeChartModal}
               >
                 <Text style={styles.sizeChartText}>Size Chart</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.doneButton} onPress={handleDoneSize}>
                 <Text style={styles.doneButtonText}>Done</Text>
               </TouchableOpacity>
+            </View>
+          </Animated.View>
+        </View>
+      )}
+
+      {/* Size Chart Modal */}
+      {sizeChartModalVisible && (
+        <View style={styles.modalOverlay}>
+          <Animated.View 
+            style={[
+              styles.sizeChartModalContainer,
+              {
+                transform: [
+                  { translateY: sizeChartSlideAnim },
+                  { translateY: sizeChartPanY }
+                ]
+              }
+            ]}
+            {...sizeChartPanResponder.panHandlers}
+          >
+            <View style={styles.dragHandle} />
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>SIZE SELECTION</Text>
+              
+              {/* Tab Headers */}
+              <View style={styles.tabContainer}>
+                <TouchableOpacity 
+                  style={[
+                    styles.tabButton,
+                    sizeChartActiveTab === 'chart' && styles.activeTab
+                  ]}
+                  onPress={() => setSizeChartActiveTab('chart')}
+                >
+                  <Text style={[
+                    styles.tabText,
+                    sizeChartActiveTab === 'chart' && styles.activeTabText
+                  ]}>
+                    Size Chart
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                  style={[
+                    styles.tabButton,
+                    sizeChartActiveTab === 'measure' && styles.activeTab
+                  ]}
+                  onPress={() => setSizeChartActiveTab('measure')}
+                >
+                  <Text style={[
+                    styles.tabText,
+                    sizeChartActiveTab === 'measure' && styles.activeTabText
+                  ]}>
+                    How To Measure
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* Tab Content */}
+              <ScrollView style={styles.tabContent}>
+                {sizeChartActiveTab === 'chart' ? (
+                  <View style={styles.sizeChartContent}>
+                    <Text style={styles.sizeChartSubtitle}>Select size in</Text>
+                    <View style={styles.unitSelector}>
+                      <TouchableOpacity 
+                        style={[
+                          styles.unitButton,
+                          selectedUnit === 'in' && styles.selectedUnitButton
+                        ]}
+                        onPress={() => setSelectedUnit('in')}
+                      >
+                        <Text style={[
+                          styles.unitButtonText,
+                          selectedUnit === 'in' && styles.selectedUnitButtonText
+                        ]}>
+                          in
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity 
+                        style={[
+                          styles.unitButton,
+                          selectedUnit === 'cm' && styles.selectedUnitButton
+                        ]}
+                        onPress={() => setSelectedUnit('cm')}
+                      >
+                        <Text style={[
+                          styles.unitButtonText,
+                          selectedUnit === 'cm' && styles.selectedUnitButtonText
+                        ]}>
+                          cm
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    
+                    {/* Size Chart Table */}
+                    <View style={styles.sizeTable}>
+                      {/* Table Header */}
+                      <View style={styles.tableHeader}>
+                        <Text style={styles.tableHeaderText}>Size</Text>
+                        <Text style={styles.tableHeaderText}>To fit waist(cm)</Text>
+                        <Text style={styles.tableHeaderText}>Inseam Length(cm)</Text>
+                      </View>
+                      
+                      {/* Table Rows */}
+                      {[
+                        { size: 'S', waist: '71.1', inseam: '70.1' },
+                        { size: 'M', waist: '71.1', inseam: '70.1' },
+                        { size: 'L', waist: '71.1', inseam: '70.1' },
+                        { size: 'XL', waist: '71.1', inseam: '70.1' },
+                        { size: 'XXL', waist: '71.1', inseam: '70.1' },
+                      ].map((item, index, array) => (
+                        <View 
+                          key={index} 
+                          style={[
+                            styles.tableRow,
+                            index === array.length - 1 && styles.lastTableRow
+                          ]}
+                        >
+                          <Text style={styles.tableCellText}>{item.size}</Text>
+                          <Text style={styles.tableCellText}>{item.waist}</Text>
+                          <Text style={styles.tableCellText}>{item.inseam}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                ) : (
+                  <View style={styles.measureContent}>
+                    <Text style={styles.measureText}>
+                      Measuring instructions would go here...
+                    </Text>
+                  </View>
+                )}
+              </ScrollView>
             </View>
           </Animated.View>
         </View>
@@ -787,6 +966,120 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
+  },
+  // Size Chart Modal Styles
+  sizeChartModalContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    maxHeight: screenHeight * 0.8,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  tabButton: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: 'transparent',
+  },
+  activeTab: {
+    borderBottomColor: '#000000',
+  },
+  tabText: {
+    fontSize: 16,
+    color: '#BABABA',
+  },
+  activeTabText: {
+    color: '#000000',
+    fontWeight: '600',
+  },
+  tabContent: {
+    flex: 1,
+  },
+  sizeChartContent: {
+    padding: 16,
+  },
+  sizeChartSubtitle: {
+    fontSize: 14,
+    color: '#000000',
+    marginBottom: 8,
+  },
+  unitSelector: {
+    flexDirection: 'row',
+    marginBottom: 20,
+    alignSelf: 'flex-end',
+  },
+  unitButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    borderRadius: 16,
+    marginLeft: 8,
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  selectedUnitButton: {
+    backgroundColor: '#000000',
+    borderColor: '#000000',
+  },
+  unitButtonText: {
+    fontSize: 12,
+    color: '#767676',
+    fontWeight: '600',
+  },
+  selectedUnitButtonText: {
+    color: '#FFFFFF',
+  },
+  sizeTable: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    overflow: 'hidden',
+    marginTop: 20,
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#000000',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
+  tableHeaderText: {
+    flex: 1,
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  tableRow: {
+    flexDirection: 'row',
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F6F6F6',
+  },
+  tableCellText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#000000',
+    textAlign: 'center',
+    fontWeight: '400',
+  },
+  lastTableRow: {
+    borderBottomWidth: 0,
+  },
+  measureContent: {
+    padding: 16,
+  },
+  measureText: {
+    fontSize: 14,
+    color: '#767676',
+    lineHeight: 20,
   },
 });
 
