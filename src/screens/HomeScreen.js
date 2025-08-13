@@ -35,6 +35,12 @@ const HomeScreen = ({ navigation }) => {
     }
   };
 
+  const handleFavoritesPress = () => {
+    if (navigation) {
+      navigation.navigate('Favourites');
+    }
+  };
+
   const mainTabs = [
     { id: 'My', name: 'My' },
     { id: 'Men', name: 'Men' },
@@ -113,7 +119,7 @@ const HomeScreen = ({ navigation }) => {
           <TouchableOpacity style={styles.iconButton} onPress={handleSearchPress}>
             <SearchIconSvg width={24} height={24} color="#000000" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
+          <TouchableOpacity style={styles.iconButton} onPress={handleFavoritesPress}>
             <HeartIconSvg width={23} height={21} color="#000000" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconButton}>

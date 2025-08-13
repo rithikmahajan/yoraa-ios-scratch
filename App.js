@@ -7,18 +7,21 @@ import {
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Colors } from './src/constants';
 import { EnhancedLayout } from './src/components/layout';
+import { FavoritesProvider } from './src/contexts/FavoritesContext';
 
 const App = () => {
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-        <StatusBar 
-          barStyle="dark-content" 
-          backgroundColor={Colors.background} 
-          translucent={false}
-        />
-        <EnhancedLayout />
-      </SafeAreaView>
+      <FavoritesProvider>
+        <SafeAreaView style={styles.container}>
+          <StatusBar 
+            barStyle="dark-content" 
+            backgroundColor={Colors.background} 
+            translucent={false}
+          />
+          <EnhancedLayout />
+        </SafeAreaView>
+      </FavoritesProvider>
     </SafeAreaProvider>
   );
 };
