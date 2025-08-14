@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Spacing, BorderRadius, Shadows } from '../constants';
 import Svg, { Path } from 'react-native-svg';
+import GlobalCartIcon from '../components/GlobalCartIcon';
 
 // SVG Icon Components
 const BackIcon = ({ color = '#000000' }) => (
@@ -43,19 +44,6 @@ const HeartIcon = ({ filled = false, color = '#000000' }) => (
       fill={filled ? color : 'none'}
       strokeLinecap="round"
       strokeLinejoin="round"
-    />
-  </Svg>
-);
-
-const ShoppingBagIcon = ({ color = '#14142B' }) => (
-  <Svg width={19} height={18} viewBox="0 0 19 18" fill="none">
-    <Path
-      d="M17.6885 0.5L18.5049 17.0596H0.524414L1.34082 0.5H17.6885Z"
-      stroke={color}
-    />
-    <Path
-      d="M1 9.9225L1 5.32483C1 4.17781 1.45565 3.07778 2.26671 2.26671C3.07778 1.45565 4.17781 1 5.32483 1C6.47185 1 7.57188 1.45565 8.38295 2.26671C9.19401 3.07778 9.64966 4.17781 9.64966 5.32483V9.9225"
-      stroke={color}
     />
   </Svg>
 );
@@ -138,6 +126,16 @@ const ShopScreen = ({ navigation }) => {
     setFavorites(newFavorites);
   };
 
+  const handleAddToCart = (productId) => {
+    // Handle add to cart functionality
+    console.log('Adding product to cart:', productId);
+    // You can implement actual cart logic here
+    if (navigation && navigation.navigate) {
+      // Optionally navigate to cart or show confirmation
+      // navigation.navigate('Bag');
+    }
+  };
+
   const renderProductItem = ({ item }) => (
     <TouchableOpacity style={styles.productCard}>
       <View style={styles.productImageContainer}>
@@ -148,9 +146,11 @@ const ShopScreen = ({ navigation }) => {
         >
           <HeartIcon filled={favorites.has(item.id)} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.cartButton}>
-          <ShoppingBagIcon />
-        </TouchableOpacity>
+        <GlobalCartIcon 
+          size={16} 
+          onPress={() => handleAddToCart(item.id)}
+          containerStyle={styles.globalCartButton}
+        />
       </View>
       <View style={styles.productInfo}>
         <Text style={styles.productName}>{item.name}</Text>
@@ -321,17 +321,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...Shadows.small,
   },
-  cartButton: {
-    position: 'absolute',
+  globalCartButton: {
     bottom: 12,
     right: 12,
     width: 34,
     height: 34,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 17,
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...Shadows.small,
   },
   productInfo: {
     gap: 2,

@@ -29,3 +29,4 @@ export { default as LanguageScreen } from './language';
 export { default as RegionScreen } from './region';
 export { default as MembersExclusive } from './membersexclusive';
 export { default as PointsHistory } from './pointshistory';
+export { default as AuthenticationFlow } from './authenticationflow';

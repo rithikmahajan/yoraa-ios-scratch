@@ -7,13 +7,16 @@ import {
   SafeAreaView,
   Animated,
   Easing,
+  Image,
 } from 'react-native';
 
-// Back Arrow Icon Component - Simple Chevron style to match Figma
+// Back Arrow Icon Component - Using the new back button image
 const BackArrowIcon = () => (
-  <View style={styles.backArrowIcon}>
-    <Text style={styles.backChevronText}>〈</Text>
-  </View>
+  <Image 
+    source={require('../assets/icons/back-button.png')} 
+    style={styles.backArrowIcon}
+    resizeMode="contain"
+  />
 );
 
 // Right Arrow Icon Component - Simple Chevron style to match Figma
@@ -160,17 +163,10 @@ const styles = StyleSheet.create({
     width: 40, // Same width as back button to center the title
   },
 
-  // Back Arrow Icon - Simple Chevron
+  // Back Arrow Icon - Image-based
   backArrowIcon: {
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  backChevronText: {
-    fontSize: 18,
-    color: '#000000',
-    fontWeight: '400',
+    width: 34,  // Adjusted for the 68x24 image (scaled down by 2)
+    height: 12,  // Maintaining aspect ratio 
   },
 
   // Right Arrow Icon - Simple Chevron

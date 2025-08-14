@@ -13,7 +13,8 @@ import {
   StatusBar,
 } from 'react-native';
 import { FontSizes, FontWeights, Spacing, BorderRadius } from '../constants';
-import { SearchIcon, FilterIcon, ShoppingBagIcon, HeartIcon } from '../assets/icons';
+import { SearchIcon, FilterIcon, HeartIcon } from '../assets/icons';
+import GlobalCartIcon from '../components/GlobalCartIcon';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -278,6 +279,16 @@ const CollectionScreen = ({ navigation }) => {
     ));
   };
 
+  const handleAddToCart = (productId) => {
+    // Handle add to cart functionality
+    console.log('Adding product to cart:', productId);
+    // You can implement actual cart logic here
+    if (navigation && navigation.navigate) {
+      // Optionally navigate to cart or show confirmation
+      // navigation.navigate('Bag');
+    }
+  };
+
   const openFilterModal = () => {
     setShowFilterModal(true);
     Animated.timing(slideAnim, {
@@ -317,9 +328,11 @@ const CollectionScreen = ({ navigation }) => {
         >
           <HeartIcon size={16} filled={item.isWishlisted} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.cartButton}>
-          <ShoppingBagIcon size={16} />
-        </TouchableOpacity>
+        <GlobalCartIcon 
+          size={16} 
+          onPress={() => handleAddToCart(item.id)}
+          containerStyle={styles.globalCartButton}
+        />
       </View>
       <View style={styles.productInfo}>
         <Text style={styles.productName}>{item.name}</Text>
@@ -540,24 +553,11 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  cartButton: {
-    position: 'absolute',
+  globalCartButton: {
     bottom: 12,
     right: 12,
     width: 34,
     height: 34,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 17,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
   },
   productInfo: {
     paddingHorizontal: 14,

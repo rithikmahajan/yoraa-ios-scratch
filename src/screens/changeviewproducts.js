@@ -11,8 +11,8 @@ import Svg, { Path } from 'react-native-svg';
 import { FontSizes, FontWeights, Spacing } from '../constants';
 import SearchIconSvg from '../assets/icons/SearchIconSvg';
 import HeartIconSvg from '../assets/icons/HeartIconSvg';
-import CartIconSvg from '../assets/icons/CartIconSvg';
 import FilterIconNew from '../assets/icons/FilterIconNew';
+import GlobalCartIcon from '../components/GlobalCartIcon';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -197,16 +197,16 @@ const productData = {
   Lifestyle: [
     {
       id: '5',
-      name: 'Casual White Tank',
-      subtitle: 'Relaxed Fit Top',
-      price: 'US$45',
-      colors: ['#FFFFFF', '#F0F0F0'],
-      backgroundColor: '#F5F5F5',
+      name: 'High-Waist Straight Jeans',
+      subtitle: 'Vintage Blue Denim',
+      price: 'US$89',
+      colors: ['#4682B4', '#5F9EA0'],
+      backgroundColor: '#E6F3FF',
       isFavorite: false,
     },
     {
       id: '6',
-      name: 'Bright Orange Tee',
+      name: 'Cropped Orange Tee',
       subtitle: 'Cotton Blend Shirt',
       price: 'US$35',
       colors: ['#FF6B35', '#FF8C42'],
@@ -215,11 +215,11 @@ const productData = {
     },
     {
       id: '7',
-      name: 'High-Waist Jeans',
-      subtitle: 'Classic Denim',
-      price: 'US$89',
-      colors: ['#4A90E2', '#6BB6FF'],
-      backgroundColor: '#E6F3FF',
+      name: 'White Cotton Tank',
+      subtitle: 'Relaxed Fit Top',
+      price: 'US$25',
+      colors: ['#FFFFFF', '#F8F8F8'],
+      backgroundColor: '#F5F5F5',
       isFavorite: false,
     },
     {
@@ -231,10 +231,37 @@ const productData = {
       backgroundColor: '#F0F0F0',
       isFavorite: false,
     },
+    {
+      id: '9',
+      name: 'Denim Jacket & Jeans',
+      subtitle: 'Matching Set',
+      price: 'US$125',
+      colors: ['#4682B4', '#6495ED'],
+      backgroundColor: '#E6F3FF',
+      isFavorite: false,
+    },
+    {
+      id: '10',
+      name: 'Yellow Cardigan',
+      subtitle: 'Cozy Knit Sweater',
+      price: 'US$65',
+      colors: ['#FFD700', '#FFA500'],
+      backgroundColor: '#FFF8DC',
+      isFavorite: false,
+    },
+    {
+      id: '11',
+      name: 'Dark Casual Set',
+      subtitle: 'Comfort Wear',
+      price: 'US$88',
+      colors: ['#2F2F2F', '#000000'],
+      backgroundColor: '#F0F0F0',
+      isFavorite: false,
+    },
   ],
   Trendy: [
     {
-      id: '9',
+      id: '12',
       name: 'Textured Mini Dress',
       subtitle: 'Woven Pattern Design',
       price: 'US$125',
@@ -243,7 +270,7 @@ const productData = {
       isFavorite: false,
     },
     {
-      id: '10',
+      id: '13',
       name: 'Camel Knit Sweater',
       subtitle: 'Soft Wool Blend',
       price: 'US$95',
@@ -252,8 +279,8 @@ const productData = {
       isFavorite: false,
     },
     {
-      id: '11',
-      name: 'Neutral Tone Set',
+      id: '14',
+      name: 'Neutral Knit Set',
       subtitle: 'Matching Top & Bottom',
       price: 'US$88',
       colors: ['#F5E6D3', '#E8D5C4', '#D2B48C'],
@@ -261,12 +288,30 @@ const productData = {
       isFavorite: false,
     },
     {
-      id: '12',
-      name: 'Beige Coordinated Look',
+      id: '15',
+      name: 'Cream Coordinated Look',
       subtitle: 'Two-Piece Ensemble',
       price: 'US$112',
       colors: ['#F5E6D3', '#E8D5C4'],
       backgroundColor: '#E8D5C4',
+      isFavorite: false,
+    },
+    {
+      id: '16',
+      name: 'Camel Sweater',
+      subtitle: 'Turtleneck Style',
+      price: 'US$75',
+      colors: ['#D2B48C', '#CD853F'],
+      backgroundColor: '#D2B48C',
+      isFavorite: false,
+    },
+    {
+      id: '17',
+      name: 'Beige Textured Dress',
+      subtitle: 'Vintage Inspired',
+      price: 'US$135',
+      colors: ['#F5E6D3', '#E8D5C4'],
+      backgroundColor: '#F5E6D3',
       isFavorite: false,
     },
   ],
@@ -275,7 +320,7 @@ const productData = {
 const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
   const [products, setProducts] = useState([]);
   const [favorites, setFavorites] = useState(new Set());
-  const [viewMode, setViewMode] = useState(0); // 0: default 2-column, 1: staggered view, 2: compact 3-column
+  const [viewMode, setViewMode] = useState(0); // 0: 2-column grid, 1: 3-column grid, 2: large staggered grid
 
   useEffect(() => {
     // Set products based on category
@@ -325,6 +370,16 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
     });
   };
 
+  const handleAddToCart = (productId) => {
+    // Handle add to cart functionality
+    console.log('Adding product to cart:', productId);
+    // You can implement actual cart logic here
+    if (navigation && navigation.navigate) {
+      // Optionally navigate to cart or show confirmation
+      // navigation.navigate('Bag');
+    }
+  };
+
   const renderColorDots = (colors) => (
     <View style={styles.colorDotsContainer}>
       {colors.slice(0, 5).map((color, index) => (
@@ -354,21 +409,21 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
 
     // Different card styles for different view modes
     let cardStyle = styles.productCard;
-    let imageHeight = 150;
+    let imageHeight = 160;
     
     if (viewMode === 1) {
-      // Staggered view
-      cardStyle = [styles.productCard, styles.staggeredCard];
-      // Alternate heights for staggered effect
-      imageHeight = index % 3 === 1 ? 180 : 140;
-    } else if (viewMode === 2) {
-      // Compact 3-column view
+      // 3-column compact view
       cardStyle = [styles.productCard, styles.compactCard];
-      imageHeight = 120; // Smaller images for compact view
+      imageHeight = 140;
+    } else if (viewMode === 2) {
+      // Large staggered view with varying heights
+      cardStyle = [styles.productCard, styles.staggeredCard];
+      // Create varied heights for visual interest
+      const heights = [200, 160, 180, 170];
+      imageHeight = heights[index % 4];
     }
 
-    const isCompact = viewMode === 2;
-    const isStaggered = viewMode === 1;
+    const isCompact = viewMode === 1;
 
     return (
       <TouchableOpacity 
@@ -381,8 +436,8 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
           onPress={() => toggleFavorite(item.id)}
         >
           <HeartIconSvg
-            width={isCompact ? 16 : 20}
-            height={isCompact ? 14 : 18}
+            width={isCompact ? 18 : 20}
+            height={isCompact ? 16 : 18}
             color={favorites.has(item.id) ? '#FF0000' : '#000000'}
           />
         </TouchableOpacity>
@@ -392,14 +447,12 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
         <View style={styles.productInfo}>
           <Text style={[
             styles.productName, 
-            (isStaggered || isCompact) && styles.smallerText,
             isCompact && styles.compactText
           ]}>
             {item.name}
           </Text>
           <Text style={[
             styles.productSubtitle, 
-            (isStaggered || isCompact) && styles.smallerText,
             isCompact && styles.compactText
           ]}>
             {item.subtitle}
@@ -408,18 +461,18 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
           <View style={styles.priceContainer}>
             <Text style={[
               styles.productPrice, 
-              (isStaggered || isCompact) && styles.smallerText,
               isCompact && styles.compactText
             ]}>
               {item.price}
             </Text>
-            <TouchableOpacity style={styles.cartButton}>
-              <CartIconSvg 
-                width={isCompact ? 16 : 20} 
-                height={isCompact ? 12 : 15} 
-                color="#000000" 
-              />
-            </TouchableOpacity>
+            <GlobalCartIcon 
+              size={isCompact ? 16 : 20} 
+              onPress={() => handleAddToCart(item.id)}
+              containerStyle={[
+                styles.globalCartButton,
+                isCompact && styles.compactCartButton
+              ]}
+            />
           </View>
         </View>
       </TouchableOpacity>
@@ -428,21 +481,7 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
 
   const renderGridView = () => {
     if (viewMode === 1) {
-      // Staggered view - simplified approach
-      return (
-        <FlatList
-          key="staggered-view"
-          data={products}
-          numColumns={2}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item, index }) => renderProductCard({ item, index })}
-          contentContainerStyle={styles.staggeredContainer}
-          showsVerticalScrollIndicator={false}
-          columnWrapperStyle={styles.staggeredRow}
-        />
-      );
-    } else if (viewMode === 2) {
-      // Compact 3-column view
+      // 3-column compact view
       return (
         <FlatList
           key="compact-view"
@@ -453,6 +492,20 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
           contentContainerStyle={styles.compactContainer}
           showsVerticalScrollIndicator={false}
           columnWrapperStyle={styles.compactRow}
+        />
+      );
+    } else if (viewMode === 2) {
+      // Large staggered view
+      return (
+        <FlatList
+          key="staggered-view"
+          data={products}
+          numColumns={2}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item, index }) => renderProductCard({ item, index })}
+          contentContainerStyle={styles.staggeredContainer}
+          showsVerticalScrollIndicator={false}
+          columnWrapperStyle={styles.staggeredRow}
         />
       );
     } else {
@@ -494,7 +547,7 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
       </View>
 
       {/* Debug view mode indicator */}
-      <Text style={styles.debugText}>View Mode: {viewMode} ({viewMode === 0 ? '2-col' : viewMode === 1 ? 'staggered' : '3-col'})</Text>
+      <Text style={styles.debugText}>View Mode: {viewMode} ({viewMode === 0 ? '2-col' : viewMode === 1 ? '3-col' : 'staggered'})</Text>
 
       {/* Product Grid */}
       {renderGridView()}
@@ -555,22 +608,24 @@ const styles = StyleSheet.create({
   productCard: {
     width: (screenWidth - Spacing.md * 3) / 2,
     backgroundColor: '#FFFFFF',
-    borderRadius: 8,
+    borderRadius: 12,
     overflow: 'hidden',
     marginBottom: Spacing.lg,
-    elevation: 2,
+    elevation: 1,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
   },
   staggeredCard: {
     width: (screenWidth - Spacing.md * 3) / 2,
     marginBottom: Spacing.md,
+    borderRadius: 16,
   },
   compactCard: {
     width: (screenWidth - Spacing.md * 2 - Spacing.sm * 2) / 3,
     marginBottom: Spacing.sm,
+    borderRadius: 8,
   },
   favoriteButton: {
     position: 'absolute',
@@ -583,7 +638,7 @@ const styles = StyleSheet.create({
   },
   productImage: {
     width: '100%',
-    height: 150,
+    height: 160,
     backgroundColor: '#F5F5F5',
   },
   whiteProductImage: {
@@ -598,18 +653,20 @@ const styles = StyleSheet.create({
     fontWeight: FontWeights.medium,
     color: '#000000',
     marginBottom: 2,
+    lineHeight: 18,
   },
   productSubtitle: {
     fontSize: FontSizes.xs,
     color: '#767676',
     marginBottom: Spacing.xs,
+    lineHeight: 16,
   },
   smallerText: {
     fontSize: FontSizes.xs * 0.9,
   },
   compactText: {
-    fontSize: FontSizes.xs * 0.8,
-    lineHeight: FontSizes.xs * 0.9,
+    fontSize: FontSizes.xs * 0.85,
+    lineHeight: FontSizes.xs * 1.1,
   },
   colorDotsContainer: {
     flexDirection: 'row',
@@ -641,8 +698,16 @@ const styles = StyleSheet.create({
     fontWeight: FontWeights.medium,
     color: '#000000',
   },
-  cartButton: {
-    padding: Spacing.xs,
+  globalCartButton: {
+    width: 24,
+    height: 24,
+    position: 'relative',
+    bottom: 0,
+    right: 0,
+  },
+  compactCartButton: {
+    width: 20,
+    height: 20,
   },
   debugText: {
     textAlign: 'center',

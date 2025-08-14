@@ -7,7 +7,9 @@ import {
   TouchableOpacity,
   Animated,
   SafeAreaView,
+  Modal,
 } from 'react-native';
+import AuthenticationFlow from './authenticationflow';
 
 // Sample user data
 const USER_POINTS = {
@@ -31,12 +33,28 @@ const RewardsScreen = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState('giveaways'); // Default to giveaways as per requirement
   const [selectedShoppingPreference, setSelectedShoppingPreference] = useState('Women');
   const [selectedAdditionalPreferences, setSelectedAdditionalPreferences] = useState(['Boy']);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const handleLanguagePress = () => {
     if (navigation && navigation.navigate) {
       navigation.navigate('Language');
     }
+  };
+
+  const handleCreateAccount = () => {
+    setShowAuthModal(true);
+  };
+
+  const handleAuthSkip = () => {
+    setShowAuthModal(false);
+  };
+
+  const handleAuthSuccess = (type, data) => {
+    setShowAuthModal(false);
+    console.log('Authentication successful:', type, data);
+    // Handle successful authentication here
+    // You might want to update user state, navigate to another screen, etc.
   };
 
   const renderTabButtons = () => (
@@ -113,7 +131,7 @@ const RewardsScreen = ({ navigation }) => {
         <TouchableOpacity style={styles.signInButton}>
           <Text style={styles.signInButtonText}>Sign In</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.createAccountButton}>
+        <TouchableOpacity style={styles.createAccountButton} onPress={handleCreateAccount}>
           <Text style={styles.createAccountButtonText}>Create Account</Text>
         </TouchableOpacity>
       </View>
@@ -164,7 +182,7 @@ const RewardsScreen = ({ navigation }) => {
             <TouchableOpacity style={styles.signInButton}>
               <Text style={styles.signInButtonText}>Sign In</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.createAccountButton}>
+            <TouchableOpacity style={styles.createAccountButton} onPress={handleCreateAccount}>
               <Text style={styles.createAccountButtonText}>Create Account</Text>
             </TouchableOpacity>
           </View>
@@ -259,6 +277,20 @@ const RewardsScreen = ({ navigation }) => {
     <SafeAreaView style={styles.safeArea}>
       {renderTabButtons()}
       {activeTab === 'rewards' ? renderRewardsTab() : renderGiveawaysTab()}
+      
+      {/* Authentication Modal */}
+      <Modal
+        visible={showAuthModal}
+        animationType="slide"
+        presentationStyle="fullScreen"
+        onRequestClose={handleAuthSkip}
+      >
+        <AuthenticationFlow
+          navigation={navigation}
+          onSkip={handleAuthSkip}
+          onAuthSuccess={handleAuthSuccess}
+        />
+      </Modal>
     </SafeAreaView>
   );
 };
