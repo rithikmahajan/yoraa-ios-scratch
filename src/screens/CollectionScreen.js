@@ -360,7 +360,7 @@ const CollectionScreen = ({ navigation }) => {
         {/* Filter Bar */}
         <View style={styles.filterBar}>
           <TouchableOpacity style={styles.filterButton} onPress={openFilterModal}>
-            <FilterIcon size={20} />
+            <FilterIcon size={26} />
           </TouchableOpacity>
           
           {/* Swipeable Tabs */}

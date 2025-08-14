@@ -9,13 +9,7 @@ import {
 } from 'react-native';
 import LogoutModal from './logoutmodal';
 import ContactUsScreen from './contactus';
-
-// Arrow Icon Component - Simple Chevron style to match Figma
-const ArrowIcon = () => (
-  <View style={styles.arrowIcon}>
-    <Text style={styles.chevronText}>〉</Text>
-  </View>
-);
+import { ForwardArrowIcon } from '../assets/icons';
 
 // Icon Components
 const OrdersIcon = () => (
@@ -162,7 +156,7 @@ const ProfileScreen = ({ navigation }) => {
               <Text style={styles.menuItemTitle}>Inbox</Text>
               <Text style={styles.menuItemSubtitle}>View message</Text>
             </View>
-            <ArrowIcon />
+            <ForwardArrowIcon color="#999999" />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.menuItem} onPress={handleFAQ}>
@@ -170,42 +164,42 @@ const ProfileScreen = ({ navigation }) => {
               <Text style={styles.menuItemTitle}>FAQ</Text>
               <Text style={styles.menuItemSubtitle}>View queries</Text>
             </View>
-            <ArrowIcon />
+            <ForwardArrowIcon color="#999999" />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.menuItem} onPress={handleInvoices}>
             <View style={styles.menuItemLeft}>
               <Text style={styles.menuItemTitle}>Invoices</Text>
             </View>
-            <ArrowIcon />
+            <ForwardArrowIcon color="#999999" />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.menuItem} onPress={handleLoveUs}>
             <View style={styles.menuItemLeft}>
               <Text style={styles.menuItemTitle}>Love Us rate Us</Text>
             </View>
-            <ArrowIcon />
+            <ForwardArrowIcon color="#999999" />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.menuItem} onPress={handleInviteFriend}>
             <View style={styles.menuItemLeft}>
               <Text style={styles.menuItemTitle}>Invite a friend</Text>
             </View>
-            <ArrowIcon />
+            <ForwardArrowIcon color="#999999" />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.menuItem} onPress={handlePrivacyPolicy}>
             <View style={styles.menuItemLeft}>
               <Text style={styles.menuItemTitle}>Privacy policy</Text>
             </View>
-            <ArrowIcon />
+            <ForwardArrowIcon color="#999999" />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.menuItem} onPress={handleTermsConditions}>
             <View style={styles.menuItemLeft}>
               <Text style={styles.menuItemTitle}>T&C</Text>
             </View>
-            <ArrowIcon />
+            <ForwardArrowIcon color="#999999" />
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.menuItem, styles.lastMenuItem]} onPress={handleLogout}>
@@ -394,20 +388,6 @@ const styles = StyleSheet.create({
   menuItemSubtitle: {
     fontSize: 14,
     color: '#666666',
-  },
-
-  // Arrow Icon
-  // Arrow Icon - Simple Chevron
-  arrowIcon: {
-    width: 16,
-    height: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  chevronText: {
-    fontSize: 14,
-    color: '#999999',
-    fontWeight: '400',
   },
 });
 

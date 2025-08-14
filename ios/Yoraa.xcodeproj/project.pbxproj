@@ -112,7 +112,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
-				1132C0A0A132AA3B59FE5E74 /* [CP-User] [RNFB] Core Configuration */,
+				6F2B68D3E9EECE0839408DA8 /* [CP-User] [RNFB] Core Configuration */,
 			);
 			buildRules = (
 			);
@@ -202,7 +202,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-YoraaApp/Pods-YoraaApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		1132C0A0A132AA3B59FE5E74 /* [CP-User] [RNFB] Core Configuration */ = {
+		6F2B68D3E9EECE0839408DA8 /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (

@@ -15,3 +15,4 @@ export { default as ClearIcon } from './ClearIcon';
 export { default as GlobalShippingIcon } from './GlobalShippingIcon';
 export { default as RiskFreePurchaseIcon } from './RiskFreePurchaseIcon';
 export { default as OnlineAssistanceIcon } from './OnlineAssistanceIcon';
+export { default as ForwardArrowIcon } from './ForwardArrowIcon';

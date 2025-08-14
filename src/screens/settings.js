@@ -9,15 +9,9 @@ import {
   Easing,
 } from 'react-native';
 import BackButton from '../components/BackButton';
+import { ForwardArrowIcon } from '../assets/icons';
 
 // Back arrow uses global BackButton component
-
-// Right Arrow Icon Component - Simple Chevron style to match Figma
-const RightArrowIcon = () => (
-  <View style={styles.rightArrowIcon}>
-    <Text style={styles.chevronText}>〉</Text>
-  </View>
-);
 
 const SettingsScreen = ({ navigation }) => {
   const slideAnim = React.useRef(new Animated.Value(300)).current;
@@ -93,27 +87,27 @@ const SettingsScreen = ({ navigation }) => {
         <View style={styles.menuContainer}>
           <TouchableOpacity style={styles.menuItem} onPress={handleDeliveryAddresses}>
             <Text style={styles.menuItemText}>Delivery addresses</Text>
-            <RightArrowIcon />
+            <ForwardArrowIcon color="#999999" />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.menuItem} onPress={handleCommunicationPreferences}>
             <Text style={styles.menuItemText}>Communication preferences</Text>
-            <RightArrowIcon />
+            <ForwardArrowIcon color="#999999" />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.menuItem} onPress={handleProfileVisibility}>
             <Text style={styles.menuItemText}>Profile visibility</Text>
-            <RightArrowIcon />
+            <ForwardArrowIcon color="#999999" />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.menuItem} onPress={handleLinkedAccounts}>
             <Text style={styles.menuItemText}>Linked accounts</Text>
-            <RightArrowIcon />
+            <ForwardArrowIcon color="#999999" />
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.menuItem, styles.lastMenuItem]} onPress={handleDeleteAccount}>
             <Text style={[styles.menuItemText, styles.deleteAccountText]}>Delete account</Text>
-            <RightArrowIcon />
+            <ForwardArrowIcon color="#999999" />
           </TouchableOpacity>
         </View>
       </Animated.View>
@@ -155,19 +149,6 @@ const styles = StyleSheet.create({
   },
 
   // Back arrow icon is handled by BackButton component
-
-  // Right Arrow Icon - Simple Chevron
-  rightArrowIcon: {
-    width: 20,
-    height: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  chevronText: {
-    fontSize: 16,
-    color: '#999999',
-    fontWeight: '400',
-  },
 
   // Menu Styles
   menuContainer: {

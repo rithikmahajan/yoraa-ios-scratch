@@ -1,15 +1,25 @@
 import React from 'react';
-import { TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
+import BackArrowIcon from '../assets/icons/BackArrowIcon';
 
-// Reusable Back Button component using the global back-button asset
+// Reusable Back Button component using the global back arrow SVG icon
 // Props:
 // - onPress: function to execute on press (defaults to navigation.goBack handled by caller)
 // - style: optional style override for the touchable container
 // - hitSlop: optional hitSlop override
-// - size: optional numeric multiplier to scale the icon (1 = default)
-const BackButton = ({ onPress, style, hitSlop, size = 1 }) => {
-  const width = 34 * size;
-  const height = 12 * size;
+// - size: optional numeric multiplier to scale the icon (1 = default, gives 24x24)
+// - color: optional color override for the arrow (defaults to black)
+// - strokeWidth: optional stroke width override (defaults to 2)
+const BackButton = ({ 
+  onPress, 
+  style, 
+  hitSlop, 
+  size = 1, 
+  color = "black", 
+  strokeWidth = 2 
+}) => {
+  const iconSize = 24 * size;
+  
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -18,10 +28,11 @@ const BackButton = ({ onPress, style, hitSlop, size = 1 }) => {
       accessibilityRole="button"
       accessibilityLabel="Back"
     >
-      <Image
-        source={require('../assets/icons/back-button.png')}
-        style={{ width, height }}
-        resizeMode="contain"
+      <BackArrowIcon
+        width={iconSize}
+        height={iconSize}
+        color={color}
+        strokeWidth={strokeWidth}
       />
     </TouchableOpacity>
   );

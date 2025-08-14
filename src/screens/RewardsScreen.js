@@ -10,6 +10,7 @@ import {
   Modal,
 } from 'react-native';
 import AuthenticationFlow from './authenticationflow';
+import { ForwardArrowIcon } from '../assets/icons';
 
 // Sample user data
 const USER_POINTS = {
@@ -205,7 +206,7 @@ const RewardsScreen = ({ navigation }) => {
                   <Text style={styles.preferenceLabel}>Language</Text>
                 </View>
               </View>
-              <Text style={styles.chevron}>›</Text>
+              <ForwardArrowIcon color="#999999" />
             </TouchableOpacity>
             
             <TouchableOpacity 
@@ -219,7 +220,7 @@ const RewardsScreen = ({ navigation }) => {
                   <Text style={styles.preferenceLabel}>Region</Text>
                 </View>
               </View>
-              <Text style={styles.chevron}>›</Text>
+              <ForwardArrowIcon color="#999999" />
             </TouchableOpacity>
             
             <Text style={styles.shippingNote}>
@@ -587,10 +588,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666666',
     marginTop: 2,
-  },
-  chevron: {
-    fontSize: 20,
-    color: '#666666',
   },
   shippingNote: {
     fontSize: 12,
