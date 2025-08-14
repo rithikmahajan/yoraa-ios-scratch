@@ -73,7 +73,9 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   const handleInviteFriend = () => {
-    console.log('Invite a friend pressed');
+    if (navigation && navigation.navigate) {
+      navigation.navigate('InviteAFriend');
+    }
   };
 
   const handlePrivacyPolicy = () => {
