@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import BackButton from '../components/BackButton';
+import TickIcon from '../components/icons/TickIcon';
 
 
 const EditProfile = ({ navigation }) => {
@@ -533,7 +534,7 @@ const EditProfile = ({ navigation }) => {
         <View style={styles.successModalOverlay}>
           <View style={styles.successModalContent}>
             <View style={styles.successIcon}>
-              <Text style={styles.successIconText}>✓</Text>
+              <TickIcon size={24} color="#FFFFFF" />
             </View>
             <Text style={styles.successMessage}>
               Your profile details has been updated!
@@ -891,11 +892,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
-  },
-  successIconText: {
-    color: '#FFFFFF',
-    fontSize: 24,
-    fontWeight: 'bold',
   },
   successMessage: {
     fontSize: 16,

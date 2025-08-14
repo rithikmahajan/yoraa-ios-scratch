@@ -9,12 +9,11 @@ import {
   Linking,
 } from 'react-native';
 import BackButton from '../components/BackButton';
-import { Colors } from '../constants/colors';
-import { FontSizes, FontWeights, Spacing, BorderRadius } from '../constants/styles';
+import CheckboxIcon from '../components/icons/CheckboxIcon';
 
 const DeleteAccount = ({ navigation }) => {
-  const [isFirstCheckboxChecked, setIsFirstCheckboxChecked] = useState(false);
-  const [isSecondCheckboxChecked, setIsSecondCheckboxChecked] = useState(false);
+  const [isFirstCheckboxChecked, setIsFirstCheckboxChecked] = useState(true);
+  const [isSecondCheckboxChecked, setIsSecondCheckboxChecked] = useState(true);
 
   const handleTermsAndConditionsPress = () => {
     // Replace with your actual terms and conditions URL
@@ -59,9 +58,13 @@ const DeleteAccount = ({ navigation }) => {
 
   const renderCheckbox = (isChecked, onPress) => (
     <TouchableOpacity style={styles.checkboxContainer} onPress={onPress}>
-      <View style={[styles.checkbox, isChecked && styles.checkboxChecked]}>
-        {isChecked && <Text style={styles.checkmark}>✓</Text>}
-      </View>
+      <CheckboxIcon 
+        isChecked={isChecked}
+        size={20}
+        checkedColor="#111111"
+        uncheckedBorderColor="#BCBCBC"
+        uncheckedBackgroundColor="transparent"
+      />
     </TouchableOpacity>
   );
 
@@ -126,103 +129,85 @@ const DeleteAccount = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: '#FFFFFF',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderLight,
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 16,
   },
   backButton: {
-    marginRight: Spacing.lg,
-    padding: Spacing.sm,
+    marginRight: 16,
+    padding: 8,
+    marginLeft: -8,
   },
   headerTitle: {
-    fontSize: FontSizes.xl,
-    fontWeight: FontWeights.medium,
-    color: Colors.textPrimary,
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#000000',
   },
   content: {
     flex: 1,
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.xxl,
+    paddingHorizontal: 24,
+    paddingTop: 8,
   },
   guidelineSection: {
-    marginBottom: Spacing.xxxl,
+    marginBottom: 24,
   },
   guidelineTitle: {
-    fontSize: FontSizes.xl,
-    fontWeight: FontWeights.semiBold,
-    color: Colors.textPrimary,
-    marginBottom: Spacing.md,
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#000000',
+    marginBottom: 8,
   },
   guidelineText: {
-    fontSize: FontSizes.md,
-    color: Colors.textPrimary,
-    lineHeight: 20,
+    fontSize: 16,
+    color: '#000000',
+    lineHeight: 22,
   },
   termsLink: {
     textDecorationLine: 'underline',
-    color: Colors.textPrimary,
-    fontWeight: FontWeights.medium,
+    color: '#000000',
+    fontWeight: '500',
   },
   checkboxSection: {
-    marginBottom: Spacing.xxxl * 2,
+    marginBottom: 32,
   },
   checkboxRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: Spacing.lg,
+    marginBottom: 16,
   },
   checkboxContainer: {
-    marginRight: Spacing.md,
+    marginRight: 12,
     marginTop: 2,
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderWidth: 2,
-    borderColor: Colors.textSecondary,
-    backgroundColor: Colors.background,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  checkboxChecked: {
-    backgroundColor: Colors.textPrimary,
-    borderColor: Colors.textPrimary,
-  },
-  checkmark: {
-    color: Colors.background,
-    fontSize: 12,
-    fontWeight: FontWeights.bold,
   },
   checkboxText: {
     flex: 1,
-    fontSize: FontSizes.md,
-    color: Colors.textSecondary,
-    lineHeight: 20,
+    fontSize: 16,
+    color: '#666666',
+    lineHeight: 22,
   },
   continueButton: {
-    backgroundColor: Colors.textPrimary,
-    paddingVertical: Spacing.lg,
-    borderRadius: BorderRadius.xxxl,
+    backgroundColor: '#000000',
+    paddingVertical: 16,
+    borderRadius: 25,
     alignItems: 'center',
-    marginTop: 'auto',
-    marginBottom: Spacing.xxl,
+    marginTop: 0,
+    marginBottom: 32,
   },
   continueButtonDisabled: {
-    backgroundColor: Colors.textTertiary,
+    backgroundColor: '#CCCCCC',
   },
   continueButtonText: {
-    color: Colors.background,
-    fontSize: FontSizes.lg,
-    fontWeight: FontWeights.medium,
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
   continueButtonTextDisabled: {
-    color: Colors.backgroundSecondary,
+    color: '#999999',
   },
 });
 

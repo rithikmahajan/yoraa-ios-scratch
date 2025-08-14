@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import AuthenticationFlow from './authenticationflow';
 import { ForwardArrowIcon } from '../assets/icons';
+import CheckboxIcon from '../components/icons/CheckboxIcon';
 
 // Sample user data
 const USER_POINTS = {
@@ -267,11 +268,13 @@ const RewardsScreen = ({ navigation }) => {
                 }}
               >
                 <Text style={styles.checkboxLabel}>{pref}</Text>
-                <View style={styles.checkbox}>
-                  {selectedAdditionalPreferences.includes(pref) && (
-                    <Text style={styles.checkmark}>✓</Text>
-                  )}
-                </View>
+                <CheckboxIcon 
+                  isChecked={selectedAdditionalPreferences.includes(pref)}
+                  size={20}
+                  checkedColor="#111111"
+                  uncheckedBorderColor="#BCBCBC"
+                  uncheckedBackgroundColor="transparent"
+                />
               </TouchableOpacity>
             ))}
           </View>
@@ -645,20 +648,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000000',
     fontWeight: '400',
-  },
-  checkbox: {
-    width: 24,
-    height: 24,
-    borderWidth: 2,
-    borderColor: '#000000',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  checkmark: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#000000',
   },
 });
 

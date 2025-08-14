@@ -11,6 +11,7 @@ import {
   TextInput,
 } from 'react-native';
 import BackButton from '../components/BackButton';
+import CheckboxIcon from '../components/icons/CheckboxIcon';
 
 // Back arrow uses global BackButton component
 
@@ -25,9 +26,13 @@ const DropdownArrowIcon = () => (
 // Checkbox Component
 const Checkbox = ({ checked, onPress }) => (
   <TouchableOpacity style={styles.checkboxContainer} onPress={onPress}>
-    <View style={[styles.checkbox, checked && styles.checkboxChecked]}>
-      {checked && <View style={styles.checkmark} />}
-    </View>
+    <CheckboxIcon 
+      isChecked={checked}
+      size={20}
+      checkedColor="#111111"
+      uncheckedBorderColor="#BCBCBC"
+      uncheckedBackgroundColor="transparent"
+    />
   </TouchableOpacity>
 );
 
@@ -159,7 +164,7 @@ const DeliveryAddressesSettings = ({ navigation }) => {
     >
       {/* Header */}
       <View style={styles.header}>
-  <BackButton style={styles.backButton} onPress={handleBack} />
+        <BackButton style={styles.backButton} onPress={handleBack} />
         <Text style={styles.headerTitle}>Saved Delivery Address</Text>
         <View style={styles.headerSpacer} />
       </View>
@@ -195,7 +200,7 @@ const DeliveryAddressesSettings = ({ navigation }) => {
     >
       {/* Header */}
       <View style={styles.header}>
-  <BackButton style={styles.backButton} onPress={handleBack} />
+        <BackButton style={styles.backButton} onPress={handleBack} />
         <Text style={styles.headerTitle}>Add Address</Text>
         <View style={styles.headerSpacer} />
       </View>
@@ -346,7 +351,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingTop: 12,
-    paddingBottom: 20,
+    paddingBottom: 32,
   },
   backButton: {
     padding: 8,
@@ -361,22 +366,16 @@ const styles = StyleSheet.create({
     width: 40,
   },
 
-  // Back Arrow Icon - PNG Image
-  backArrowIcon: {
-    width: 24,
-    height: 24,
-  },
-
   // Address Card Styles
   addressCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     paddingHorizontal: 20,
-    paddingVertical: 20,
-    marginHorizontal: 20,
-    marginTop: 10,
-    backgroundColor: '#FFFFFF',
+    paddingVertical: 0,
+    marginHorizontal: 0,
+    marginTop: 0,
+    backgroundColor: 'transparent',
   },
   addressInfo: {
     flex: 1,
@@ -386,24 +385,29 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#000000',
     marginBottom: 4,
+    lineHeight: 20,
   },
   addressLine: {
-    fontSize: 14,
+    fontSize: 16,
+    fontWeight: '400',
     color: '#666666',
     marginBottom: 2,
+    lineHeight: 20,
   },
   addressEmail: {
-    fontSize: 14,
+    fontSize: 16,
+    fontWeight: '400',
     color: '#666666',
-    marginTop: 4,
+    marginTop: 2,
+    lineHeight: 20,
   },
   editButton: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 0,
     paddingVertical: 8,
   },
   editButtonText: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '400',
     color: '#000000',
   },
 
@@ -413,7 +417,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingVertical: 16,
     marginHorizontal: 20,
-    marginTop: 30,
+    marginTop: 40,
     alignItems: 'center',
   },
   addAddressButtonText: {
@@ -542,28 +546,6 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     marginRight: 12,
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderWidth: 2,
-    borderColor: '#CCCCCC',
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-  },
-  checkboxChecked: {
-    backgroundColor: '#000000',
-    borderColor: '#000000',
-  },
-  checkmark: {
-    width: 6,
-    height: 10,
-    borderRightWidth: 2,
-    borderBottomWidth: 2,
-    borderColor: '#FFFFFF',
-    transform: [{ rotate: '45deg' }],
   },
   checkboxLabel: {
     fontSize: 16,

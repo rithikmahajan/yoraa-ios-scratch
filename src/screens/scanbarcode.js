@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { Colors, FontSizes, FontWeights, Spacing, BorderRadius } from '../constants';
 import BackButton from '../components/BackButton';
+import TickIcon from '../components/icons/TickIcon';
 
 const { width, height } = Dimensions.get('window');
 
@@ -360,7 +361,7 @@ const EnterGTINScreen = ({ navigation }) => {
             ]}
           >
             <View style={styles.checkIcon}>
-              <Text style={styles.checkMark}>✓</Text>
+              <TickIcon size={24} color="#FFFFFF" />
             </View>
             
             <Text style={styles.successTitle}>GTIN verified successfully</Text>
@@ -627,11 +628,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: Spacing.lg,
-  },
-  checkMark: {
-    fontSize: 24,
-    color: '#FFFFFF',
-    fontWeight: FontWeights.bold,
   },
   successTitle: {
     fontSize: FontSizes.lg,

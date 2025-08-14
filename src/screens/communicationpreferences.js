@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingTop: 12,
-    paddingBottom: 20,
+    paddingBottom: 32,
   },
   backButton: {
     padding: 8,
@@ -134,13 +134,11 @@ const styles = StyleSheet.create({
     width: 40,
   },
 
-  // Back button uses shared BackButton component
-
   // Main Content
   mainContent: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingTop: 8,
+    paddingTop: 0,
   },
 
   // Section Styles
@@ -148,20 +146,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
     color: '#000000',
-    marginBottom: 8,
+    marginBottom: 4,
   },
   sectionDescription: {
     fontSize: 16,
     color: '#000000',
-    lineHeight: 22,
-    marginBottom: 32,
+    lineHeight: 20,
+    marginBottom: 24,
   },
 
   // Preference Row
   preferenceRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 24,
   },
   preferenceText: {
     fontSize: 16,
@@ -202,7 +200,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingVertical: 16,
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 16,
   },
   saveButtonText: {
     fontSize: 16,

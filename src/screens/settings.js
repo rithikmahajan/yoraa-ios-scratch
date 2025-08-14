@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingTop: 12,
-    paddingBottom: 20,
+    paddingBottom: 32,
     borderBottomWidth: 0,
   },
   backButton: {
@@ -148,20 +148,19 @@ const styles = StyleSheet.create({
     width: 40, // Same width as back button to center the title
   },
 
-  // Back arrow icon is handled by BackButton component
-
   // Menu Styles
   menuContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 8,
+    paddingHorizontal: 16,
+    paddingTop: 0,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    paddingVertical: 20,
+    paddingHorizontal: 4,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#E5E5E5',
   },
   lastMenuItem: {
     borderBottomWidth: 0,
@@ -170,9 +169,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     color: '#000000',
+    lineHeight: 20,
   },
   deleteAccountText: {
-    color: '#000000', // Same as other items based on the design
+    color: '#000000',
   },
 });
 

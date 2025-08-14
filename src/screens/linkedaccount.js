@@ -10,14 +10,6 @@ import {
 } from 'react-native';
 import BackButton from '../components/BackButton';
 
-// Chain Link Icon Component
-const ChainLinkIcon = () => (
-  <View style={styles.chainLinkIcon}>
-    <View style={styles.chainLink1} />
-    <View style={styles.chainLink2} />
-  </View>
-);
-
 const LinkedAccountScreen = ({ navigation }) => {
   const slideAnim = React.useRef(new Animated.Value(300)).current;
 
@@ -76,7 +68,7 @@ const LinkedAccountScreen = ({ navigation }) => {
 
           {/* No Connected Accounts Container */}
           <View style={styles.noAccountsContainer}>
-            <ChainLinkIcon />
+            <Text style={styles.linkIcon}>🔗</Text>
             <Text style={styles.noAccountsText}>
               You dont have any connected{'\n'}app or services
             </Text>
@@ -108,9 +100,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#E0E0E0',
+    paddingTop: 8,
+    paddingBottom: 16,
   },
   backButton: {
     padding: 8,
@@ -120,7 +111,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     fontWeight: '600',
-    color: '#1A1A1A',
+    color: '#000000',
     textAlign: 'center',
     marginRight: 28, // Compensate for back button width
   },
@@ -130,64 +121,39 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 24,
+    paddingTop: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#1A1A1A',
+    color: '#000000',
     lineHeight: 22,
-    marginBottom: 32,
+    marginBottom: 24,
   },
   noAccountsContainer: {
-    backgroundColor: '#F5F5F5',
-    borderRadius: 12,
-    paddingVertical: 24,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 40,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 8,
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    alignItems: 'flex-start',
+    marginBottom: 24,
   },
-  chainLinkIcon: {
-    width: 24,
-    height: 20,
-    marginBottom: 12,
-    position: 'relative',
-  },
-  chainLink1: {
-    position: 'absolute',
-    left: 2,
-    top: 2,
-    width: 8,
-    height: 12,
-    borderWidth: 2,
-    borderColor: '#999999',
-    borderRadius: 4,
-    transform: [{ rotate: '-25deg' }],
-  },
-  chainLink2: {
-    position: 'absolute',
-    right: 2,
-    top: 2,
-    width: 8,
-    height: 12,
-    borderWidth: 2,
-    borderColor: '#999999',
-    borderRadius: 4,
-    transform: [{ rotate: '25deg' }],
+  linkIcon: {
+    fontSize: 20,
+    marginBottom: 8,
+    color: '#666666',
   },
   noAccountsText: {
     fontSize: 14,
     color: '#666666',
-    textAlign: 'center',
-    lineHeight: 20,
+    lineHeight: 18,
   },
   updateButton: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#000000',
     borderRadius: 25,
     paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 'auto',
+    marginTop: 0,
     marginBottom: 32,
   },
   updateButtonText: {

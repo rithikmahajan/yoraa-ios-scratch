@@ -9,8 +9,6 @@ import {
   Easing,
   ScrollView,
 } from 'react-native';
-import { Colors } from '../constants/colors';
-import { Spacing, FontSizes, FontWeights, BorderRadius } from '../constants/styles';
 import BackButton from '../components/BackButton';
 
 // Radio Button Component
@@ -155,7 +153,7 @@ const ProfileVisibilityScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: '#FFFFFF',
   },
   content: {
     flex: 1,
@@ -164,18 +162,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderLight,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    paddingBottom: 32,
   },
   backButton: {
-    padding: Spacing.sm,
+    padding: 8,
+    marginLeft: -8,
   },
   headerTitle: {
-    fontSize: FontSizes.xl,
-    fontWeight: FontWeights.semiBold,
-    color: Colors.textPrimary,
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#000000',
   },
   placeholder: {
     width: 40,
@@ -184,30 +182,31 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   descriptionContainer: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.xl,
+    paddingHorizontal: 16,
+    paddingBottom: 24,
   },
   description: {
-    fontSize: FontSizes.md,
-    color: Colors.textPrimary,
-    lineHeight: 20,
+    fontSize: 16,
+    color: '#000000',
+    lineHeight: 22,
+    fontWeight: '400',
   },
   learnMore: {
-    color: Colors.primary,
+    color: '#FF6B35',
     textDecorationLine: 'underline',
   },
   sectionContainer: {
-    paddingHorizontal: Spacing.lg,
-    marginBottom: Spacing.xl,
+    paddingHorizontal: 16,
+    marginBottom: 32,
   },
   sectionTitle: {
-    fontSize: FontSizes.lg,
-    fontWeight: FontWeights.semiBold,
-    color: Colors.textPrimary,
-    marginBottom: Spacing.lg,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#000000',
+    marginBottom: 16,
   },
   radioContainer: {
-    marginBottom: Spacing.lg,
+    marginBottom: 16,
   },
   radioRow: {
     flexDirection: 'row',
@@ -218,47 +217,48 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: Colors.border,
+    borderColor: '#E0E0E0',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: Spacing.md,
+    marginRight: 12,
     marginTop: 2,
   },
   radioButtonSelected: {
-    borderColor: Colors.textPrimary,
+    borderColor: '#000000',
   },
   radioButtonInner: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.textPrimary,
+    backgroundColor: '#000000',
   },
   radioTextContainer: {
     flex: 1,
   },
   radioLabel: {
-    fontSize: FontSizes.md,
-    color: Colors.textPrimary,
+    fontSize: 16,
+    color: '#000000',
     lineHeight: 20,
+    fontWeight: '400',
   },
   radioDescription: {
-    fontSize: FontSizes.sm,
-    color: Colors.textSecondary,
-    marginTop: Spacing.xs,
-    lineHeight: 16,
+    fontSize: 14,
+    color: '#666666',
+    marginTop: 4,
+    lineHeight: 18,
   },
   saveButton: {
-    backgroundColor: Colors.textPrimary,
-    borderRadius: BorderRadius.round,
-    paddingVertical: Spacing.lg,
-    marginHorizontal: Spacing.lg,
-    marginBottom: Spacing.xxxl,
+    backgroundColor: '#000000',
+    borderRadius: 25,
+    paddingVertical: 16,
+    marginHorizontal: 16,
+    marginBottom: 40,
     alignItems: 'center',
   },
   saveButtonText: {
-    color: Colors.background,
-    fontSize: FontSizes.lg,
-    fontWeight: FontWeights.semiBold,
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
