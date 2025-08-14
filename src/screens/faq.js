@@ -10,6 +10,7 @@ import {
   Platform,
   UIManager,
 } from 'react-native';
+import { BackButton } from '../components';
 
 // Enable LayoutAnimation on Android
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -24,17 +25,8 @@ const ExpandIcon = ({ isExpanded }) => (
   </View>
 );
 
-// Back Arrow Component
-const BackArrow = () => (
-  <View style={styles.backArrowContainer}>
-    <View style={styles.backArrowLine1} />
-    <View style={styles.backArrowLine2} />
-  </View>
-);
-
 const FAQScreen = ({ navigation }) => {
-  const [expandedItems, setExpandedItems] = useState({});
-  const [allExpanded, setAllExpanded] = useState(false);
+  const [expandedItems, setExpandedItems] = useState({ 1: true }); // First item expanded by default
 
   // FAQ Data
   const faqData = [
@@ -100,20 +92,6 @@ const FAQScreen = ({ navigation }) => {
     }));
   };
 
-  const toggleAllItems = () => {
-    // Configure the animation
-    LayoutAnimation.configureNext(animationConfig);
-    
-    const newExpandedState = !allExpanded;
-    setAllExpanded(newExpandedState);
-    
-    const newExpandedItems = {};
-    faqData.forEach(item => {
-      newExpandedItems[item.id] = newExpandedState;
-    });
-    setExpandedItems(newExpandedItems);
-  };
-
   const handleBack = () => {
     if (navigation && navigation.goBack) {
       navigation.goBack();
@@ -122,39 +100,11 @@ const FAQScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Status Bar */}
-      <View style={styles.statusBar}>
-        <Text style={styles.statusBarTime}>9:41</Text>
-        <View style={styles.statusBarRight}>
-          <View style={styles.signalBars}>
-            <View style={styles.bar1} />
-            <View style={styles.bar2} />
-            <View style={styles.bar3} />
-            <View style={styles.bar4} />
-          </View>
-          <View style={styles.wifiIcon} />
-          <View style={styles.batteryIcon}>
-            <View style={styles.batteryFill} />
-          </View>
-        </View>
-      </View>
-
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-          <BackArrow />
-        </TouchableOpacity>
+        <BackButton onPress={handleBack} style={styles.backButton} />
         <Text style={styles.headerTitle}>FAQ</Text>
         <View style={styles.headerRight} />
-      </View>
-
-      {/* View All / Hide All Button */}
-      <View style={styles.toggleContainer}>
-        <TouchableOpacity style={styles.toggleButton} onPress={toggleAllItems}>
-          <Text style={styles.toggleButtonText}>
-            {allExpanded ? 'Hide All Data' : 'View All Data'}
-          </Text>
-        </TouchableOpacity>
       </View>
 
       {/* FAQ Content */}
@@ -174,17 +124,9 @@ const FAQScreen = ({ navigation }) => {
                 <Text style={styles.answerText}>{item.answer}</Text>
               </View>
             )}
-            
-            {/* Separator line between FAQ items */}
-            {index < faqData.length - 1 && <View style={styles.separator} />}
           </View>
         ))}
       </ScrollView>
-
-      {/* Home Indicator */}
-      <View style={styles.homeIndicator}>
-        <View style={styles.homeIndicatorBar} />
-      </View>
     </SafeAreaView>
   );
 };
@@ -195,82 +137,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   
-  // Status Bar
-  statusBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    height: 44,
-  },
-  statusBarTime: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#000000',
-    letterSpacing: -0.165,
-  },
-  statusBarRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  signalBars: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: 1,
-    width: 17,
-    height: 11,
-  },
-  bar: {
-    width: 3,
-    backgroundColor: '#000000',
-    borderRadius: 0.5,
-  },
-  bar1: {
-    width: 3,
-    height: 4,
-    backgroundColor: '#000000',
-    borderRadius: 0.5,
-  },
-  bar2: {
-    width: 3,
-    height: 6,
-    backgroundColor: '#000000',
-    borderRadius: 0.5,
-  },
-  bar3: {
-    width: 3,
-    height: 8,
-    backgroundColor: '#000000',
-    borderRadius: 0.5,
-  },
-  bar4: {
-    width: 3,
-    height: 10,
-    backgroundColor: '#000000',
-    borderRadius: 0.5,
-  },
-  wifiIcon: {
-    width: 15,
-    height: 11,
-    backgroundColor: '#000000',
-    borderRadius: 2,
-  },
-  batteryIcon: {
-    width: 25,
-    height: 12,
-    borderWidth: 1,
-    borderColor: '#000000',
-    borderRadius: 3,
-    padding: 1,
-  },
-  batteryFill: {
-    flex: 1,
-    backgroundColor: '#000000',
-    borderRadius: 1,
-  },
-
   // Header
   header: {
     flexDirection: 'row',
@@ -279,33 +145,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     backgroundColor: '#FFFFFF',
+    marginBottom: 24,
   },
   backButton: {
     width: 68,
     height: 24,
     justifyContent: 'center',
     alignItems: 'flex-start',
-  },
-  backArrowContainer: {
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-  },
-  backArrowLine1: {
-    position: 'absolute',
-    width: 8,
-    height: 2,
-    backgroundColor: '#000000',
-    transform: [{ rotate: '45deg' }, { translateX: -2 }, { translateY: -2 }],
-  },
-  backArrowLine2: {
-    position: 'absolute',
-    width: 8,
-    height: 2,
-    backgroundColor: '#000000',
-    transform: [{ rotate: '-45deg' }, { translateX: -2 }, { translateY: 2 }],
   },
   headerTitle: {
     fontSize: 16,
@@ -318,38 +164,19 @@ const styles = StyleSheet.create({
     width: 68,
   },
 
-  // Toggle Container
-  toggleContainer: {
-    paddingHorizontal: 32,
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
-  toggleButton: {
-    backgroundColor: '#000000',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 24,
-  },
-  toggleButtonText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '500',
-    textAlign: 'center',
-  },
-
   // FAQ Content
   scrollView: {
     flex: 1,
     paddingHorizontal: 32,
   },
   faqItem: {
-    marginBottom: 24,
+    marginBottom: 32,
   },
   questionContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    paddingVertical: 8,
+    paddingVertical: 4,
   },
   questionText: {
     flex: 1,
@@ -384,7 +211,7 @@ const styles = StyleSheet.create({
     borderRadius: 0.75,
   },
   answerContainer: {
-    paddingTop: 16,
+    paddingTop: 12,
     paddingRight: 32,
   },
   answerText: {
@@ -392,26 +219,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#848688',
     lineHeight: 16.8,
-  },
-
-  // Separator
-  separator: {
-    height: 1,
-    backgroundColor: '#F0F0F0',
-    marginVertical: 16,
-  },
-
-  // Home Indicator
-  homeIndicator: {
-    alignItems: 'center',
-    paddingBottom: 8,
-    paddingTop: 4,
-  },
-  homeIndicatorBar: {
-    width: 134,
-    height: 5,
-    backgroundColor: '#1A1A1A',
-    borderRadius: 100,
   },
 });
 

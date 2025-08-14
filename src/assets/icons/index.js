@@ -16,3 +16,6 @@ export { default as GlobalShippingIcon } from './GlobalShippingIcon';
 export { default as RiskFreePurchaseIcon } from './RiskFreePurchaseIcon';
 export { default as OnlineAssistanceIcon } from './OnlineAssistanceIcon';
 export { default as ForwardArrowIcon } from './ForwardArrowIcon';
+export { default as OrdersIconNew } from './OrdersIconNew';
+export { default as ContactUsIcon } from './ContactUsIcon';
+export { default as SettingsIconNew } from './SettingsIconNew';

@@ -9,36 +9,19 @@ import {
 } from 'react-native';
 import LogoutModal from './logoutmodal';
 import ContactUsScreen from './contactus';
-import { ForwardArrowIcon } from '../assets/icons';
+import { ForwardArrowIcon, OrdersIconNew, ContactUsIcon, SettingsIconNew } from '../assets/icons';
 
-// Icon Components
+// Updated icon components using the new Figma-based SVG icons
 const OrdersIcon = () => (
-  <View style={styles.iconContainer}>
-    {/* Main container representing the document/order */}
-    <View style={styles.ordersMainContainer}>
-      {/* Top section (header area) */}
-      <View style={styles.ordersHeader} />
-      {/* Content area with line */}
-      <View style={styles.ordersContent}>
-        <View style={styles.ordersContentLine} />
-      </View>
-    </View>
-  </View>
+  <OrdersIconNew width={24} height={24} color="#000000" />
 );
 
 const ContactIcon = () => (
-  <View style={styles.iconContainer}>
-    <View style={styles.contactCircle} />
-    <View style={styles.contactLine1} />
-    <View style={styles.contactLine2} />
-  </View>
+  <ContactUsIcon width={24} height={24} color="#000000" />
 );
 
 const SettingsIcon = () => (
-  <View style={styles.iconContainer}>
-    <View style={styles.settingsGear} />
-    <View style={styles.settingsCenter} />
-  </View>
+  <SettingsIconNew width={18} height={18} color="#000000" />
 );
 
 const ProfileScreen = ({ navigation }) => {
@@ -236,37 +219,40 @@ const styles = StyleSheet.create({
   // Header Styles
   headerContainer: {
     alignItems: 'center',
-    paddingTop: 40,
-    paddingBottom: 32,
+    paddingTop: 50,
+    paddingBottom: 30,
     paddingHorizontal: 24,
   },
   clientName: {
-    fontSize: 24,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '500',
     color: '#000000',
-    marginBottom: 24,
+    marginBottom: 30,
+    fontFamily: 'Montserrat-Medium',
   },
   editProfileButton: {
     backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: '#000000',
-    borderRadius: 24,
-    paddingHorizontal: 40,
-    paddingVertical: 12,
+    borderRadius: 100,
+    paddingHorizontal: 51,
+    paddingVertical: 16,
   },
   editProfileText: {
     fontSize: 16,
     fontWeight: '500',
     color: '#000000',
+    fontFamily: 'Montserrat-Medium',
   },
 
   // Actions Container
   actionsContainer: {
     flexDirection: 'row',
-    paddingHorizontal: 24,
-    paddingVertical: 24,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
+    marginBottom: 34,
   },
   actionButton: {
     alignItems: 'center',
@@ -274,91 +260,17 @@ const styles = StyleSheet.create({
   },
   actionDivider: {
     width: 1,
-    height: 40,
-    backgroundColor: '#E0E0E0',
-    marginHorizontal: 16,
+    height: 31,
+    backgroundColor: '#000000',
+    marginHorizontal: 0,
   },
   actionButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 12,
+    fontWeight: '400',
     color: '#000000',
-    marginTop: 8,
-  },
-
-  // Icon Styles
-  iconContainer: {
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-  },
-  ordersMainContainer: {
-    width: 20,
-    height: 18,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1.5,
-    borderColor: '#000000',
-    borderRadius: 2,
-    overflow: 'hidden',
-  },
-  ordersHeader: {
-    width: '100%',
-    height: 5,
-    backgroundColor: '#000000',
-  },
-  ordersContent: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 3,
-  },
-  ordersContentLine: {
-    width: '80%',
-    height: 1.5,
-    backgroundColor: '#000000',
-    borderRadius: 0.5,
-  },
-  contactCircle: {
-    width: 16,
-    height: 16,
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: '#000000',
-    borderRadius: 8,
-  },
-  contactLine1: {
-    position: 'absolute',
-    width: 8,
-    height: 2,
-    backgroundColor: '#000000',
-    top: 6,
-    left: 4,
-  },
-  contactLine2: {
-    position: 'absolute',
-    width: 6,
-    height: 2,
-    backgroundColor: '#000000',
-    top: 10,
-    left: 5,
-  },
-  settingsGear: {
-    width: 20,
-    height: 20,
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: '#000000',
-    borderRadius: 10,
-  },
-  settingsCenter: {
-    position: 'absolute',
-    width: 8,
-    height: 8,
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: '#000000',
-    borderRadius: 4,
+    marginTop: 10,
+    fontFamily: 'Montserrat-Regular',
+    letterSpacing: -0.3,
   },
 
   // Menu Styles
@@ -369,12 +281,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 16,
+    paddingVertical: 21,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: '#E4E4E4',
   },
   lastMenuItem: {
-    borderBottomWidth: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E4E4E4',
   },
   menuItemLeft: {
     flex: 1,
@@ -383,11 +296,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: '#000000',
-    marginBottom: 2,
+    marginBottom: 6,
+    fontFamily: 'Montserrat-Medium',
   },
   menuItemSubtitle: {
-    fontSize: 14,
-    color: '#666666',
+    fontSize: 12,
+    color: '#767676',
+    fontFamily: 'Montserrat-Regular',
+    letterSpacing: -0.3,
   },
 });
 
