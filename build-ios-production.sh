@@ -8,13 +8,13 @@ set -e
 echo "🚀 Starting Yoraa iOS Production Build..."
 
 # Set paths
-PROJECT_ROOT="/Users/rithikmahajan/Desktop/yoraa-ios-fromscratch/yoraa-ios-scratch"
+PROJECT_ROOT="/Users/rithikmahajan/yoraa-ios-scratch-after-point history/yoraa-ios-scratch"
 IOS_DIR="$PROJECT_ROOT/ios"
 WORKSPACE_PATH="$IOS_DIR/Yoraa.xcworkspace"
 SCHEME="YoraaApp"
 ARCHIVE_PATH="$IOS_DIR/build/YoraaApp.xcarchive"
 EXPORT_PATH="$IOS_DIR/build/Release"
-EXPORT_OPTIONS_PATH="$IOS_DIR/exportOptions-production-ready.plist"
+EXPORT_OPTIONS_PATH="$IOS_DIR/exportOptions.plist"
 
 cd "$PROJECT_ROOT"
 
@@ -48,9 +48,7 @@ xcodebuild -workspace "$WORKSPACE_PATH" \
            -archivePath "$ARCHIVE_PATH" \
            clean archive \
            DEVELOPMENT_TEAM=D8JZ482HWR \
-           CODE_SIGN_IDENTITY="iPhone Distribution" \
-           PROVISIONING_PROFILE_SPECIFIER="YoraaApp_Distribution" \
-           | xcpretty
+           CODE_SIGN_STYLE=Automatic
 
 if [ ! -d "$ARCHIVE_PATH" ]; then
     echo "❌ Archive failed!"
@@ -61,8 +59,7 @@ echo "📦 Exporting IPA..."
 xcodebuild -exportArchive \
            -archivePath "$ARCHIVE_PATH" \
            -exportPath "$EXPORT_PATH" \
-           -exportOptionsPlist "$EXPORT_OPTIONS_PATH" \
-           | xcpretty
+           -exportOptionsPlist "$EXPORT_OPTIONS_PATH"
 
 if [ -f "$EXPORT_PATH/YoraaApp.ipa" ]; then
     echo "✅ Production build completed successfully!"
