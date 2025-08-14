@@ -46,6 +46,12 @@ const RewardsScreen = ({ navigation }) => {
     setShowAuthModal(true);
   };
 
+  const handleSignIn = () => {
+    if (navigation && navigation.navigate) {
+      navigation.navigate('LoginScreen');
+    }
+  };
+
   const handleAuthSkip = () => {
     setShowAuthModal(false);
   };
@@ -128,7 +134,7 @@ const RewardsScreen = ({ navigation }) => {
 
       {/* Sign in and Create Account buttons */}
       <View style={styles.authButtons}>
-        <TouchableOpacity style={styles.signInButton}>
+        <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
           <Text style={styles.signInButtonText}>Sign In</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.createAccountButton} onPress={handleCreateAccount}>
@@ -179,7 +185,7 @@ const RewardsScreen = ({ navigation }) => {
 
           {/* Sign in and Create Account buttons */}
           <View style={styles.authButtons}>
-            <TouchableOpacity style={styles.signInButton}>
+            <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
               <Text style={styles.signInButtonText}>Sign In</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.createAccountButton} onPress={handleCreateAccount}>

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import BottomNavigationBar from './bottomnavigationbar';
 import { Colors, FontSizes, FontWeights, Spacing } from '../constants';
-import { HomeScreen, ShopScreen, CollectionScreen, RewardsScreen, ProfileScreen, SearchScreen, OrdersScreen, EditProfile, SettingsScreen, DeliveryAddressesSettings, CommunicationPreferences, LinkedAccountScreen, DeleteAccount, ProfileVisibilityScreen, ContactUsScreen, InvoiceScreen, LoveUsRateUs, FAQScreen, ScanBarcodeFlow, FavouritesScreen, ChangeViewProducts, ProductDetailScreen, ReviewsScreen, BuyNowScreen, SizeChartScreen, BagScreen, DeliveryScreen, LanguageScreen, RegionScreen, MembersExclusive, PointsHistory } from '../screens';
+import { HomeScreen, ShopScreen, CollectionScreen, RewardsScreen, ProfileScreen, SearchScreen, OrdersScreen, EditProfile, SettingsScreen, DeliveryAddressesSettings, CommunicationPreferences, LinkedAccountScreen, DeleteAccount, ProfileVisibilityScreen, ContactUsScreen, InvoiceScreen, LoveUsRateUs, FAQScreen, ScanBarcodeFlow, FavouritesScreen, ChangeViewProducts, ProductDetailScreen, ReviewsScreen, BuyNowScreen, SizeChartScreen, BagScreen, DeliveryScreen, LanguageScreen, RegionScreen, MembersExclusive, PointsHistory, LoginScreen, MobileLoginScreen, EmailLoginScreen, OTPVerificationScreen, CreateAccountScreen } from '../screens';
 
 // Navigation context for handling screen navigation
 const createNavigation = (setCurrentScreen, setActiveTab, navigationHistory, setNavigationHistory) => ({
@@ -122,6 +122,16 @@ const EnhancedLayout = () => {
         return <MembersExclusive navigation={navigation} />;
       case 'PointsHistory':
         return <PointsHistory navigation={navigation} />;
+      case 'LoginScreen':
+        return <LoginScreen navigation={navigation} onClose={() => navigation.goBack()} />;
+      case 'MobileLoginScreen':
+        return <MobileLoginScreen navigation={navigation} onClose={() => navigation.goBack()} />;
+      case 'EmailLoginScreen':
+        return <EmailLoginScreen navigation={navigation} onClose={() => navigation.goBack()} />;
+      case 'OTPVerificationScreen':
+        return <OTPVerificationScreen navigation={navigation} route={{ params: navigationHistory.params }} onClose={() => navigation.goBack()} />;
+      case 'CreateAccountScreen':
+        return <CreateAccountScreen navigation={navigation} onClose={() => navigation.goBack()} />;
       default:
         return <HomeContent />;
     }
