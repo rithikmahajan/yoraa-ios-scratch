@@ -9,17 +9,10 @@ import {
   Easing,
   ScrollView,
   TextInput,
-  Image,
 } from 'react-native';
+import BackButton from '../components/BackButton';
 
-// Back Arrow Icon Component - Using PNG Image
-const BackArrowIcon = () => (
-  <Image 
-    source={require('../assets/icons/CaretLeft.png')} 
-    style={styles.backArrowIcon}
-    resizeMode="contain"
-  />
-);
+// Back arrow uses global BackButton component
 
 // Dropdown Arrow Icon Component
 const DropdownArrowIcon = () => (
@@ -166,9 +159,7 @@ const DeliveryAddressesSettings = ({ navigation }) => {
     >
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-          <BackArrowIcon />
-        </TouchableOpacity>
+  <BackButton style={styles.backButton} onPress={handleBack} />
         <Text style={styles.headerTitle}>Saved Delivery Address</Text>
         <View style={styles.headerSpacer} />
       </View>
@@ -204,9 +195,7 @@ const DeliveryAddressesSettings = ({ navigation }) => {
     >
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-          <BackArrowIcon />
-        </TouchableOpacity>
+  <BackButton style={styles.backButton} onPress={handleBack} />
         <Text style={styles.headerTitle}>Add Address</Text>
         <View style={styles.headerSpacer} />
       </View>

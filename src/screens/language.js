@@ -7,12 +7,11 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Dimensions,
-  Image
 } from 'react-native';
 import { Colors, FontSizes, FontFamilies, Spacing } from '../constants';
+import BackButton from '../components/BackButton';
 
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+
 
 const Language = ({ navigation }) => {
   const LANGUAGES = [
@@ -48,17 +47,8 @@ const Language = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Back button */}
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={styles.backButton}
-      >
-        <Image
-          source={require('../assets/icons/CaretLeft.png')}
-          style={styles.backIcon}
-          resizeMode="contain"
-        />
-      </TouchableOpacity>
+  {/* Back button */}
+  <BackButton onPress={() => navigation.goBack()} style={styles.backButton} />
 
       {/* HEADING */}
       <View style={styles.headerContainer}>
@@ -115,10 +105,7 @@ const styles = StyleSheet.create({
     marginLeft: -10,
     marginBottom: Spacing.lg,
   },
-  backIcon: {
-    width: SCREEN_HEIGHT * 0.038,
-    height: SCREEN_HEIGHT * 0.038,
-  },
+
   headerContainer: {
     marginBottom: Spacing.lg,
   },

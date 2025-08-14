@@ -4,3 +4,4 @@ export { default as LoadingScreen } from './LoadingScreen';
 export { default as BottomNavigationBar } from './bottomnavigationbar';
 export { default as Layout } from './layout';
 export { default as TopNavigationBar } from './topnavigationbar';
+export { default as BackButton } from './BackButton';

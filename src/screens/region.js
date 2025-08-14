@@ -12,15 +12,10 @@ import {
 } from 'react-native';
 import { Colors, FontSizes, FontWeights, FontFamilies, Spacing } from '../constants';
 import { SearchIcon } from '../assets/icons';
+import BackButton from '../components/BackButton';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-// Back Arrow Icon Component
-const BackArrowIcon = ({ size = 24, color = Colors.textPrimary }) => (
-  <View style={[styles.backArrowIcon, { width: size, height: size }]}>
-    <Text style={[styles.backChevronText, { color, fontSize: size * 0.8 }]}>〈</Text>
-  </View>
-);
 
 // Flag Icon Component (placeholder)
 const FlagIcon = ({ country, size = 24 }) => (
@@ -88,12 +83,7 @@ const Region = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Back button */}
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={styles.backButton}
-      >
-        <BackArrowIcon size={SCREEN_HEIGHT * 0.038} />
-      </TouchableOpacity>
+  <BackButton onPress={() => navigation.goBack()} style={styles.backButton} />
 
       {/* HEADING */}
       <View style={styles.headingContainer}>
@@ -185,14 +175,6 @@ const styles = StyleSheet.create({
   backButton: {
     marginLeft: -10,
     alignSelf: 'flex-start',
-  },
-  backArrowIcon: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  backChevronText: {
-    fontFamily: FontFamilies.bold,
-    fontWeight: FontWeights.bold,
   },
   headingContainer: {},
   heading: {

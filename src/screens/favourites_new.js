@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { FontWeights, Spacing } from '../constants';
 import { useFavorites } from '../contexts/FavoritesContext';
+import BackButton from '../components/BackButton';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -220,9 +221,7 @@ const Favourites = ({ navigation }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <Text style={styles.backIcon}>‹</Text>
-        </TouchableOpacity>
+        <BackButton onPress={handleGoBack} style={styles.backButton} />
         
         <Text style={styles.headerTitle}>Favourites</Text>
         

@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-} from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import BackButton from '../components/BackButton';
 
 const PointsHistorySimple = ({ navigation }) => {
   const handleBack = () => {
@@ -17,9 +12,7 @@ const PointsHistorySimple = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Text style={styles.backArrow}>‹</Text>
-        </TouchableOpacity>
+        <BackButton onPress={handleBack} style={styles.backButton} />
         <Text style={styles.headerTitle}>POINTS HISTORY</Text>
         <View style={styles.backButton} />
       </View>
@@ -50,11 +43,6 @@ const styles = StyleSheet.create({
     height: 24,
     justifyContent: 'center',
     alignItems: 'flex-start',
-  },
-  backArrow: {
-    fontSize: 20,
-    color: '#000000',
-    fontWeight: '400',
   },
   headerTitle: {
     fontFamily: 'System',

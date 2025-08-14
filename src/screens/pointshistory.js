@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Animated,
 } from 'react-native';
+import BackButton from '../components/BackButton';
 
 // Sample points history data
 const POINTS_RECEIVED_DATA = [
@@ -124,9 +125,7 @@ const PointsHistory = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Text style={styles.backArrow}>‹</Text>
-        </TouchableOpacity>
+        <BackButton onPress={handleBack} style={styles.backButton} />
         <Text style={styles.headerTitle}>POINTS HISTORY</Text>
         <View style={styles.backButton} />
       </View>
@@ -195,11 +194,6 @@ const styles = StyleSheet.create({
     height: 24,
     justifyContent: 'center',
     alignItems: 'flex-start',
-  },
-  backArrow: {
-    fontSize: 20,
-    color: '#000000',
-    fontWeight: '400',
   },
   headerTitle: {
     fontFamily: 'System',

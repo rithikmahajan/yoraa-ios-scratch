@@ -8,6 +8,7 @@ import {
   Alert,
   Linking,
 } from 'react-native';
+import BackButton from '../components/BackButton';
 import { Colors } from '../constants/colors';
 import { FontSizes, FontWeights, Spacing, BorderRadius } from '../constants/styles';
 
@@ -67,12 +68,10 @@ const DeleteAccount = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity 
+        <BackButton 
           style={styles.backButton} 
           onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backButtonText}>‹</Text>
-        </TouchableOpacity>
+        />
         <Text style={styles.headerTitle}>Delete Accounts</Text>
       </View>
 
@@ -140,11 +139,6 @@ const styles = StyleSheet.create({
   backButton: {
     marginRight: Spacing.lg,
     padding: Spacing.sm,
-  },
-  backButtonText: {
-    fontSize: 24,
-    color: Colors.textPrimary,
-    fontWeight: FontWeights.medium,
   },
   headerTitle: {
     fontSize: FontSizes.xl,

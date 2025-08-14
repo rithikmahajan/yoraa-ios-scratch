@@ -1,0 +1,3 @@
+// This file represents a placeholder for delete-icon.png
+// In a real implementation, this would be an actual PNG image file
+export default null;

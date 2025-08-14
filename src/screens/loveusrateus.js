@@ -13,6 +13,7 @@ import {
   Modal,
   Alert,
 } from 'react-native';
+import BackButton from '../components/BackButton';
 
 // Dynamic import for image picker to handle cases where it might not be available
 let ImagePicker;
@@ -22,14 +23,7 @@ try {
   console.warn('react-native-image-picker not available');
 }
 
-// Back Arrow Icon Component
-const BackArrowIcon = () => (
-  <Image 
-    source={require('../assets/icons/CaretLeft.png')} 
-    style={styles.backArrowIcon}
-    resizeMode="contain"
-  />
-);
+// Back arrow uses global BackButton component
 
 // Star Rating Component
 const StarRating = ({ rating, onRatingPress }) => {
@@ -181,9 +175,7 @@ const LoveUsRateUs = ({ navigation }) => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <BackArrowIcon />
-          </TouchableOpacity>
+          <BackButton style={styles.backButton} onPress={handleBack} />
           <Text style={styles.headerTitle}>Submit your feedback</Text>
           <View style={styles.headerSpacer} />
         </View>

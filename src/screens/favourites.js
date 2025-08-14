@@ -8,7 +8,8 @@ import {
   Image,
   Modal,
   Dimensions,
-} from 'react-native';
+ } from 'react-native';
+import BackButton from '../components/BackButton';
 import { FontWeights } from '../constants';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { HeartIconSvg, DeleteIcon, CheckmarkIcon } from '../assets/icons';
@@ -234,9 +235,7 @@ const Favourites = ({ navigation }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <Text style={styles.backIcon}>‹</Text>
-        </TouchableOpacity>
+        <BackButton onPress={handleGoBack} style={styles.backButton} />
         
         <Text style={styles.headerTitle}>Favourites</Text>
         
@@ -298,10 +297,7 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 8,
   },
-  backIcon: {
-    fontSize: 28,
-    color: '#000',
-  },
+  // Removed backIcon style as it is no longer needed
   headerTitle: {
     fontSize: 28,
     color: '#000',

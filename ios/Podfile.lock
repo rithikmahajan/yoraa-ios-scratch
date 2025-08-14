@@ -2758,7 +2758,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
-  hermes-engine: bbc1152da7d2d40f9e59c28acc6576fcf5d28e2a
+  hermes-engine: 8da7d7be4dcc8d4b2f4b299cbbd468f410a2e5d7
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: 300c5eb91114d4339b0bb39505d0f4824d7299b7
@@ -2767,7 +2767,7 @@ SPEC CHECKSUMS:
   React: e7a4655b09d0e17e54be188cc34c2f3e2087318a
   React-callinvoker: 62192daaa2f30c3321fc531e4f776f7b09cf892b
   React-Core: c400b068fdb6172177f3b3fae00c10d1077244d7
-  React-CoreModules: 8e911a5a504b45824374eec240a78de7a6db8ca2
+  React-CoreModules: 0816a877a905444bdf9053a87037645f6e9d2646
   React-cxxreact: 06a91f55ac5f842219d6ca47e0f77187a5b5f4ac
   React-debug: 1834225a63b420b16e9b8b01ba5870aee96d0610
   React-defaultsnativemodule: 260aa990a9617c58df46c00321f396ad6ea7cc7f
@@ -2794,7 +2794,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: a5d550d1add940ed2bc65b20dc1413407bf1a63f
   React-microtasksnativemodule: 5d00fefc19f0bc9a6432e5533683d6fc9c3da4e1
   react-native-image-picker: df98fd6bf821b49ae97a383fd4adb1430f659a67
-  react-native-safe-area-context: b36ae404f4500dff1a0adc05ecfa66be319730ac
+  react-native-safe-area-context: fbcd8153e71d8e875c96029ec19a895c98892f4b
   React-NativeModulesApple: b22e6abb44d78270dfdfc7d85efe29e35e0333a7
   React-oscompat: 56d6de59f9ae95cd006a1c40be2cde83bc06a4e1
   React-perflogger: 0633844e495d8b34798c9bf0cb32ce315f1d5c9f
@@ -2832,11 +2832,11 @@ SPEC CHECKSUMS:
   RNFBApp: fb8ecc637267c1655a4608061356246a410f423d
   RNFBAuth: 11b1855318ab7dc26ad1325277718bfd5769b0e3
   RNGoogleSignin: 9b9be54a206798826ec410b17c69fe1abe9e2af7
-  RNSVG: 432ca012e24410cab11449afef353ce20573a59f
+  RNSVG: 3cb23d072838a3e8093624119afd75efdd8091a1
   RNVectorIcons: 54df27a2e90ddeb674c7237d76060ec9762d0bc5
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 1c52fbd270869e556504def7e94fffbf67f53f7b
 
 PODFILE CHECKSUM: e61157561fd585cd27e20f131bcaeb86aadd2148
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.14.3

@@ -1,0 +1,17 @@
+export { default as HomeIcon } from './HomeIcon';
+export { default as ShopIcon } from './ShopIcon';
+export { default as CollectionIcon } from './CollectionIcon';
+export { default as RewardsIcon } from './RewardsIcon';
+export { default as ProfileIcon } from './ProfileIcon';
+export { default as ShoppingBagIcon } from './ShoppingBagIcon';
+export { default as SearchIcon } from './SearchIcon';
+export { default as FilterIcon } from './FilterIcon';
+export { default as HeartIcon } from './HeartIcon';
+export { default as MicrophoneIcon } from './MicrophoneIcon';
+export { default as CameraIcon } from './CameraIcon';
+export { default as ScanBarcodeIcon } from './ScanBarcodeIcon';
+export { default as CloseIcon } from './CloseIcon';
+export { default as ClearIcon } from './ClearIcon';
+export { default as GlobalShippingIcon } from './GlobalShippingIcon';
+export { default as RiskFreePurchaseIcon } from './RiskFreePurchaseIcon';
+export { default as OnlineAssistanceIcon } from './OnlineAssistanceIcon';

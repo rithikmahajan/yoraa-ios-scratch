@@ -14,6 +14,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { Colors, FontWeights, Spacing } from '../constants';
+import BackButton from '../components/BackButton';
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -153,12 +154,7 @@ const DeliveryScreen = ({ navigation }) => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.backIcon}>←</Text>
-          </TouchableOpacity>
+          <BackButton onPress={() => navigation.goBack()} style={styles.backButton} />
           <Text style={styles.headerTitle}>Delivery</Text>
           <View style={styles.placeholder} />
         </View>
@@ -883,10 +879,6 @@ const styles = StyleSheet.create({
   },
   backButton: {
     padding: Spacing.small,
-  },
-  backIcon: {
-    fontSize: 24,
-    color: Colors.text,
   },
   headerTitle: {
     fontSize: 18,

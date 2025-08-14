@@ -15,6 +15,7 @@ import {
 import { FontSizes, FontWeights, Spacing, BorderRadius } from '../constants';
 import { SearchIcon, FilterIcon, HeartIcon } from '../assets/icons';
 import GlobalCartIcon from '../components/GlobalCartIcon';
+import BackButton from '../components/BackButton';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -350,9 +351,7 @@ const CollectionScreen = ({ navigation }) => {
         
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton}>
-            <Text style={styles.backButtonText}>‹</Text>
-          </TouchableOpacity>
+          <BackButton onPress={() => navigation?.goBack?.()} style={styles.backButton} />
           <TouchableOpacity style={styles.searchButton} onPress={handleSearchPress}>
             <SearchIcon size={20} />
           </TouchableOpacity>
@@ -446,11 +445,6 @@ const styles = StyleSheet.create({
     height: 24,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  backButtonText: {
-    fontSize: 24,
-    color: '#000000',
-    fontWeight: '300',
   },
   searchButton: {
     width: 24,

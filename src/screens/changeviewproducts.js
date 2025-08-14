@@ -13,6 +13,7 @@ import SearchIconSvg from '../assets/icons/SearchIconSvg';
 import HeartIconSvg from '../assets/icons/HeartIconSvg';
 import FilterIconNew from '../assets/icons/FilterIconNew';
 import GlobalCartIcon from '../components/GlobalCartIcon';
+import BackButton from '../components/BackButton';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -529,9 +530,7 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
-          <Text style={styles.backArrow}>‹</Text>
-        </TouchableOpacity>
+        <BackButton onPress={handleBackPress} style={styles.backButton} />
         
         <View style={styles.headerIcons}>
           <TouchableOpacity style={styles.iconButton} onPress={handleSearchPress}>
@@ -570,11 +569,6 @@ const styles = StyleSheet.create({
   },
   backButton: {
     padding: Spacing.xs,
-  },
-  backArrow: {
-    fontSize: 28,
-    color: '#000000',
-    fontWeight: '300',
   },
   headerIcons: {
     flexDirection: 'row',

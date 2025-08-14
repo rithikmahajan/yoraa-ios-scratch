@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,19 +6,16 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
-  Image,
   FlatList,
   Modal,
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
   Alert,
   Dimensions,
 } from 'react-native';
 import moment from 'moment';
-import { FontSizes, FontWeights, Spacing, BorderRadius, Shadows } from '../constants';
+// import { Spacing } from '../constants';
+import BackButton from '../components/BackButton';
 
-const { height: DEVICE_HEIGHT, width: DEVICE_WIDTH } = Dimensions.get('window');
+const { height: DEVICE_HEIGHT } = Dimensions.get('window');
 
 // OrderManager class for managing orders
 export class OrderManager {
@@ -384,7 +381,7 @@ const ConfirmationModal = ({ visible, onClose, title, message, buttonText }) => 
         
         <TouchableOpacity
           onPress={onClose}
-          style={[styles.modalButton, styles.primaryButton, { width: '70%' }]}
+          style={[styles.modalButton, styles.primaryButton, styles.modalButton70]}
         >
           <Text style={styles.primaryButtonText}>{buttonText}</Text>
         </TouchableOpacity>
@@ -478,10 +475,8 @@ const ReturnOptionsModal = ({ visible, onClose, onOptionSelect }) => {
                   key={item.value}
                   style={[
                     styles.optionItem,
-                    { 
-                      borderBottomWidth: index === RETURN_OPTIONS.length - 1 ? 0 : 0.7,
-                      backgroundColor: selectedOption === item.value ? "#F5F5F5" : "transparent"
-                    }
+                    index === RETURN_OPTIONS.length - 1 ? styles.optionItemLast : styles.optionItemNotLast,
+                    selectedOption === item.value && styles.optionItemSelected
                   ]}
                 >
                   <Text style={styles.optionText}>{item.label}</Text>
@@ -679,9 +674,7 @@ const OrdersScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation?.goBack?.()} style={styles.backButton}>
-          <Text style={styles.backButtonText}>←</Text>
-        </TouchableOpacity>
+        <BackButton onPress={() => navigation?.goBack?.()} style={styles.backButton} />
         <Text style={styles.headerTitle}>Orders</Text>
         <View style={styles.headerSpacer} />
       </View>
@@ -759,10 +752,6 @@ const styles = StyleSheet.create({
   },
   backButton: {
     padding: 8,
-  },
-  backButtonText: {
-    fontSize: 24,
-    color: '#000',
   },
   headerTitle: {
     flex: 1,
@@ -1073,6 +1062,15 @@ const styles = StyleSheet.create({
     padding: 15,
     borderBottomColor: '#E0E0E0',
   },
+  optionItemLast: {
+    borderBottomWidth: 0,
+  },
+  optionItemNotLast: {
+    borderBottomWidth: 0.7,
+  },
+  optionItemSelected: {
+    backgroundColor: '#F5F5F5',
+  },
   optionText: {
     fontSize: 14,
     color: '#000',
@@ -1082,6 +1080,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#666',
     marginBottom: 20,
+  },
+  modalButton70: {
+    width: '70%',
   },
 });
 

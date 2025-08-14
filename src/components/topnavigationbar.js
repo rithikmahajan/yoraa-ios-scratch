@@ -6,6 +6,7 @@ import {
   StyleSheet,
   SafeAreaView,
 } from 'react-native';
+import BackButton from './BackButton';
 
 // YORAA Fashion App Top Navigation Bar Component
 const TopNavigationBar = ({ 
@@ -25,13 +26,7 @@ const TopNavigationBar = ({
         {/* Left Section */}
         <View style={styles.leftSection}>
           {showBackButton ? (
-            <TouchableOpacity 
-              style={styles.iconButton} 
-              onPress={onBackPress}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.backIcon}>←</Text>
-            </TouchableOpacity>
+            <BackButton onPress={onBackPress} style={styles.iconButton} />
           ) : (
             <TouchableOpacity style={styles.menuButton} activeOpacity={0.7}>
               <View style={styles.menuLine} />
@@ -172,11 +167,7 @@ const styles = StyleSheet.create({
     marginVertical: 2,
     borderRadius: 1,
   },
-  backIcon: {
-    fontSize: 24,
-    color: '#1A1A1A',
-    fontWeight: 'bold',
-  },
+  
   searchIcon: {
     width: 20,
     height: 20,

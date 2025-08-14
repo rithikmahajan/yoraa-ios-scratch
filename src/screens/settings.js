@@ -7,17 +7,10 @@ import {
   SafeAreaView,
   Animated,
   Easing,
-  Image,
 } from 'react-native';
+import BackButton from '../components/BackButton';
 
-// Back Arrow Icon Component - Using the new back button image
-const BackArrowIcon = () => (
-  <Image 
-    source={require('../assets/icons/back-button.png')} 
-    style={styles.backArrowIcon}
-    resizeMode="contain"
-  />
-);
+// Back arrow uses global BackButton component
 
 // Right Arrow Icon Component - Simple Chevron style to match Figma
 const RightArrowIcon = () => (
@@ -91,9 +84,7 @@ const SettingsScreen = ({ navigation }) => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <BackArrowIcon />
-          </TouchableOpacity>
+          <BackButton style={styles.backButton} onPress={handleBack} />
           <Text style={styles.headerTitle}>Settings</Text>
           <View style={styles.headerSpacer} />
         </View>
@@ -163,11 +154,7 @@ const styles = StyleSheet.create({
     width: 40, // Same width as back button to center the title
   },
 
-  // Back Arrow Icon - Image-based
-  backArrowIcon: {
-    width: 34,  // Adjusted for the 68x24 image (scaled down by 2)
-    height: 12,  // Maintaining aspect ratio 
-  },
+  // Back arrow icon is handled by BackButton component
 
   // Right Arrow Icon - Simple Chevron
   rightArrowIcon: {

@@ -14,6 +14,7 @@ import {
   TextInput,
   Easing,
 } from 'react-native';
+import BackButton from '../components/BackButton';
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -518,12 +519,10 @@ const BagScreen = ({ navigation, route }) => {
       
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity 
+        <BackButton 
           style={styles.backButton}
           onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backIcon}>‹</Text>
-        </TouchableOpacity>
+        />
         <Text style={styles.headerTitle}>Bag</Text>
         <View style={styles.headerSpacer} />
       </View>

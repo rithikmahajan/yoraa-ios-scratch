@@ -8,14 +8,7 @@ import {
   Animated,
   Easing,
 } from 'react-native';
-
-// Back Arrow Icon Component
-const BackArrowIcon = () => (
-  <View style={styles.backArrowIcon}>
-    <View style={styles.backArrowLine} />
-    <View style={styles.backArrowHead} />
-  </View>
-);
+import BackButton from '../components/BackButton';
 
 // Checkbox Component
 const Checkbox = ({ checked, onPress }) => (
@@ -78,9 +71,7 @@ const CommunicationPreferences = ({ navigation }) => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <BackArrowIcon />
-          </TouchableOpacity>
+          <BackButton style={styles.backButton} onPress={handleBack} />
           <Text style={styles.headerTitle}>Communication Preferences</Text>
           <View style={styles.headerSpacer} />
         </View>
@@ -143,33 +134,7 @@ const styles = StyleSheet.create({
     width: 40,
   },
 
-  // Back Arrow Icon
-  backArrowIcon: {
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-  },
-  backArrowLine: {
-    width: 12,
-    height: 2,
-    backgroundColor: '#000000',
-    position: 'absolute',
-  },
-  backArrowHead: {
-    width: 0,
-    height: 0,
-    borderRightWidth: 6,
-    borderLeftWidth: 0,
-    borderTopWidth: 4,
-    borderBottomWidth: 4,
-    borderRightColor: '#000000',
-    borderTopColor: 'transparent',
-    borderBottomColor: 'transparent',
-    position: 'absolute',
-    left: 6,
-  },
+  // Back button uses shared BackButton component
 
   // Main Content
   mainContent: {

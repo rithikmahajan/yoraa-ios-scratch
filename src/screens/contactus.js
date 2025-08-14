@@ -9,24 +9,17 @@ import {
   Linking,
   Alert,
   Modal,
-  Dimensions,
   ScrollView,
   TextInput,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import BackButton from '../components/BackButton';
 
-const { height: screenHeight } = Dimensions.get('window');
+// Dimensions can be used if needed for layout
+// const { height: screenHeight } = Dimensions.get('window');
 
-// Back Arrow Icon Component
-const BackArrowIcon = () => (
-  <View style={styles.backArrowIcon}>
-    <View style={styles.arrowPath}>
-      <View style={styles.arrowLine1} />
-      <View style={styles.arrowLine2} />
-    </View>
-  </View>
-);
+// Using shared BackButton component for back navigation
 
 // Phone Icon Component
 const PhoneIcon = () => (
@@ -304,9 +297,7 @@ const ContactUsScreen = ({ navigation, visible = true }) => {
     >
       {/* Chat Header */}
       <View style={styles.chatHeader}>
-        <TouchableOpacity style={styles.backButton} onPress={handleClose}>
-          <BackArrowIcon />
-        </TouchableOpacity>
+        <BackButton style={styles.backButton} onPress={handleClose} />
         <Text style={styles.chatHeaderTitle}>Customer Support</Text>
         <TouchableOpacity style={styles.phoneButton} onPress={handlePhoneCall}>
           <PhoneIcon />
@@ -560,24 +551,6 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  locationPin: {
-    width: 40,
-    height: 50,
-    backgroundColor: '#000000',
-    borderRadius: 20,
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-  },
-  locationDot: {
-    width: 12,
-    height: 12,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 6,
-    marginTop: -5,
   },
   addressContainer: {
     marginBottom: 20,

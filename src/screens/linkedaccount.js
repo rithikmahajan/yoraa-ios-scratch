@@ -8,14 +8,7 @@ import {
   Animated,
   Easing,
 } from 'react-native';
-
-// Back Arrow Icon Component
-const BackArrowIcon = () => (
-  <View style={styles.backArrowIcon}>
-    <View style={styles.backArrowLine} />
-    <View style={styles.backArrowHead} />
-  </View>
-);
+import BackButton from '../components/BackButton';
 
 // Chain Link Icon Component
 const ChainLinkIcon = () => (
@@ -67,13 +60,10 @@ const LinkedAccountScreen = ({ navigation }) => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity 
+          <BackButton 
             style={styles.backButton}
             onPress={handleBack}
-            activeOpacity={0.7}
-          >
-            <BackArrowIcon />
-          </TouchableOpacity>
+          />
           <Text style={styles.headerTitle}>Linked Accounts</Text>
           <View style={styles.headerSpacer} />
         </View>
@@ -125,32 +115,6 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 8,
     marginLeft: -8,
-  },
-  backArrowIcon: {
-    width: 20,
-    height: 20,
-    position: 'relative',
-  },
-  backArrowLine: {
-    position: 'absolute',
-    left: 8,
-    top: 9,
-    width: 10,
-    height: 2,
-    backgroundColor: '#1A1A1A',
-    borderRadius: 1,
-  },
-  backArrowHead: {
-    position: 'absolute',
-    left: 2,
-    top: 5,
-    width: 8,
-    height: 8,
-    borderLeftWidth: 2,
-    borderTopWidth: 2,
-    borderColor: '#1A1A1A',
-    transform: [{ rotate: '-45deg' }],
-    borderRadius: 1,
   },
   headerTitle: {
     flex: 1,

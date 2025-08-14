@@ -1,0 +1,4 @@
+// This file represents a placeholder for heart-empty.png
+// In a real implementation, this would be an actual PNG image file
+// For now, we'll use a different approach
+export default null;

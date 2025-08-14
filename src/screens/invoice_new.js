@@ -11,13 +11,9 @@ import {
   Share,
   Platform,
 } from 'react-native';
+import BackButton from '../components/BackButton';
 
-// Back Arrow Icon Component
-const BackArrowIcon = () => (
-  <View style={styles.backArrowContainer}>
-    <Text style={styles.backArrowText}>‹</Text>
-  </View>
-);
+// Back arrow uses global BackButton component
 
 // Share Icon Component
 const ShareIcon = () => (
@@ -314,9 +310,7 @@ const InvoiceScreen = ({ navigation, route }) => {
         >
           {/* Header */}
           <View style={styles.header}>
-            <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-              <BackArrowIcon />
-            </TouchableOpacity>
+            <BackButton style={styles.backButton} onPress={handleBack} />
             <Text style={styles.headerTitle}>Invoice</Text>
             <View style={styles.headerSpacer} />
           </View>
@@ -340,9 +334,7 @@ const InvoiceScreen = ({ navigation, route }) => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <BackArrowIcon />
-          </TouchableOpacity>
+          <BackButton style={styles.backButton} onPress={handleBack} />
           <Text style={styles.headerTitle}>Invoice</Text>
           <View style={styles.headerSpacer} />
         </View>
@@ -385,17 +377,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  backArrowContainer: {
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  backArrowText: {
-    fontSize: 24,
-    color: '#000000',
-    fontWeight: '300',
-  },
+  
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',

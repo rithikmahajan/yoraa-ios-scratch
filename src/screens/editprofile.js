@@ -10,15 +10,8 @@ import {
   Modal,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import BackButton from '../components/BackButton';
 
-// Back Arrow Icon Component
-const BackArrowIcon = () => (
-  <View style={styles.backIcon}>
-    <View style={styles.backArrowLine} />
-    <View style={styles.backArrowHead1} />
-    <View style={styles.backArrowHead2} />
-  </View>
-);
 
 const EditProfile = ({ navigation }) => {
   const [formData, setFormData] = useState({
@@ -182,13 +175,10 @@ const EditProfile = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity 
+        <BackButton 
           style={styles.backButton} 
           onPress={handleGoBack}
-          activeOpacity={0.7}
-        >
-          <BackArrowIcon />
-        </TouchableOpacity>
+        />
         <Text style={styles.headerTitle}>Profile</Text>
         <View style={styles.placeholder} />
       </View>
@@ -367,13 +357,10 @@ const EditProfile = ({ navigation }) => {
         <SafeAreaView style={styles.modalContainer}>
           {/* Address Modal Header */}
           <View style={styles.modalHeader}>
-            <TouchableOpacity 
+            <BackButton 
               style={styles.backButton} 
               onPress={handleCloseAddressModal}
-              activeOpacity={0.7}
-            >
-              <BackArrowIcon />
-            </TouchableOpacity>
+            />
             <Text style={styles.modalTitle}>Address</Text>
             <View style={styles.placeholder} />
           </View>

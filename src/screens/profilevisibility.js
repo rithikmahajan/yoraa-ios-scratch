@@ -11,14 +11,7 @@ import {
 } from 'react-native';
 import { Colors } from '../constants/colors';
 import { Spacing, FontSizes, FontWeights, BorderRadius } from '../constants/styles';
-
-// Back Arrow Icon Component
-const BackArrowIcon = () => (
-  <View style={styles.backArrowIcon}>
-    <View style={styles.backArrowLine} />
-    <View style={styles.backArrowHead} />
-  </View>
-);
+import BackButton from '../components/BackButton';
 
 // Radio Button Component
 const RadioButton = ({ selected, onPress, label, description }) => (
@@ -108,9 +101,7 @@ const ProfileVisibilityScreen = ({ navigation }) => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <BackArrowIcon />
-          </TouchableOpacity>
+          <BackButton style={styles.backButton} onPress={handleBack} />
           <Text style={styles.headerTitle}>Product Review Visibility</Text>
           <View style={styles.placeholder} />
         </View>
@@ -180,29 +171,6 @@ const styles = StyleSheet.create({
   },
   backButton: {
     padding: Spacing.sm,
-  },
-  backArrowIcon: {
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  backArrowLine: {
-    position: 'absolute',
-    width: 12,
-    height: 2,
-    backgroundColor: Colors.textPrimary,
-    left: 6,
-  },
-  backArrowHead: {
-    position: 'absolute',
-    width: 6,
-    height: 6,
-    borderTopWidth: 2,
-    borderLeftWidth: 2,
-    borderColor: Colors.textPrimary,
-    transform: [{ rotate: '-45deg' }],
-    left: 2,
   },
   headerTitle: {
     fontSize: FontSizes.xl,

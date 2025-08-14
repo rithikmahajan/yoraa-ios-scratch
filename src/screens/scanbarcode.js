@@ -13,6 +13,7 @@ import {
   Easing,
 } from 'react-native';
 import { Colors, FontSizes, FontWeights, Spacing, BorderRadius } from '../constants';
+import BackButton from '../components/BackButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -63,9 +64,7 @@ const BarcodeInstructionScreen = ({ navigation }) => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-            <Text style={styles.backArrow}>←</Text>
-          </TouchableOpacity>
+          <BackButton style={styles.backButton} onPress={handleGoBack} />
         </View>
 
         {/* Content */}
@@ -139,9 +138,7 @@ const ManualProductNumberScreen = ({ navigation }) => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-            <Text style={styles.backArrow}>←</Text>
-          </TouchableOpacity>
+          <BackButton style={styles.backButton} onPress={handleGoBack} />
         </View>
 
         {/* Content */}
@@ -212,9 +209,7 @@ const CameraScanningScreen = ({ navigation }) => {
       >
         {/* Header */}
         <View style={styles.cameraHeader}>
-          <TouchableOpacity style={styles.cameraBackButton} onPress={handleGoBack}>
-            <Text style={styles.cameraBackArrow}>←</Text>
-          </TouchableOpacity>
+          <BackButton style={styles.cameraBackButton} onPress={handleGoBack} />
         </View>
 
         {/* Camera Frame */}
@@ -310,9 +305,7 @@ const EnterGTINScreen = ({ navigation }) => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-            <Text style={styles.backArrow}>←</Text>
-          </TouchableOpacity>
+          <BackButton style={styles.backButton} onPress={handleGoBack} />
         </View>
 
         {/* Content */}
@@ -475,16 +468,8 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
   },
-  backArrow: {
-    fontSize: 24,
-    color: Colors.textPrimary,
-    fontWeight: FontWeights.normal,
-  },
-  cameraBackArrow: {
-    fontSize: 24,
-    color: '#FFFFFF',
-    fontWeight: FontWeights.normal,
-  },
+  
+  
   contentContainer: {
     flex: 1,
     justifyContent: 'center',
