@@ -36,6 +36,12 @@ const HomeScreen = ({ navigation }) => {
     }
   };
 
+  const handleCartPress = () => {
+    if (navigation) {
+      navigation.navigate('Bag');
+    }
+  };
+
   const mainTabs = [
     { id: 'My', name: 'My' },
     { id: 'Men', name: 'Men' },
@@ -124,7 +130,7 @@ const HomeScreen = ({ navigation }) => {
           <TouchableOpacity style={styles.iconButton} onPress={handleFavoritesPress}>
             <HeartIconSvg width={23} height={21} color="#000000" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
+          <TouchableOpacity style={styles.iconButton} onPress={handleCartPress}>
             <CartIconSvg width={23} height={17} color="#000000" />
           </TouchableOpacity>
         </View>

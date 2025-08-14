@@ -17,30 +17,6 @@ import {
 
 const { height: screenHeight } = Dimensions.get('window');
 
-// Sample cart items data (you can replace with actual data)
-const sampleCartItems = [
-  {
-    id: 1,
-    name: 'Nike Everyday Plus Cushioned',
-    description: 'Training Ankle Socks',
-    size: 'L (W 10-13 / M 8-12)',
-    color: '(5 Pairs)',
-    quantity: 1,
-    price: 10.00,
-    image: null, // Using placeholder instead
-  },
-  {
-    id: 2,
-    name: 'Nike Everyday Plus Cushioned',
-    description: 'Training Ankle Socks',
-    size: 'L (W 10-13 / M 8-12)',
-    color: '(5 Pairs)',
-    quantity: 1,
-    price: 10.00,
-    image: null, // Using placeholder instead
-  },
-];
-
 const BagScreen = ({ navigation, route }) => {
   const [cartItems, setCartItems] = useState([]);
   const [quantityModalVisible, setQuantityModalVisible] = useState(false);
@@ -86,9 +62,10 @@ const BagScreen = ({ navigation, route }) => {
         price: Number(product.price) || 10.00,
         image: product.image || null,
       };
-      initialItems = [newItem, ...sampleCartItems];
+      initialItems = [newItem];
     } else {
-      initialItems = sampleCartItems;
+      // Start with empty bag by default
+      initialItems = [];
     }
     
     setCartItems(initialItems);
@@ -551,7 +528,31 @@ const BagScreen = ({ navigation, route }) => {
         <View style={styles.headerSpacer} />
       </View>
 
-      <ScrollView style={styles.scrollView}>
+      {/* Empty Bag State */}
+      {cartItems.length === 0 ? (
+        <View style={styles.emptyBagContainer}>
+          <View style={styles.emptyBagContent}>
+            <View style={styles.emptyBagIcon}>
+              <View style={styles.bagIconCircle}>
+                <Text style={styles.bagIconText}>🛍</Text>
+              </View>
+            </View>
+            <Text style={styles.emptyBagTitle}>Your bag is empty.</Text>
+            <Text style={styles.emptyBagSubtitle}>
+              When you add products, they'll{'\n'}appear here.
+            </Text>
+          </View>
+          
+          <TouchableOpacity 
+            style={styles.shopNowButton}
+            onPress={() => navigation.navigate('Home')}
+          >
+            <Text style={styles.shopNowButtonText}>Shop Now</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <>
+          <ScrollView style={styles.scrollView}>
         {/* Cart Items */}
         <View style={styles.cartContainer}>
           {cartItems.map((item, index) => renderCartItem(item, index))}
@@ -921,6 +922,8 @@ const BagScreen = ({ navigation, route }) => {
             </View>
           </Animated.View>
         </Animated.View>
+      )}
+        </>
       )}
     </SafeAreaView>
   );
@@ -1573,6 +1576,63 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
+  },
+  // Empty bag styles
+  emptyBagContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingTop: 120,
+    paddingBottom: 40,
+  },
+  emptyBagContent: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  emptyBagIcon: {
+    marginBottom: 24,
+  },
+  bagIconCircle: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 2,
+    borderColor: '#000000',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+  },
+  bagIconText: {
+    fontSize: 32,
+  },
+  emptyBagTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#000000',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptyBagSubtitle: {
+    fontSize: 16,
+    color: '#666666',
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  shopNowButton: {
+    backgroundColor: '#000000',
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 24,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  shopNowButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
