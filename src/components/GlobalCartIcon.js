@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import CartIconSvg from '../assets/icons/CartIconSvg';
+import { GlobalShoppingBagIcon } from '../assets/icons';
 
 const GlobalCartIcon = ({ 
   size = 20, 
@@ -15,9 +15,9 @@ const GlobalCartIcon = ({
       onPress={onPress}
       activeOpacity={0.7}
     >
-      <CartIconSvg 
+      <GlobalShoppingBagIcon 
         width={size} 
-        height={size * 0.75} // Maintain aspect ratio based on original SVG
+        height={size} // Use same dimensions for shopping bag
         color={color} 
       />
     </TouchableOpacity>

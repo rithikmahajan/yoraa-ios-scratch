@@ -7,7 +7,7 @@ import {
   Platform,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Colors, FontSizes, FontWeights, FontFamilies, Spacing, Shadows } from '../constants';
+import { FontWeights, FontFamilies, Spacing } from '../constants';
 import {
   HomeIcon,
   ShopIcon,
@@ -68,7 +68,7 @@ const BottomNavigationBar = ({ activeTab = 'Home', onTabChange }) => {
           <View style={[
             styles.navigationBar, 
             { 
-              paddingBottom: Platform.OS === 'ios' ? Math.max(insets.bottom, 20) : 10 
+              paddingBottom: Platform.OS === 'ios' ? Math.max(insets.bottom,12) : 6 
             }
           ]}>
             {tabs.map((tab) => {
@@ -83,13 +83,12 @@ const BottomNavigationBar = ({ activeTab = 'Home', onTabChange }) => {
             >
               <tab.icon 
                 active={isActive} 
-                color={isActive ? Colors.primary : Colors.textTertiary}
-                size={24}
+                color={isActive ? '#FF6B6B' : '#8E8E93'}
+                size={20}
               />
               <Text style={[styles.tabLabel, isActive && styles.activeTabLabel]}>
                 {tab.label}
               </Text>
-              {isActive && <View style={styles.activeIndicator} />}
             </TouchableOpacity>
           );
         })}
@@ -100,48 +99,55 @@ const BottomNavigationBar = ({ activeTab = 'Home', onTabChange }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.background,
-    ...Shadows.medium,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
+    backgroundColor: 'transparent', // Completely transparent for seamless integration
   },
   navigationBar: {
     flexDirection: 'row',
-    backgroundColor: Colors.background,
-    paddingTop: Spacing.lg,
-    paddingHorizontal: Spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: Colors.borderLight,
-    minHeight: 70,
+    backgroundColor: 'rgba(255, 255, 255, 0.98)', // Slightly transparent white for modern look
+    paddingTop: 12, // Clean minimal padding
+    paddingHorizontal: Spacing.lg,
+    paddingBottom: Spacing.sm,
+    borderTopWidth: 0.5, // Very subtle separation
+    borderTopColor: 'rgba(229, 229, 229, 0.6)', // Subtle border
+    minHeight: 56, // Optimal height for clean look
+    // Add subtle backdrop blur effect for iOS
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -2 },
+        shadowOpacity: 0.02,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 1,
+      },
+    }),
   },
   tabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: Spacing.xs,
+    paddingVertical: 6, // Minimal padding
     position: 'relative',
-    minHeight: 50,
+    minHeight: 36,
   },
   tabLabel: {
-    fontSize: FontSizes.xs,
-    fontWeight: FontWeights.medium,
+    fontSize: 11, // Clean, minimal font size
+    fontWeight: FontWeights.normal,
     fontFamily: FontFamilies.medium,
-    color: Colors.textTertiary,
-    marginTop: Spacing.xs,
+    color: '#8E8E93', // iOS-style gray
+    marginTop: 3, // Tight spacing
     textAlign: 'center',
+    letterSpacing: -0.1, // Better kerning
+    lineHeight: 14, // Clean line height
   },
   activeTabLabel: {
-    color: Colors.primary,
-    fontWeight: FontWeights.semiBold,
-    fontFamily: FontFamilies.semiBold,
+    color: '#FF6B6B', // Brand primary for active
+    fontWeight: FontWeights.medium,
+    fontFamily: FontFamilies.medium,
   },
   activeIndicator: {
-    position: 'absolute',
-    top: 2,
-    width: 24,
-    height: 3,
-    backgroundColor: Colors.primary,
-    borderRadius: 2,
+    display: 'none', // Keep removed for H&M style
   },
 });
 

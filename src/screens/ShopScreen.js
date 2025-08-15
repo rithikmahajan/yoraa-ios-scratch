@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Spacing.xl,
-    paddingTop: 54, // Status bar height + padding
+    paddingTop: 15, // Status bar height + padding
     paddingBottom: Spacing.lg,
   },
   backButton: {

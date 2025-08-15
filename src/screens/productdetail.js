@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import Svg, { Path } from 'react-native-svg';
+import Svg, { Path, G, Defs, ClipPath, Rect } from 'react-native-svg';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -52,28 +52,26 @@ const HeartIcon = ({ filled = false, color = '#000000' }) => (
 );
 
 const CartIcon = ({ color = '#000000' }) => (
-  <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
-    <Path
-      d="M6 1L3 5V19A1 1 0 0 0 4 20H16A1 1 0 0 0 17 19V5L14 1H6Z"
-      stroke={color}
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <Path
-      d="M3 5H17"
-      stroke={color}
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <Path
-      d="M13 9C13 10.6569 11.6569 12 10 12C8.34315 12 7 10.6569 7 9"
-      stroke={color}
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
+  <Svg width={23} height={23} viewBox="0 0 23 23" fill="none">
+    <G clipPath="url(#clip0_533_7825)">
+      <Path
+        d="M19.5403 6.71155L20.2952 22.0387H3.63501L4.38989 6.71155H19.5403Z"
+        stroke={color}
+        strokeWidth="1.5"
+        fill="none"
+      />
+      <Path
+        d="M7.82043 9.72615L7.82043 5.32004C7.82043 4.22082 8.2571 3.16662 9.03437 2.38935C9.81164 1.61208 10.8658 1.17542 11.9651 1.17542C13.0643 1.17542 14.1185 1.61208 14.8958 2.38935C15.673 3.16662 16.1097 4.22082 16.1097 5.32004V9.72615"
+        stroke={color}
+        strokeWidth="1.5"
+        fill="none"
+      />
+    </G>
+    <Defs>
+      <ClipPath id="clip0_533_7825">
+        <Rect width="23" height="23" fill="white"/>
+      </ClipPath>
+    </Defs>
   </Svg>
 );
 

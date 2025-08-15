@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import { FontSizes, FontWeights, Spacing } from '../constants';
+import { FontWeights, Spacing } from '../constants';
 import SearchIconSvg from '../assets/icons/SearchIconSvg';
 import HeartIconSvg from '../assets/icons/HeartIconSvg';
-import ShoppingBagIconSvg from '../assets/icons/ShoppingBagIconSvg';
+import { GlobalShoppingBagIcon, ForwardArrowIcon } from '../assets/icons';
 import {
   SaleImageSvg,
   LifestyleImageSvg,
@@ -112,7 +112,7 @@ const HomeScreen = ({ navigation }) => {
           </Text>
         </View>
         <View style={styles.categoryArrow}>
-          <Text style={styles.arrowIcon}>›</Text>
+          <ForwardArrowIcon width={14} height={14} color="#292526" strokeWidth={2} />
         </View>
       </TouchableOpacity>
     );
@@ -131,7 +131,7 @@ const HomeScreen = ({ navigation }) => {
             <HeartIconSvg width={23} height={21} color="#000000" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconButton} onPress={handleCartPress}>
-            <ShoppingBagIconSvg width={23} height={23} color="#000000" />
+            <GlobalShoppingBagIcon width={23} height={23} color="#000000" />
           </TouchableOpacity>
         </View>
       </View>
@@ -172,19 +172,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Spacing.lg,
-    paddingTop: 60, // Account for status bar
-    paddingBottom: Spacing.md,
+    paddingTop: 15, // Reduced from 60 to bring content higher
+    paddingBottom: Spacing.md, // Reduced from Spacing.lg to tighten spacing
   },
   headerTitle: {
-    fontSize: 28,
+    fontSize: 32, // Increased font size to match Figma
     fontWeight: FontWeights.medium,
     color: '#000000',
-    letterSpacing: -0.168,
+    letterSpacing: -0.32,
   },
   headerIcons: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.md,
+    gap: Spacing.lg, // Increased gap between icons
   },
   iconButton: {
     padding: Spacing.xs,
@@ -195,32 +195,34 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#CDCDCD',
     paddingHorizontal: Spacing.lg,
+    marginBottom: 0, // Remove margin to reduce spacing
   },
   tabBarContent: {
-    gap: Spacing.sm,
+    gap: Spacing.lg, // Increased gap between tabs
   },
   tabItem: {
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md, // Reduced from Spacing.lg to compact the tabs
+    paddingHorizontal: Spacing.sm,
     position: 'relative',
   },
   activeTabItem: {
     // Active tab styles handled by indicator
   },
   tabText: {
-    fontSize: FontSizes.lg,
+    fontSize: 16, // Increased font size
     fontWeight: FontWeights.medium,
     color: '#767676',
-    letterSpacing: -0.4,
+    letterSpacing: -0.32,
   },
   activeTabText: {
     color: '#000000',
+    fontWeight: FontWeights.semiBold, // Made active tab bolder
   },
   tabIndicator: {
     position: 'absolute',
     bottom: 0,
-    left: Spacing.lg,
-    right: Spacing.lg,
+    left: Spacing.sm,
+    right: Spacing.sm,
     height: 2,
     backgroundColor: '#000000',
   },
@@ -228,38 +230,43 @@ const styles = StyleSheet.create({
   // Categories Styles
   categoriesList: {
     flex: 1,
-    paddingTop: Spacing.xs, // Reduced padding to match Figma
+    paddingTop: 0, // Remove top padding to bring content higher
   },
   categoryItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.lg,
+    paddingVertical: 20, // Increased vertical padding to match Figma
     borderBottomWidth: 1,
     borderBottomColor: '#E4E4E4',
-    backgroundColor: '#FFFFFF', // Explicit white background
+    backgroundColor: '#FFFFFF',
+    minHeight: 90, // Ensure consistent height
   },
   activeCategoryItem: {
     backgroundColor: '#F8F8F8',
   },
   categoryImageContainer: {
     marginRight: Spacing.lg,
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   categoryContent: {
     flex: 1,
+    justifyContent: 'center',
   },
   categoryName: {
-    fontSize: 14,
-    letterSpacing: -0.14,
-    fontWeight: FontWeights.normal, // Ensure normal weight for non-sale items
+    fontSize: 16, // Increased font size to match Figma
+    letterSpacing: -0.16,
+    fontWeight: FontWeights.normal,
+    lineHeight: 24, // Added line height for better spacing
   },
   categoryArrow: {
     marginLeft: Spacing.sm,
-  },
-  arrowIcon: {
-    fontSize: 18, // Slightly smaller to match Figma
-    color: '#292526',
-    fontWeight: '300',
+    padding: Spacing.xs, // Added padding for better touch target
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

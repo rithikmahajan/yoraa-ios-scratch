@@ -4,6 +4,8 @@ export { default as CollectionIcon } from './CollectionIcon';
 export { default as RewardsIcon } from './RewardsIcon';
 export { default as ProfileIcon } from './ProfileIcon';
 export { default as ShoppingBagIcon } from './ShoppingBagIcon';
+export { default as ShoppingBagIconSvg } from './ShoppingBagIconSvg';
+export { default as GlobalShoppingBagIcon } from './GlobalShoppingBagIcon';
 export { default as EmptyBagIcon } from './EmptyBagIcon';
 export { default as SearchIcon } from './SearchIcon';
 export { default as FilterIcon } from './FilterIcon';
