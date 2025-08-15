@@ -29,6 +29,12 @@ const COUNTRY_CODES = [
   { code: '+55', country: 'Brazil', flag: '🇧🇷' },
 ];
 
+// Constants
+const OTP_LENGTH = 6;
+const OTP_TIMER_DURATION = 30;
+const MIN_PASSWORD_LENGTH = 6;
+const MIN_NAME_LENGTH = 2;
+
 const AuthenticationFlow = ({ navigation, onSkip, onAuthSuccess }) => {
   // Current screen state
   const [currentScreen, setCurrentScreen] = useState('loginOption'); // 'loginOption', 'mobileLogin', 'emailLogin', 'otpVerification', 'createAccount'
@@ -50,16 +56,13 @@ const AuthenticationFlow = ({ navigation, onSkip, onAuthSuccess }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
   // OTP state
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const [timer, setTimer] = useState(30);
+  const [otp, setOtp] = useState(new Array(OTP_LENGTH).fill(''));
+  const [timer, setTimer] = useState(OTP_TIMER_DURATION);
   const [canResend, setCanResend] = useState(false);
   const inputRefs = useRef([]);
   
   // Tab state for mobile/email switching
   const [selectedTab, setSelectedTab] = useState('phone'); // 'phone', 'email'
-  
-  // Success modal state
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   // Timer effect for OTP
   useEffect(() => {
@@ -129,73 +132,118 @@ const AuthenticationFlow = ({ navigation, onSkip, onAuthSuccess }) => {
 
   // Validation functions
   const validatePhoneNumber = () => {
+    if (!phoneNumber || phoneNumber.trim().length === 0) {
+      return false;
+    }
     const phoneRegex = /^\d{10,15}$/;
-    return phoneRegex.test(phoneNumber);
+    return phoneRegex.test(phoneNumber.trim());
   };
 
   const validateEmail = () => {
+    if (!email || email.trim().length === 0) {
+      return false;
+    }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    return emailRegex.test(email.trim().toLowerCase());
   };
 
   const validatePassword = () => {
-    return password.length >= 6;
+    if (!password || password.length === 0) {
+      return false;
+    }
+    return password.length >= MIN_PASSWORD_LENGTH;
+  };
+
+  const validateName = () => {
+    if (!name || name.trim().length === 0) {
+      return false;
+    }
+    return name.trim().length >= MIN_NAME_LENGTH;
   };
 
   const isOtpComplete = () => {
-    return otp.every(digit => digit.length === 1);
+    return otp.every(digit => digit.length === 1 && /^\d$/.test(digit));
   };
 
   const isFormValid = () => {
-    return name.trim() && validateEmail() && validatePassword() && password === confirmPassword;
+    return validateName() && 
+           validateEmail() && 
+           validatePassword() && 
+           password === confirmPassword &&
+           confirmPassword.length > 0;
   };
 
   // Phone login handlers
   const handlePhoneLogin = () => {
-    if (!validatePhoneNumber()) {
-      Alert.alert('Invalid Phone Number', 'Please enter a valid phone number');
+    if (!phoneNumber || phoneNumber.trim().length === 0) {
+      Alert.alert('Missing Phone Number', 'Please enter your phone number');
       return;
     }
     
-    setCurrentScreen('otpVerification');
-    setTimer(30);
+    if (!validatePhoneNumber()) {
+      Alert.alert('Invalid Phone Number', 'Please enter a valid phone number (10-15 digits)');
+      return;
+    }
+    
+    // Reset OTP state before moving to verification
+    setOtp(new Array(OTP_LENGTH).fill(''));
+    setTimer(OTP_TIMER_DURATION);
     setCanResend(false);
-    setOtp(['', '', '', '', '', '']);
+    setCurrentScreen('otpVerification');
   };
 
   // Email login handlers
   const handleEmailLogin = () => {
+    if (!email || email.trim().length === 0) {
+      Alert.alert('Missing Email', 'Please enter your email address');
+      return;
+    }
+    
     if (!validateEmail()) {
       Alert.alert('Invalid Email', 'Please enter a valid email address');
       return;
     }
     
-    if (!validatePassword()) {
-      Alert.alert('Invalid Password', 'Password must be at least 6 characters long');
+    if (!password || password.length === 0) {
+      Alert.alert('Missing Password', 'Please enter your password');
       return;
     }
     
-    Alert.alert('Login Successful', 'You have been logged in successfully');
-    if (onAuthSuccess) {
-      onAuthSuccess('email', { email });
+    if (!validatePassword()) {
+      Alert.alert('Invalid Password', `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`);
+      return;
     }
+    
+    // Simulate successful login
+    Alert.alert('Login Successful', 'You have been logged in successfully', [
+      {
+        text: 'OK',
+        onPress: () => {
+          if (onAuthSuccess) {
+            onAuthSuccess('email', { email: email.trim().toLowerCase() });
+          }
+        }
+      }
+    ]);
   };
 
   // OTP handlers
   const handleOtpChange = (value, index) => {
+    // Only allow single digit numbers
     if (value.length <= 1 && /^\d*$/.test(value)) {
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
 
-      // Auto-focus next input
-      if (value && index < 5) {
+      // Auto-focus next input if value entered and not last input
+      if (value && index < OTP_LENGTH - 1) {
         inputRefs.current[index + 1]?.focus();
       }
     }
   };
 
   const handleKeyPress = (e, index) => {
+    // Handle backspace navigation
     if (e.nativeEvent.key === 'Backspace' && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
@@ -203,19 +251,21 @@ const AuthenticationFlow = ({ navigation, onSkip, onAuthSuccess }) => {
 
   const handleVerifyOtp = () => {
     if (!isOtpComplete()) {
-      Alert.alert('Incomplete OTP', 'Please enter the complete OTP');
+      Alert.alert('Incomplete OTP', `Please enter the complete ${OTP_LENGTH}-digit verification code`);
       return;
     }
 
     const otpString = otp.join('');
     console.log('Verifying OTP:', otpString);
     
+    // Simulate OTP verification
     Alert.alert('Success', 'Phone number verified successfully!', [
       {
         text: 'OK',
         onPress: () => {
           if (onAuthSuccess) {
-            onAuthSuccess('phone', selectedCountryCode.code + phoneNumber);
+            const fullPhoneNumber = selectedCountryCode.code + phoneNumber.trim();
+            onAuthSuccess('phone', fullPhoneNumber);
           }
         }
       }
@@ -223,18 +273,28 @@ const AuthenticationFlow = ({ navigation, onSkip, onAuthSuccess }) => {
   };
 
   const handleResendOtp = () => {
-    if (canResend) {
-      setTimer(30);
-      setCanResend(false);
-      setOtp(['', '', '', '', '', '']);
-      Alert.alert('OTP Sent', 'A new OTP has been sent to your phone number');
+    if (!canResend) {
+      Alert.alert('Please Wait', `You can resend the code in ${formatTime(timer)}`);
+      return;
     }
+    
+    // Reset OTP and timer
+    setOtp(new Array(OTP_LENGTH).fill(''));
+    setTimer(OTP_TIMER_DURATION);
+    setCanResend(false);
+    
+    // Focus first input after reset
+    setTimeout(() => {
+      inputRefs.current[0]?.focus();
+    }, 100);
+    
+    Alert.alert('OTP Sent', 'A new verification code has been sent to your phone number');
   };
 
   // Create account handlers
   const handleCreateAccount = () => {
-    if (!name.trim()) {
-      Alert.alert('Missing Name', 'Please enter your name');
+    if (!validateName()) {
+      Alert.alert('Invalid Name', `Please enter your name (at least ${MIN_NAME_LENGTH} characters)`);
       return;
     }
     
@@ -244,21 +304,30 @@ const AuthenticationFlow = ({ navigation, onSkip, onAuthSuccess }) => {
     }
     
     if (!validatePassword()) {
-      Alert.alert('Invalid Password', 'Password must be at least 6 characters long');
+      Alert.alert('Invalid Password', `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`);
+      return;
+    }
+    
+    if (!confirmPassword || confirmPassword.length === 0) {
+      Alert.alert('Missing Confirmation', 'Please confirm your password');
       return;
     }
     
     if (password !== confirmPassword) {
-      Alert.alert('Password Mismatch', 'Passwords do not match');
+      Alert.alert('Password Mismatch', 'Passwords do not match. Please try again.');
       return;
     }
     
+    // Simulate account creation
     Alert.alert('Account Created', 'Your account has been created successfully!', [
       {
         text: 'OK',
         onPress: () => {
           if (onAuthSuccess) {
-            onAuthSuccess('signup', { name, email });
+            onAuthSuccess('signup', { 
+              name: name.trim(), 
+              email: email.trim().toLowerCase() 
+            });
           }
         }
       }
@@ -273,45 +342,78 @@ const AuthenticationFlow = ({ navigation, onSkip, onAuthSuccess }) => {
         requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
       });
 
-      const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+      const credentialState = await appleAuth.getCredentialStateForUser(
+        appleAuthRequestResponse.user
+      );
 
       if (credentialState === appleAuth.State.AUTHORIZED) {
-        Alert.alert('Apple Sign-In Successful', 'You have been signed in with Apple successfully');
-        if (onAuthSuccess) {
-          onAuthSuccess('apple', appleAuthRequestResponse);
-        }
+        Alert.alert('Apple Sign-In Successful', 'You have been signed in with Apple successfully', [
+          {
+            text: 'OK',
+            onPress: () => {
+              if (onAuthSuccess) {
+                onAuthSuccess('apple', appleAuthRequestResponse);
+              }
+            }
+          }
+        ]);
+      } else {
+        Alert.alert('Apple Sign-In Failed', 'Unable to verify Apple credentials. Please try again.');
       }
     } catch (error) {
+      console.error('Apple Sign-In Error:', error);
+      
       if (error.code === appleAuth.Error.CANCELED) {
-        Alert.alert('Apple Sign-In Cancelled', 'Apple Sign-In was cancelled');
+        // User cancelled, no need to show error
+        return;
+      } else if (error.code === appleAuth.Error.FAILED) {
+        Alert.alert('Apple Sign-In Failed', 'Unable to complete Apple Sign-In. Please try again.');
+      } else if (error.code === appleAuth.Error.NOT_HANDLED) {
+        Alert.alert('Apple Sign-In Error', 'Apple Sign-In is not available on this device.');
       } else {
-        Alert.alert('Apple Sign-In Error', error.message || 'An error occurred during Apple Sign-In');
+        Alert.alert('Apple Sign-In Error', error.message || 'An unexpected error occurred during Apple Sign-In');
       }
     }
   };
 
   const handleGoogleSignIn = async () => {
     try {
+      // Configure Google Sign-In
       await GoogleSignin.configure({
-        webClientId: 'YOUR_WEB_CLIENT_ID', // You'll need to add your actual web client ID
+        webClientId: 'YOUR_WEB_CLIENT_ID', // Replace with your actual web client ID
+        offlineAccess: true,
       });
 
-      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      // Check for Play Services availability
+      await GoogleSignin.hasPlayServices({ 
+        showPlayServicesUpdateDialog: true 
+      });
+      
+      // Perform sign-in
       const userInfo = await GoogleSignin.signIn();
       
-      Alert.alert('Google Sign-In Successful', `Welcome ${userInfo.user.name}!`);
-      if (onAuthSuccess) {
-        onAuthSuccess('google', userInfo);
-      }
+      Alert.alert('Google Sign-In Successful', `Welcome ${userInfo.user.name}!`, [
+        {
+          text: 'OK',
+          onPress: () => {
+            if (onAuthSuccess) {
+              onAuthSuccess('google', userInfo);
+            }
+          }
+        }
+      ]);
     } catch (error) {
+      console.error('Google Sign-In Error:', error);
+      
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        Alert.alert('Google Sign-In Cancelled', 'Google Sign-In was cancelled');
+        // User cancelled, no need to show error
+        return;
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        Alert.alert('Google Sign-In In Progress', 'Google Sign-In is already in progress');
+        Alert.alert('Google Sign-In In Progress', 'Google Sign-In is already in progress. Please wait.');
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        Alert.alert('Google Sign-In Error', 'Google Play Services is not available');
+        Alert.alert('Google Sign-In Error', 'Google Play Services is not available or needs to be updated.');
       } else {
-        Alert.alert('Google Sign-In Error', error.message || 'An error occurred during Google Sign-In');
+        Alert.alert('Google Sign-In Error', error.message || 'An unexpected error occurred during Google Sign-In');
       }
     }
   };
@@ -321,6 +423,21 @@ const AuthenticationFlow = ({ navigation, onSkip, onAuthSuccess }) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const sanitizeInput = (input, type = 'text') => {
+    if (!input) return '';
+    
+    switch (type) {
+      case 'email':
+        return input.trim().toLowerCase();
+      case 'phone':
+        return input.replace(/[^\d]/g, '');
+      case 'name':
+        return input.trim().replace(/\s+/g, ' ');
+      default:
+        return input.trim();
+    }
   };
 
   // Render functions for different screens
@@ -440,7 +557,7 @@ const AuthenticationFlow = ({ navigation, onSkip, onAuthSuccess }) => {
               placeholder="Enter mobile number"
               placeholderTextColor="#CCCCCC"
               value={phoneNumber}
-              onChangeText={setPhoneNumber}
+              onChangeText={(text) => setPhoneNumber(sanitizeInput(text, 'phone'))}
               keyboardType="numeric"
               maxLength={15}
             />
@@ -506,7 +623,7 @@ const AuthenticationFlow = ({ navigation, onSkip, onAuthSuccess }) => {
               placeholder="Enter your email"
               placeholderTextColor="#CCCCCC"
               value={email}
-              onChangeText={setEmail}
+              onChangeText={(text) => setEmail(sanitizeInput(text, 'email'))}
               keyboardType="email-address"
               autoCapitalize="none"
             />
@@ -596,7 +713,7 @@ const AuthenticationFlow = ({ navigation, onSkip, onAuthSuccess }) => {
       <View style={styles.content}>
         <Text style={styles.title}>Enter Verification Code</Text>
         <Text style={styles.subtitle}>
-          We've sent a 6-digit code to {selectedCountryCode.code}{phoneNumber}
+          We've sent a {OTP_LENGTH}-digit code to {selectedCountryCode.code}{phoneNumber}
         </Text>
 
         {/* OTP Input */}
@@ -678,7 +795,7 @@ const AuthenticationFlow = ({ navigation, onSkip, onAuthSuccess }) => {
               placeholder="Enter your name"
               placeholderTextColor="#CCCCCC"
               value={name}
-              onChangeText={setName}
+              onChangeText={(text) => setName(sanitizeInput(text, 'name'))}
               autoCapitalize="words"
             />
           </View>
@@ -691,7 +808,7 @@ const AuthenticationFlow = ({ navigation, onSkip, onAuthSuccess }) => {
               placeholder="Enter your email"
               placeholderTextColor="#CCCCCC"
               value={email}
-              onChangeText={setEmail}
+              onChangeText={(text) => setEmail(sanitizeInput(text, 'email'))}
               keyboardType="email-address"
               autoCapitalize="none"
             />
@@ -849,7 +966,7 @@ const AuthenticationFlow = ({ navigation, onSkip, onAuthSuccess }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.mainContainer}>
       {renderCurrentScreen()}
       {renderCountryPicker()}
     </View>
@@ -1266,6 +1383,11 @@ const styles = StyleSheet.create({
   countryCode: {
     fontSize: 16,
     color: '#666',
+  },
+  
+  // Main container
+  mainContainer: {
+    flex: 1,
   },
 });
 

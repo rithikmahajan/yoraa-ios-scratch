@@ -249,6 +249,12 @@ const ProductDetailScreen = ({ navigation, route }) => {
     navigation.navigate('Reviews', { product: productData });
   };
 
+  const handleSearchPress = () => {
+    if (navigation) {
+      navigation.navigate('Search');
+    }
+  };
+
   const renderHeader = () => (
     <View style={styles.header}>
       <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
@@ -257,7 +263,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
       <Text style={styles.headerTitle} numberOfLines={1}>
         {productData?.name || 'Product Details'}
       </Text>
-      <TouchableOpacity style={styles.searchButton}>
+      <TouchableOpacity style={styles.searchButton} onPress={handleSearchPress}>
         <SearchIcon color="#000000" />
       </TouchableOpacity>
     </View>
