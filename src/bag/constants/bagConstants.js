@@ -12,7 +12,7 @@ export const DELETE_ANIMATION_DURATION = 300;
 export const VALID_PROMO_CODES = ['FIRST30', '30OFF', 'WELCOME'];
 
 export const SIZES = ['XS', 'S', 'M', 'L', 'XL'];
-export const QUANTITIES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+export const QUANTITIES = [1, 2, 3, 4];
 
 export const SIZE_CHART_DATA = [
   { size: 'S', waist: '71.1', inseam: '70.1' },

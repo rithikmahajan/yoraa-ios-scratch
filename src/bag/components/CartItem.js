@@ -129,40 +129,43 @@ const CartItem = ({
         ]}
         {...createSwipePanResponder(item.id).panHandlers}
       >
-        <View style={bagStyles.itemImageContainer}>
-          {item.image ? (
-            <Image source={item.image} style={bagStyles.itemImage} />
-          ) : (
-            <View style={bagStyles.itemImagePlaceholder}>
-              <Text style={bagStyles.placeholderText}>👟</Text>
-            </View>
-          )}
-        </View>
-        <View style={bagStyles.itemDetails}>
-          <Text style={bagStyles.itemName}>{item.name}</Text>
-          <Text style={bagStyles.itemDescription}>{item.description}</Text>
-          <Text style={bagStyles.itemSize}>{item.size}</Text>
-          <Text style={bagStyles.itemColor}>{item.color}</Text>
-          
-          <View style={bagStyles.itemControls}>
-            <TouchableOpacity 
-              style={bagStyles.quantityContainer}
-              onPress={() => onQuantityPress(index)}
-            >
-              <Text style={bagStyles.quantityText}>Qty {item.quantity}</Text>
-              <Text style={bagStyles.dropdownIcon}>▼</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={bagStyles.sizeContainer}
-              onPress={() => onSizePress(index)}
-            >
-              <Text style={bagStyles.sizeText}>{item.size.split(' ')[0]}</Text>
-              <Text style={bagStyles.dropdownIcon}>▼</Text>
-            </TouchableOpacity>
-            
-            <Text style={bagStyles.itemPrice}>US${(Number(item.price) || 0).toFixed(2)}</Text>
+        {/* Product Row */}
+        <View style={bagStyles.productRow}>
+          <View style={bagStyles.itemImageContainer}>
+            {item.image ? (
+              <Image source={item.image} style={bagStyles.itemImage} />
+            ) : (
+              <View style={bagStyles.itemImagePlaceholder}>
+                <Text style={bagStyles.placeholderText}>👟</Text>
+              </View>
+            )}
           </View>
+          <View style={bagStyles.itemDetails}>
+            <Text style={bagStyles.itemName}>{item.name}</Text>
+            <Text style={bagStyles.itemDescription}>{item.description}</Text>
+            <Text style={bagStyles.itemSize}>{item.size}</Text>
+          </View>
+        </View>
+        
+        {/* Controls Row */}
+        <View style={bagStyles.itemControls}>
+          <TouchableOpacity 
+            style={bagStyles.quantityContainer}
+            onPress={() => onQuantityPress(index)}
+          >
+            <Text style={bagStyles.quantityText}>Qty {item.quantity}</Text>
+            <Text style={bagStyles.dropdownIcon}>▼</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={bagStyles.sizeContainer}
+            onPress={() => onSizePress(index)}
+          >
+            <Text style={bagStyles.sizeText}>{item.size.split(' ')[0]}</Text>
+            <Text style={bagStyles.dropdownIcon}>▼</Text>
+          </TouchableOpacity>
+          
+          <Text style={bagStyles.itemPrice}>US${(Number(item.price) || 0).toFixed(2)}</Text>
         </View>
       </Animated.View>
     </View>

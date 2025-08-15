@@ -9,18 +9,16 @@ import {
   TouchableWithoutFeedback,
   Easing,
 } from 'react-native';
-import { QUANTITIES } from '../constants/bagConstants';
+import { SIZES } from '../constants/bagConstants';
 import { bagStyles } from '../styles/bagStyles';
 
-// Create full options array with Remove at the beginning
-const ALL_OPTIONS = ['Remove', ...QUANTITIES];
-
-const QuantityModal = ({
+const SelectSizeBagModal = ({
   visible,
-  selectedQuantity,
-  setSelectedQuantity,
+  selectedSize,
+  setSelectedSize,
   onDone,
   onClose,
+  onOpenSizeChart,
   slideAnim,
   panY,
 }) => {
@@ -37,29 +35,32 @@ const QuantityModal = ({
       Animated.timing(highlightAnim, {
         toValue: 1,
         duration: 300,
-        easing: Easing.bezier(0.25, 0.46, 0.45, 0.94), // Nike-style easing
+        easing: Easing.bezier(0.25, 0.46, 0.45, 0.94),
         useNativeDriver: true, // Use native driver for better performance
       }).start();
 
-      // Set initial selection to Remove and center it when modal opens
-      setSelectedQuantity(0); // Set to Remove by default
+      // Ensure at least one size is selected (default to first size if none selected)
+      if (!selectedSize || !SIZES.includes(selectedSize)) {
+        setSelectedSize(SIZES[0]); // Default to first available size
+      }
       
       setTimeout(() => {
-        if (scrollViewRef.current) {
-          // Always start with Remove option centered
+        if (scrollViewRef.current && selectedSize) {
+          // Center the selected size
           const itemHeight = 60;
           const modalViewHeight = 200;
           const centerOffset = (modalViewHeight / 2) - (itemHeight / 2);
-          const scrollOffset = (0 * itemHeight) - centerOffset; // Remove is at index 0
+          const selectedIndex = SIZES.indexOf(selectedSize);
+          const scrollOffset = (selectedIndex * itemHeight) - centerOffset;
           
           scrollViewRef.current.scrollTo({
             y: Math.max(0, scrollOffset),
             animated: true,
           });
         }
-      }, 350); // Wait for modal animation to complete
+      }, 350);
     }
-  }, [visible, highlightAnim, setSelectedQuantity]);
+  }, [visible, highlightAnim, selectedSize, setSelectedSize]);
 
   const panResponder = PanResponder.create({
     onMoveShouldSetPanResponder: (evt, gestureState) => {
@@ -84,10 +85,10 @@ const QuantityModal = ({
     },
   });
 
-  const handleOptionSelect = (option) => {
+  const handleSizeSelect = (size) => {
     if (isScrolling) return; // Prevent selection during scroll
 
-    // Nike-style interaction feedback
+    // Interaction feedback
     Animated.sequence([
       Animated.timing(scaleAnim, {
         toValue: 0.95,
@@ -103,16 +104,14 @@ const QuantityModal = ({
       }),
     ]).start();
 
-    // Set quantity based on option
-    const quantity = option === 'Remove' ? 0 : option;
-    setSelectedQuantity(quantity);
+    setSelectedSize(size);
 
     // Smooth scroll to center the selected item in the modal
-    const itemIndex = ALL_OPTIONS.indexOf(option);
+    const itemIndex = SIZES.indexOf(size);
     if (itemIndex !== -1 && scrollViewRef.current) {
-      const itemHeight = 60; // Item height
-      const modalViewHeight = 200; // Height of the scrollable area
-      const centerOffset = (modalViewHeight / 2) - (itemHeight / 2); // Center position
+      const itemHeight = 60;
+      const modalViewHeight = 200;
+      const centerOffset = (modalViewHeight / 2) - (itemHeight / 2);
       const scrollOffset = (itemIndex * itemHeight) - centerOffset;
       
       scrollViewRef.current.scrollTo({
@@ -125,20 +124,19 @@ const QuantityModal = ({
   const handleScroll = (event) => {
     const { contentOffset } = event.nativeEvent;
     const itemHeight = 60;
-    const modalViewHeight = 200; // Height of the scrollable area
-    const centerOffset = (modalViewHeight / 2) - (itemHeight / 2); // Center position
+    const modalViewHeight = 200;
+    const centerOffset = (modalViewHeight / 2) - (itemHeight / 2);
     
     // Calculate which item is in the center of the modal view
     const centerScrollPosition = contentOffset.y + centerOffset;
     const currentIndex = Math.round(centerScrollPosition / itemHeight);
-    const adjustedIndex = Math.max(0, Math.min(currentIndex, ALL_OPTIONS.length - 1));
+    const adjustedIndex = Math.max(0, Math.min(currentIndex, SIZES.length - 1));
     
     // Auto-select based on scroll position (centered item)
-    const currentOption = ALL_OPTIONS[adjustedIndex];
-    const quantity = currentOption === 'Remove' ? 0 : currentOption;
+    const currentSize = SIZES[adjustedIndex];
     
-    if (quantity !== selectedQuantity) {
-      setSelectedQuantity(quantity);
+    if (currentSize !== selectedSize) {
+      setSelectedSize(currentSize);
     }
   };
 
@@ -157,6 +155,14 @@ const QuantityModal = ({
 
   const handleOverlayPress = () => {
     onClose();
+  };
+
+  const handleDone = () => {
+    // Ensure a size is selected before closing
+    if (!selectedSize || !SIZES.includes(selectedSize)) {
+      setSelectedSize(SIZES[0]); // Force select first size if none selected
+    }
+    onDone();
   };
 
   if (!visible) return null;
@@ -199,16 +205,14 @@ const QuantityModal = ({
                 {/* Top spacer for centering */}
                 <View style={bagStyles.scrollSpacer} />
                 
-                {ALL_OPTIONS.map((option, index) => {
-                  const isSelected = (option === 'Remove' && selectedQuantity === 0) || 
-                                   (option !== 'Remove' && selectedQuantity === option);
-                  const isRemoveOption = option === 'Remove';
+                {SIZES.map((size, index) => {
+                  const isSelected = selectedSize === size;
                   
                   return (
                     <TouchableOpacity
-                      key={option}
+                      key={size}
                       style={[bagStyles.quantityOption]}
-                      onPress={() => handleOptionSelect(option)}
+                      onPress={() => handleSizeSelect(size)}
                       activeOpacity={0.7}
                     >
                       <Animated.View
@@ -220,9 +224,8 @@ const QuantityModal = ({
                       >
                         <Animated.Text 
                           style={[
-                            isRemoveOption ? bagStyles.removeOptionText : bagStyles.quantityOptionText,
-                            isSelected && !isRemoveOption && bagStyles.selectedQuantityOptionText,
-                            isSelected && isRemoveOption && bagStyles.selectedRemoveOptionText,
+                            bagStyles.quantityOptionText,
+                            isSelected && bagStyles.selectedQuantityOptionText,
                             isSelected && {
                               transform: [{
                                 scale: highlightAnim.interpolate({
@@ -233,7 +236,7 @@ const QuantityModal = ({
                             }
                           ]}
                         >
-                          {option}
+                          {size}
                         </Animated.Text>
                       </Animated.View>
                     </TouchableOpacity>
@@ -244,7 +247,20 @@ const QuantityModal = ({
                 <View style={bagStyles.scrollSpacer} />
               </ScrollView>
               
-              <TouchableOpacity style={bagStyles.doneButton} onPress={onDone} activeOpacity={0.8}>
+              {/* Size Chart Button */}
+              <TouchableOpacity 
+                style={bagStyles.sizeChartLink}
+                onPress={onOpenSizeChart}
+                activeOpacity={0.7}
+              >
+                <Text style={bagStyles.sizeChartText}>Size Chart</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={bagStyles.doneButton} 
+                onPress={handleDone} 
+                activeOpacity={0.8}
+              >
                 <Text style={bagStyles.doneButtonText}>Done</Text>
               </TouchableOpacity>
             </View>
@@ -255,4 +271,4 @@ const QuantityModal = ({
   );
 };
 
-export default QuantityModal;
+export default SelectSizeBagModal;

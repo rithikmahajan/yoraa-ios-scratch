@@ -10,7 +10,7 @@ import {
 import { FontSizes, FontWeights, Spacing } from '../constants';
 import SearchIconSvg from '../assets/icons/SearchIconSvg';
 import HeartIconSvg from '../assets/icons/HeartIconSvg';
-import CartIconSvg from '../assets/icons/CartIconSvg';
+import ShoppingBagIconSvg from '../assets/icons/ShoppingBagIconSvg';
 import {
   SaleImageSvg,
   LifestyleImageSvg,
@@ -131,7 +131,7 @@ const HomeScreen = ({ navigation }) => {
             <HeartIconSvg width={23} height={21} color="#000000" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconButton} onPress={handleCartPress}>
-            <CartIconSvg width={23} height={17} color="#000000" />
+            <ShoppingBagIconSvg width={23} height={23} color="#000000" />
           </TouchableOpacity>
         </View>
       </View>

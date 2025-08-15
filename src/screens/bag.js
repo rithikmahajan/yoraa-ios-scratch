@@ -13,7 +13,7 @@ import {
   EmptyBag,
   BagSummary,
   QuantityModal,
-  SizeModal,
+  SelectSizeBagModal,
   SizeChartModal,
   PromoSuccessModal,
   useBagState,
@@ -98,7 +98,7 @@ const BagScreen = ({ navigation, route }) => {
         <EmptyBag onShopNow={() => navigation.navigate('Home')} />
       ) : (
         <>
-          <ScrollView style={bagStyles.scrollView}>
+          <ScrollView style={bagStyles.scrollView} showsVerticalScrollIndicator={false}>
             {/* Cart Items */}
             <View style={bagStyles.cartContainer}>
               {cartItems.map((item, index) => renderCartItem(item, index))}
@@ -141,7 +141,7 @@ const BagScreen = ({ navigation, route }) => {
         panY={animations.quantityPanY}
       />
 
-      <SizeModal
+      <SelectSizeBagModal
         visible={sizeModalVisible}
         selectedSize={selectedSize}
         setSelectedSize={setSelectedSize}

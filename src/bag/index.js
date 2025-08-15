@@ -3,7 +3,7 @@ export { default as CartItem } from './components/CartItem';
 export { default as EmptyBag } from './components/EmptyBag';
 export { default as BagSummary } from './components/BagSummary';
 export { default as QuantityModal } from './components/QuantityModal';
-export { default as SizeModal } from './components/SizeModal';
+export { default as SelectSizeBagModal } from './components/SelectSizeBagModal';
 export { default as SizeChartModal } from './components/SizeChartModal';
 export { default as PromoSuccessModal } from './components/PromoSuccessModal';
 
