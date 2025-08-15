@@ -1,147 +1,138 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  Image,
-  Modal,
-  Dimensions,
-} from 'react-native';
-import { FontWeights, Spacing } from '../constants';
-import { useFavorites } from '../contexts/FavoritesContext';
-import BackButton from '../components/BackButton';
-import { HeartIcon, DeleteIcon, CheckmarkIcon } from '../assets/icons';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useState} from 'react';
+import {View, StyleSheet, FlatList, Image, TouchableOpacity, Modal, Dimensions, SafeAreaView, Text} from 'react-native';
+
+// Placeholder image URL for products
+const placeholderImage = 'https://via.placeholder.com/184x184/CCCCCC/FFFFFF?text=Product';
 
 const screenWidth = Dimensions.get('window').width;
 
-const Favourites = ({ navigation }) => {
-  const [editMode, setEditMode] = useState(false);
-  const { favorites, removeFromFavorites } = useFavorites();
-  
-  const [showProductModal, setShowProductModal] = useState(false);
-  const [showAddToBagModal, setShowAddToBagModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [selectedQuantity, setSelectedQuantity] = useState(4);
-  const [selectedSize, setSelectedSize] = useState('L (W 10-13 / M 8-12)');
-
-  const quantities = ['Remove', 1, 2, 3, 4, 5, 6, 7, 8];
-  const sizes = [
-    'L (W 6-10 / M 6-8)',
-    'L (W 10-13 / M 8-12)', 
-    'XL (M 12-15 / M 6-8)'
-  ];
-
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
-
-  const handleEditToggle = () => {
-    setEditMode(!editMode);
-  };
-
-  const handleDeleteItem = (itemId) => {
-    removeFromFavorites(itemId);
-  };
-
-  const handleProductPress = (product) => {
-    if (!editMode) {
-      setSelectedProduct(product);
-      setShowProductModal(true);
-    }
-  };
-
-  const toggleShowBag = () => {
-    setShowAddToBagModal(!showAddToBagModal);
-    setShowProductModal(false);
-  };
-
-  const handleAddFavoritesNow = () => {
-    navigation.navigate('Home');
-  };
-
-  // Empty State Component
-  const EmptyList = () => (
-    <View style={styles.emptyContainer}>
-      <View style={styles.emptyContent}>
-        <View style={styles.heartIconContainer}>
-          <HeartIcon size={60} color="#14142B" />
-        </View>
-        <Text style={styles.emptyTitle}>
+// Empty List Component
+const EmptyList = () => {
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        paddingHorizontal: 24,
+      }}>
+      <View style={{alignItems: 'center'}}>
+        <Text style={{fontSize: 60, color: '#CCCCCC'}}>♡</Text>
+        <Text style={{textAlign: 'center', fontSize: 16, fontWeight: 400}}>
           Your Favourites is empty.{'\n'}
           When you add products, they'll{'\n'}
           appear here.
         </Text>
       </View>
-      <View style={styles.emptyButtonContainer}>
-        <TouchableOpacity style={styles.addFavoritesButton} onPress={handleAddFavoritesNow}>
-          <Text style={styles.addFavoritesButtonText}>Add Favourites Now</Text>
-        </TouchableOpacity>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 40,
+          width: screenWidth,
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingHorizontal: 24,
+        }}>
+        <View style={style.buttonContainer}>
+          <Text style={{fontSize: 16, color: '#fff'}}>Add Favourites Now</Text>
+        </View>
       </View>
     </View>
   );
+};
 
-  // Product Component
-  const Product = ({ item, index }) => (
+// Product Component
+const Product = ({
+  name,
+  price,
+  image,
+  addMargin,
+  isDeleteMode,
+  toggleProduct,
+}) => {
+  return (
     <TouchableOpacity
-      onPress={() => handleProductPress(item)}
-      style={[
-        styles.productContainer,
-        { marginRight: index % 2 === 0 ? '2%' : 0 }
-      ]}
-    >
-      <View style={styles.productImageContainer}>
-        <Image source={{ uri: item.image }} style={styles.productImage} />
-        {editMode && (
-          <TouchableOpacity 
-            style={styles.deleteIcon}
-            onPress={() => handleDeleteItem(item.id)}
-          >
-            <View style={styles.deleteIconContainer}>
-              <DeleteIcon size={16} color="#FFFFFF" />
+      onPress={toggleProduct}
+      style={{
+        width: '49%',
+        marginRight: addMargin ? '2%' : 0,
+        marginBottom: 21,
+      }}>
+      <View style={{position: 'relative'}}>
+        <Image
+          source={typeof image === 'string' ? {uri: image} : image}
+          style={{resizeMode: 'cover', height: 184, width: '100%'}}
+        />
+        {isDeleteMode && (
+          <TouchableOpacity style={{position: 'absolute', right: 10, top: -5}}>
+            <View style={{
+              width: 30,
+              height: 30,
+              borderRadius: 15,
+              backgroundColor: '#CA3327',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              <Text style={{color: 'white', fontSize: 16, fontWeight: 'bold'}}>×</Text>
             </View>
           </TouchableOpacity>
         )}
+        <Image />
       </View>
-      <View style={styles.productInfo}>
-        <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.productPrice}>US${item.price}</Text>
+
+      <View style={{paddingLeft: 14, paddingTop: 14}}>
+        <Text style={{color: '#000', fontSize: 14, fontWeight: 500}}>
+          {name}
+        </Text>
+        <Text style={{color: '#000', fontSize: 14, fontWeight: 500}}>
+          US${price}
+        </Text>
       </View>
     </TouchableOpacity>
   );
+};
 
-  // Product Modal Component
-  const ProductPopOver = ({ visible, onClose, product }) => (
+// Product PopOver Component
+const ProductPopOver = ({visible, onClose, toggleShowBag}) => {
+  const activeNumber = 4;
+  const numberData = ['Remove', 1, 2, 3, 4, 5, 6, 7, 8];
+
+  const size = [
+    'L (W 6-10 / M 6-8)',
+    'L (W 10-13 / M 8-12)',
+    'XL (M 12-15 / M 6-8)',
+  ];
+
+  return (
     <Modal transparent visible={visible} animationType="fade">
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContainer}>
-          <View style={styles.productHeader}>
-            <Image source={{ uri: product?.image }} style={styles.modalProductImage} />
-            <View style={styles.modalProductInfo}>
-              <Text style={styles.modalProductName}>{product?.name}</Text>
-              <Text style={styles.modalProductCategory}>Shoes</Text>
-              <Text style={styles.modalProductPrice}>US${product?.price}</Text>
+      <View style={style.overlay}>
+        <View style={style.container2}>
+          <View style={{padding: 24, flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#E4E4E4', marginBottom: 24}}>
+            <Image source={{uri: placeholderImage}} style={style.image} />
+            <View style={{justifyContent: 'space-between', paddingBottom: 8, flex: 1}}>
+              <Text style={{color: '#000', fontSize: 14, fontWeight: 'bold'}}>Air Jordan 1 Mid</Text>
+              <Text style={{color: '#767676', fontSize: 14, marginTop: 4}}>Shoes</Text>
+              <Text style={{color: '#000', fontWeight: '500', fontSize: 14}}>US$125</Text>
             </View>
           </View>
 
-          <View style={styles.quantitySection}>
+          <View style={{marginBottom: 20}}>
             <FlatList
-              data={quantities}
+              data={numberData}
               horizontal
               showsHorizontalScrollIndicator={false}
-              renderItem={({ item }) => (
+              renderItem={({item}) => (
                 <TouchableOpacity
-                  style={[
-                    styles.quantityOption,
-                    selectedQuantity === item && styles.selectedQuantityOption
-                  ]}
-                  onPress={() => setSelectedQuantity(item)}
-                >
-                  <Text style={[
-                    styles.quantityText,
-                    selectedQuantity === item && styles.selectedQuantityText
-                  ]}>
+                  style={{
+                    backgroundColor: '#F6F6F6',
+                    borderWidth: 1,
+                    borderColor: activeNumber === item ? '#000' : '#E4E4E4',
+                    marginLeft: 10,
+                    paddingVertical: 16,
+                    paddingHorizontal: 10,
+                    borderRadius: 4,
+                  }}>
+                  <Text style={{color: activeNumber === item ? '#000' : '#BABABA', fontSize: 16}}>
                     {item}
                   </Text>
                 </TouchableOpacity>
@@ -150,25 +141,23 @@ const Favourites = ({ navigation }) => {
             />
           </View>
 
-          <View style={styles.sizeSection}>
-            <Text style={styles.sizeTitle}>Size</Text>
+          <View style={{marginBottom: 18}}>
+            <Text style={{paddingVertical: 12, fontSize: 20, color: '#000', textAlign: 'center'}}>Size</Text>
             <FlatList
-              data={sizes}
+              data={size}
               horizontal
               showsHorizontalScrollIndicator={false}
-              renderItem={({ item, index }) => (
+              renderItem={({item, index}) => (
                 <TouchableOpacity
-                  style={[
-                    styles.sizeOption,
-                    selectedSize === item && styles.selectedSizeOption
-                  ]}
-                  onPress={() => setSelectedSize(item)}
-                >
-                  <Text style={[
-                    styles.sizeText,
-                    selectedSize === item ? styles.selectedSizeText : 
-                    index === 2 ? styles.disabledSizeText : styles.sizeText
-                  ]}>
+                  style={{
+                    paddingHorizontal: 10,
+                    paddingVertical: 16,
+                    borderWidth: 1,
+                    borderColor: index === 1 ? '#000' : '#E4E4E4',
+                    borderRadius: 4,
+                    marginLeft: 10,
+                  }}>
+                  <Text style={{fontSize: 16, color: index === 2 ? '#BABABA' : '#000'}}>
                     {item}
                   </Text>
                 </TouchableOpacity>
@@ -177,148 +166,147 @@ const Favourites = ({ navigation }) => {
             />
           </View>
 
-          <TouchableOpacity style={styles.sizeChartButton}>
-            <Text style={styles.sizeChartText}>Size Chart</Text>
-          </TouchableOpacity>
+          <Text style={style.sizeChart}>Size Chart</Text>
 
-          <TouchableOpacity style={styles.addToBagButton} onPress={toggleShowBag}>
-            <Text style={styles.addToBagButtonText}>Add to Bag</Text>
+          <TouchableOpacity style={style.button} onPress={toggleShowBag}>
+            <Text style={style.buttonText}>Add to Bag</Text>
           </TouchableOpacity>
         </View>
       </View>
     </Modal>
   );
+};
 
-  // Bag Added Modal Component  
-  const BagPopOver = ({ visible, onClose }) => (
+// Bag PopOver Component
+const BagPopOver = ({visible, onClose}) => {
+  return (
     <Modal transparent visible={visible} animationType="fade">
-      <View style={styles.bagModalOverlay}>
-        <View style={styles.bagModalContainer}>
-          <View style={styles.bagModalContent}>
-            <View style={styles.checkIconContainer}>
-              <CheckmarkIcon width={41} height={41} color="#4CAF50" />
+      <View style={style.overlay}>
+        <View style={style.container2}>
+          <View
+            style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+            <View style={{
+              width: 81,
+              height: 81,
+              borderRadius: 40.5,
+              backgroundColor: '#4CAF50',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              <Text style={{color: 'white', fontSize: 48, fontWeight: 'bold'}}>✓</Text>
             </View>
-            <Text style={styles.addedToBagText}>Added to Bag</Text>
+            <Text
+              style={{
+                fontSize: 24,
+                color: '#000',
+                textAlign: 'center',
+                marginTop: 20,
+              }}>
+              Added to Bag
+            </Text>
           </View>
-          <View style={styles.bagModalButtonContainer}>
-            <TouchableOpacity style={styles.viewBagButton} onPress={onClose}>
-              <Text style={styles.viewBagButtonText}>View Bag</Text>
+
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 20,
+              width: '100%',
+              paddingHorizontal: 22,
+            }}>
+            <TouchableOpacity style={style.button} onPress={onClose}>
+              <Text style={style.buttonText}>View Bag</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
     </Modal>
   );
+};
 
+const Favourites = () => {
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [showAddToBad, setShowAddToBag] = useState(false);
+  const toggleDeleteMode = () => setIsDeleteMode(!isDeleteMode);
+  const toggleProduct = () => setShowProductModal(!showProductModal);
+
+  const toggleShowBag = () => {
+    setShowAddToBag(!showAddToBad);
+    setShowProductModal(false);
+  };
+  
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <BackButton onPress={handleGoBack} style={styles.backButton} />
-        
-        <Text style={styles.headerTitle}>Favourites</Text>
-        
-        {favorites.length > 0 && (
-          <TouchableOpacity onPress={handleEditToggle}>
-            <Text style={styles.editText}>
-              {editMode ? 'Save' : 'Edit'}
-            </Text>
-          </TouchableOpacity>
-        )}
+    <SafeAreaView style={style.safeAreaViewContainer}>
+      <View style={{paddingHorizontal: 24, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10}}>
+        <View style={{width: 60}} />
+        <Text style={{fontSize: 28, paddingVertical: 16, color: '#000000', fontWeight: 'bold'}}>
+          Favourites
+        </Text>
+        <TouchableOpacity onPress={toggleDeleteMode}>
+          <Text style={{fontSize: 16, color: '#000'}}>
+            {isDeleteMode ? 'Save' : 'Edit'}
+          </Text>
+        </TouchableOpacity>
       </View>
 
-      {/* Product Grid or Empty State */}
+      <ProductPopOver
+        toggleShowBag={toggleShowBag}
+        visible={showProductModal}
+        onClose={toggleProduct}
+      />
+      <BagPopOver visible={showAddToBad} onClose={toggleShowBag} />
+
       <FlatList
-        style={styles.productList}
+        style={{flex: 1}}
         numColumns={2}
-        keyExtractor={item => item.id.toString()}
-        contentContainerStyle={{ flexGrow: 1 }}
-        data={favorites}
-        renderItem={({ item, index }) => <Product item={item} index={index} />}
+        keyExtractor={item => item.id}
+        contentContainerStyle={{flexGrow: 1}}
+        data={[
+          {
+            name: 'Air Jordan 1 Mid',
+            price: '125',
+            id: 1,
+            image: placeholderImage,
+          },
+          {
+            name: 'Air Jordan 2 Mid',
+            price: '130',
+            id: 2,
+            image: placeholderImage,
+          },
+          {
+            name: 'Air Jordan 3 Mid',
+            price: '140',
+            id: 3,
+            image: placeholderImage,
+          },
+          {
+            name: 'Air Jordan 4 Mid',
+            price: '160',
+            id: 4,
+            image: placeholderImage,
+          },
+        ]}
+        renderItem={({item, index}) => (
+          <Product
+            {...item}
+            isDeleteMode={isDeleteMode}
+            addMargin={index % 2 === 0}
+            toggleProduct={toggleProduct}
+          />
+        )}
         ListEmptyComponent={<EmptyList />}
       />
-
-      {/* Modals */}
-      <ProductPopOver
-        visible={showProductModal}
-        onClose={() => setShowProductModal(false)}
-        product={selectedProduct}
-      />
-      
-      <BagPopOver
-        visible={showAddToBagModal}
-        onClose={() => setShowAddToBagModal(false)}
-      />
-    </View>
+    </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
+const style = StyleSheet.create({
+  safeAreaViewContainer: {
     flex: 1,
     backgroundColor: '#fff',
   },
-
-  // Header Styles
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingTop: 60,
-    paddingBottom: 16,
-  },
-  backButton: {
-    padding: 8,
-  },
-  backIcon: {
-    fontSize: 28,
-    color: '#000',
-  },
-  headerTitle: {
-    fontSize: 28,
-    color: '#000',
-    fontWeight: FontWeights.medium,
-  },
-  editText: {
-    fontSize: 16,
-    color: '#000',
-  },
-
-  // Empty State Styles
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-  },
-  emptyContent: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-  },
-  heartIconContainer: {
-    marginBottom: 20,
-  },
-  emptyHeartIcon: {
-    width: 60,
-    height: 60,
-  },
-  emptyTitle: {
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '400',
-    color: '#000',
-    lineHeight: 24,
-  },
-  emptyButtonContainer: {
-    position: 'absolute',
-    bottom: 40,
-    width: screenWidth,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 24,
-  },
-  addFavoritesButton: {
+  buttonContainer: {
     borderWidth: 1,
     backgroundColor: '#000',
     width: '100%',
@@ -326,177 +314,40 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 100,
   },
-  addFavoritesButtonText: {
-    fontSize: 16,
-    color: '#fff',
-  },
-
-  // Product List Styles
-  productList: {
-    flex: 1,
-    paddingHorizontal: 24,
-  },
-  productContainer: {
-    width: '49%',
-    marginBottom: 21,
-  },
-  productImageContainer: {
-    position: 'relative',
-  },
-  productImage: {
-    resizeMode: 'cover',
-    height: 184,
-    width: '100%',
-  },
-  deleteIcon: {
-    position: 'absolute',
-    right: 10,
-    top: -5,
-  },
-  deleteIconContainer: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: '#CA3327',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  productInfo: {
-    paddingLeft: 14,
-    paddingTop: 14,
-  },
-  productName: {
+  sizeChart: {
+    textAlign: 'right',
+    textDecorationLine: 'underline',
+    marginBottom: 16,
+    marginRight: 22,
     color: '#000',
     fontSize: 14,
-    fontWeight: '500',
   },
-  productPrice: {
-    color: '#000',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-
-  // Modal Overlay
-  modalOverlay: {
+  overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  modalContainer: {
+  container2: {
     width: '100%',
     backgroundColor: 'white',
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    paddingBottom: 20,
   },
-
-  // Product Header in Modal
-  productHeader: {
-    padding: 24,
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E4E4E4',
-    marginBottom: 24,
-  },
-  modalProductImage: {
+  image: {
     height: 154,
     width: 154,
     resizeMode: 'cover',
     marginRight: 16,
   },
-  modalProductInfo: {
-    justifyContent: 'space-between',
-    paddingBottom: 8,
-    flex: 1,
-  },
-  modalProductName: {
-    color: '#000',
-    fontSize: 14,
+  text: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 24,
+    color: '#43484B',
     fontWeight: 'bold',
   },
-  modalProductCategory: {
-    color: '#767676',
-    fontSize: 14,
-    marginTop: 4,
-  },
-  modalProductPrice: {
-    color: '#000',
-    fontWeight: '500',
-    fontSize: 14,
-  },
-
-  // Quantity Section
-  quantitySection: {
-    marginBottom: 20,
-  },
-  quantityOption: {
-    backgroundColor: '#F6F6F6',
-    borderWidth: 1,
-    borderColor: '#E4E4E4',
-    marginLeft: 10,
-    paddingVertical: 16,
-    paddingHorizontal: 10,
-    borderRadius: 4,
-  },
-  selectedQuantityOption: {
-    borderColor: '#000',
-  },
-  quantityText: {
-    color: '#BABABA',
-    fontSize: 16,
-  },
-  selectedQuantityText: {
-    color: '#000',
-  },
-
-  // Size Section
-  sizeSection: {
-    marginBottom: 18,
-  },
-  sizeTitle: {
-    paddingVertical: 12,
-    fontSize: 20,
-    color: '#000',
-    textAlign: 'center',
-  },
-  sizeOption: {
-    paddingHorizontal: 10,
-    paddingVertical: 16,
-    borderWidth: 1,
-    borderColor: '#E4E4E4',
-    borderRadius: 4,
-    marginLeft: 10,
-  },
-  selectedSizeOption: {
-    borderColor: '#000',
-  },
-  sizeText: {
-    fontSize: 16,
-    color: '#000',
-  },
-  selectedSizeText: {
-    color: '#000',
-  },
-  disabledSizeText: {
-    color: '#BABABA',
-  },
-
-  // Size Chart Button
-  sizeChartButton: {
-    alignSelf: 'flex-end',
-    paddingRight: 22,
-    marginBottom: 16,
-  },
-  sizeChartText: {
-    textAlign: 'right',
-    textDecorationLine: 'underline',
-    color: '#000',
-    fontSize: 14,
-  },
-
-  // Add to Bag Button
-  addToBagButton: {
+  button: {
     backgroundColor: '#000',
     paddingVertical: 12,
     paddingHorizontal: 24,
@@ -505,59 +356,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 22,
   },
-  addToBagButtonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-
-  // Bag Modal Styles
-  bagModalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  bagModalContainer: {
-    width: '100%',
-    height: '50%',
-    backgroundColor: 'white',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-  },
-  bagModalContent: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-  },
-  checkIconContainer: {
-    width: 81,
-    height: 81,
-    borderRadius: 40.5,
-    backgroundColor: '#E8F5E8',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  addedToBagText: {
-    fontSize: 24,
-    color: '#000',
-    textAlign: 'center',
-    marginTop: 20,
-  },
-  bagModalButtonContainer: {
-    position: 'absolute',
-    bottom: 20,
-    width: '100%',
-    paddingHorizontal: 22,
-  },
-  viewBagButton: {
-    backgroundColor: '#000',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 100,
-    width: '100%',
-    alignItems: 'center',
-  },
-  viewBagButtonText: {
+  buttonText: {
     color: '#fff',
     fontSize: 16,
   },
