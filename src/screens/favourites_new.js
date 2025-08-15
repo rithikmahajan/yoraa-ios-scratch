@@ -12,7 +12,7 @@ import {
 import { FontWeights, Spacing } from '../constants';
 import { useFavorites } from '../contexts/FavoritesContext';
 import BackButton from '../components/BackButton';
-import { HeartIcon } from '../assets/icons';
+import { HeartIcon, CheckmarkIcon } from '../assets/icons';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -197,11 +197,9 @@ const Favourites = ({ navigation }) => {
       <View style={styles.bagModalOverlay}>
         <View style={styles.bagModalContainer}>
           <View style={styles.bagModalContent}>
-            <Image 
-              source={require('../assets/icons/check-circle.png')} 
-              style={styles.checkIcon}
-              resizeMode="contain"
-            />
+            <View style={styles.checkIconContainer}>
+              <CheckmarkIcon width={41} height={41} color="#4CAF50" />
+            </View>
             <Text style={styles.addedToBagText}>Added to Bag</Text>
           </View>
           <View style={styles.bagModalButtonContainer}>
@@ -529,9 +527,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
-  checkIcon: {
+  checkIconContainer: {
     width: 81,
     height: 81,
+    borderRadius: 40.5,
+    backgroundColor: '#E8F5E8',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   addedToBagText: {
     fontSize: 24,

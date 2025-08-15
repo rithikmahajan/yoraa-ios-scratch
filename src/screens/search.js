@@ -13,7 +13,6 @@ import {
   StatusBar,
   SafeAreaView,
   ScrollView,
-  Image,
 } from 'react-native';
 import { Colors, FontSizes, FontWeights, Spacing, BorderRadius } from '../constants';
 import { MicrophoneIcon, CameraIcon, ScanBarcodeIcon, SearchIcon } from '../assets/icons';
@@ -372,13 +371,13 @@ const SearchScreen = ({ navigation, onClose }) => {
         <View style={styles.header}>
           <View style={styles.searchInputContainer}>
             <View style={styles.searchIcon}>
-              <SearchIcon size={20} color={Colors.textTertiary} />
+              <SearchIcon size={20} color="#9E9E9E" />
             </View>
             
             <TextInput
               style={styles.searchInput}
               placeholder="Search Product"
-              placeholderTextColor={Colors.textTertiary}
+              placeholderTextColor="#9E9E9E"
               value={searchText}
               onChangeText={setSearchText}
               autoFocus={true}
@@ -406,12 +405,12 @@ const SearchScreen = ({ navigation, onClose }) => {
         {!searchResults.length && (
           <View style={styles.actionButtons}>
             <TouchableOpacity style={styles.actionButton} onPress={handleCameraPress}>
-              <CameraIcon color={Colors.textPrimary} width={24} height={24} />
+              <CameraIcon color={Colors.textPrimary} width={19} height={19} />
               <Text style={styles.actionButtonText}>Camera</Text>
             </TouchableOpacity>
             
             <TouchableOpacity style={styles.actionButton} onPress={handleScanBarcode}>
-              <ScanBarcodeIcon color={Colors.textPrimary} width={24} height={24} />
+              <ScanBarcodeIcon color={Colors.textPrimary} width={20} height={20} />
               <Text style={styles.actionButtonText}>Scan Barcode</Text>
             </TouchableOpacity>
           </View>
@@ -498,17 +497,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
-    paddingTop: Spacing.xl,
+    paddingTop: Spacing.lg,
   },
   searchInputContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#F7F7F7',
     borderRadius: BorderRadius.xl,
     paddingHorizontal: Spacing.lg,
     marginRight: Spacing.lg,
-    height: 48,
+    height: 44,
   },
   searchIcon: {
     marginRight: Spacing.md,
@@ -534,26 +533,26 @@ const styles = StyleSheet.create({
   actionButtons: {
     flexDirection: 'row',
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.xl,
-    gap: Spacing.lg,
+    paddingVertical: Spacing.lg,
+    gap: Spacing.md,
   },
   actionButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.background,
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
     borderRadius: BorderRadius.xxl,
-    borderWidth: 1,
-    borderColor: Colors.border,
+    borderWidth: 1.5,
+    borderColor: '#E8E8E8',
     flex: 1,
-    minHeight: 52,
+    height: 50,
   },
   actionButtonText: {
     fontSize: FontSizes.md,
     color: Colors.textPrimary,
-    fontWeight: FontWeights.medium,
+    fontWeight: FontWeights.normal,
     marginLeft: Spacing.sm,
   },
   suggestionsList: {

@@ -4,59 +4,45 @@ import Svg, { Path, Rect } from 'react-native-svg';
 const ScanBarcodeIcon = ({ width = 24, height = 24, color = '#000000' }) => {
   return (
     <Svg width={width} height={height} viewBox="0 0 24 24" fill="none">
-      <Rect
-        x="2"
-        y="6"
-        width="20"
-        height="12"
-        rx="2"
+      {/* Corner brackets for scanner frame */}
+      <Path
+        d="M9 3H6C4.89543 3 4 3.89543 4 5V8"
         stroke={color}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <Path
-        d="M6 10H6.01"
+        d="M15 3H18C19.1046 3 20 3.89543 20 5V8"
         stroke={color}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <Path
-        d="M10 10H10.01"
+        d="M9 21H6C4.89543 21 4 20.1046 4 19V16"
         stroke={color}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <Path
-        d="M14 10H14.01"
+        d="M15 21H18C19.1046 21 20 20.1046 20 19V16"
         stroke={color}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <Path
-        d="M18 10H18.01"
-        stroke={color}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <Path
-        d="M6 14H10"
-        stroke={color}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <Path
-        d="M14 14H18"
-        stroke={color}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      {/* QR code pattern */}
+      <Rect x="8" y="8" width="2" height="2" fill={color} />
+      <Rect x="8" y="11" width="2" height="2" fill={color} />
+      <Rect x="8" y="14" width="2" height="2" fill={color} />
+      <Rect x="11" y="8" width="2" height="2" fill={color} />
+      <Rect x="14" y="8" width="2" height="2" fill={color} />
+      <Rect x="11" y="11" width="2" height="2" fill={color} />
+      <Rect x="14" y="11" width="2" height="2" fill={color} />
+      <Rect x="11" y="14" width="2" height="2" fill={color} />
+      <Rect x="14" y="14" width="2" height="2" fill={color} />
     </Svg>
   );
 };

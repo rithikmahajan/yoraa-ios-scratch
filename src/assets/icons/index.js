@@ -11,6 +11,8 @@ export { default as SearchIcon } from './SearchIcon';
 export { default as FilterIcon } from './FilterIcon';
 export { default as HeartIcon } from './HeartIcon';
 export { default as HeartIconSvg } from './HeartIcon'; // Point to same component for consistency
+export { default as DeleteIcon } from './DeleteIcon';
+export { default as CheckmarkIcon } from './CheckmarkIcon';
 export { default as MicrophoneIcon } from './MicrophoneIcon';
 export { default as CameraIcon } from './CameraIcon';
 export { default as ScanBarcodeIcon } from './ScanBarcodeIcon';

@@ -476,6 +476,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: Spacing.xl,
+    paddingTop: -Spacing.xxl, // Slight adjustment to match Figma positioning
   },
   cameraContent: {
     flex: 1,
@@ -489,12 +490,14 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     textAlign: 'center',
     marginBottom: Spacing.xl,
+    lineHeight: 32, // Better line spacing for title
   },
   description: {
     fontSize: FontSizes.md,
     color: Colors.textSecondary,
     textAlign: 'center',
     lineHeight: 24,
+    marginTop: Spacing.sm, // Add slight top margin
   },
   cameraInstruction: {
     fontSize: FontSizes.md,
@@ -543,6 +546,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.xxl,
     borderWidth: 1,
     borderColor: Colors.textPrimary,
+    marginHorizontal: Spacing.md, // Add horizontal margin to match Figma width
   },
   nextButtonText: {
     fontSize: FontSizes.md,

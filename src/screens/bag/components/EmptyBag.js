@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { EmptyBagIcon } from '../../assets/icons';
+import { EmptyBagIcon } from '../../../assets/icons';
 import { bagStyles } from '../styles/bagStyles';
 
 const EmptyBag = ({ onShopNow }) => {

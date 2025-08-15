@@ -381,26 +381,6 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
     }
   };
 
-  const renderColorDots = (colors) => (
-    <View style={styles.colorDotsContainer}>
-      {colors.slice(0, 5).map((color, index) => (
-        <View
-          key={index}
-          style={[
-            styles.colorDot,
-            { backgroundColor: color },
-            color === '#FFFFFF' && styles.whiteColorDot,
-          ]}
-        />
-      ))}
-      {colors.length > 5 && (
-        <Text style={styles.moreColors}>
-          +{colors.length - 5}
-        </Text>
-      )}
-    </View>
-  );
-
   const renderProductCard = ({ item, index }) => {
     const imageStyle = [
       styles.productImage, 
@@ -458,7 +438,6 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
           ]}>
             {item.subtitle}
           </Text>
-          {!isCompact && renderColorDots(item.colors)}
           <View style={styles.priceContainer}>
             <Text style={[
               styles.productPrice, 
@@ -544,9 +523,6 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
           </TouchableOpacity>
         </View>
       </View>
-
-      {/* Debug view mode indicator */}
-      <Text style={styles.debugText}>View Mode: {viewMode} ({viewMode === 0 ? '2-col' : viewMode === 1 ? '3-col' : 'staggered'})</Text>
 
       {/* Product Grid */}
       {renderGridView()}
@@ -661,26 +637,6 @@ const styles = StyleSheet.create({
   compactText: {
     fontSize: FontSizes.xs * 0.85,
     lineHeight: FontSizes.xs * 1.1,
-  },
-  colorDotsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: Spacing.xs,
-  },
-  colorDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    marginRight: 4,
-  },
-  whiteColorDot: {
-    borderWidth: 1,
-    borderColor: '#E4E4E4',
-  },
-  moreColors: {
-    fontSize: FontSizes.xs,
-    color: '#767676',
-    marginLeft: 4,
   },
   priceContainer: {
     flexDirection: 'row',

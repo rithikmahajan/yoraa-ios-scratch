@@ -1,34 +1,34 @@
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-const MicrophoneIcon = ({ width = 24, height = 24, color = '#000000' }) => {
+const MicrophoneIcon = ({ width = 20, height = 20, color = '#000000' }) => {
   return (
-    <Svg width={width} height={height} viewBox="0 0 24 24" fill="none">
+    <Svg width={width} height={height} viewBox="0 0 20 20" fill="none">
       <Path
-        d="M12 1C10.3431 1 9 2.34315 9 4V12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12V4C15 2.34315 13.6569 1 12 1Z"
+        d="M10 0.833496C9.33696 0.833496 8.70107 1.09689 8.23223 1.56573C7.76339 2.03457 7.5 2.67045 7.5 3.3335V10.0002C7.5 10.6632 7.76339 11.2991 8.23223 11.7679C8.70107 12.2368 9.33696 12.5002 10 12.5002C10.663 12.5002 11.2989 12.2368 11.7678 11.7679C12.2366 11.2991 12.5 10.6632 12.5 10.0002V3.3335C12.5 2.67045 12.2366 2.03457 11.7678 1.56573C11.2989 1.09689 10.663 0.833496 10 0.833496Z"
         stroke={color}
-        strokeWidth="2"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <Path
-        d="M19 10V12C19 16.4183 15.4183 20 11 20H10C5.58172 20 2 16.4183 2 12V10"
+        d="M15.8333 8.3335V10.0002C15.8333 11.5473 15.2187 13.031 14.1247 14.125C13.0308 15.2189 11.5471 15.8335 9.99996 15.8335C8.45286 15.8335 6.96913 15.2189 5.87517 14.125C4.78121 13.031 4.16663 11.5473 4.16663 10.0002V8.3335"
         stroke={color}
-        strokeWidth="2"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <Path
-        d="M12 20V23"
+        d="M10 15.8335V19.1668"
         stroke={color}
-        strokeWidth="2"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <Path
-        d="M8 23H16"
+        d="M6.66663 19.1665H13.3333"
         stroke={color}
-        strokeWidth="2"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

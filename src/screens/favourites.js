@@ -8,67 +8,24 @@ import {
   Image,
   Modal,
   Dimensions,
- } from 'react-native';
-import BackButton from '../components/BackButton';
-import { FontWeights } from '../constants';
+} from 'react-native';
+import { FontWeights, Spacing } from '../constants';
 import { useFavorites } from '../contexts/FavoritesContext';
+import BackButton from '../components/BackButton';
 import { HeartIcon, DeleteIcon, CheckmarkIcon } from '../assets/icons';
 
 const screenWidth = Dimensions.get('window').width;
 
-// Empty State Component
-const EmptyList = ({ onAddFavorites }) => (
-  <View style={styles.emptyContainer}>
-    <View style={styles.emptyContent}>
-      <View style={styles.heartIconContainer}>
-        <HeartIcon size={60} color="#14142B" />
-      </View>
-      <Text style={styles.emptyTitle}>
-        Your Favourites is empty.{'\n'}
-        When you add products, they'll{'\n'}
-        appear here.
-      </Text>
-    </View>
-    <View style={styles.emptyButtonContainer}>
-      <TouchableOpacity style={styles.addFavoritesButton} onPress={onAddFavorites}>
-        <Text style={styles.addFavoritesButtonText}>Add Favourites Now</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-);
+const Favourites = ({ navigation }) => {
+  const [editMode, setEditMode] = useState(false);
+  const { favorites, removeFromFavorites } = useFavorites();
+  
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [showAddToBagModal, setShowAddToBagModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedQuantity, setSelectedQuantity] = useState(4);
+  const [selectedSize, setSelectedSize] = useState('L (W 10-13 / M 8-12)');
 
-// Product Component
-const Product = ({ item, index, editMode, onPress, onDelete }) => (
-  <TouchableOpacity
-    onPress={() => onPress(item)}
-    style={[
-      styles.productContainer,
-      styles.productMargin,
-      index % 2 === 0 && styles.productMarginRight
-    ]}
-  >
-    <View style={styles.productImageContainer}>
-      <Image source={{ uri: item.image }} style={styles.productImage} />
-      {editMode && (
-        <TouchableOpacity 
-          style={styles.deleteIcon}
-          onPress={() => onDelete(item.id)}
-        >
-          <View style={styles.deleteIconCircle}>
-            <DeleteIcon width={20} height={20} color="#fff" />
-          </View>
-        </TouchableOpacity>
-      )}
-    </View>
-    <View style={styles.productInfo}>
-      <Text style={styles.productName}>{item.name}</Text>
-      <Text style={styles.productPrice}>US${item.price}</Text>
-    </View>
-  </TouchableOpacity>
-);
-
-// Product Modal Component
-const ProductPopOver = ({ visible, onClose, product, selectedQuantity, selectedSize, onQuantityChange, onSizeChange, onAddToBag }) => {
   const quantities = ['Remove', 1, 2, 3, 4, 5, 6, 7, 8];
   const sizes = [
     'L (W 6-10 / M 6-8)',
@@ -76,7 +33,86 @@ const ProductPopOver = ({ visible, onClose, product, selectedQuantity, selectedS
     'XL (M 12-15 / M 6-8)'
   ];
 
-  return (
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
+  const handleEditToggle = () => {
+    setEditMode(!editMode);
+  };
+
+  const handleDeleteItem = (itemId) => {
+    removeFromFavorites(itemId);
+  };
+
+  const handleProductPress = (product) => {
+    if (!editMode) {
+      setSelectedProduct(product);
+      setShowProductModal(true);
+    }
+  };
+
+  const toggleShowBag = () => {
+    setShowAddToBagModal(!showAddToBagModal);
+    setShowProductModal(false);
+  };
+
+  const handleAddFavoritesNow = () => {
+    navigation.navigate('Home');
+  };
+
+  // Empty State Component
+  const EmptyList = () => (
+    <View style={styles.emptyContainer}>
+      <View style={styles.emptyContent}>
+        <View style={styles.heartIconContainer}>
+          <HeartIcon size={60} color="#14142B" />
+        </View>
+        <Text style={styles.emptyTitle}>
+          Your Favourites is empty.{'\n'}
+          When you add products, they'll{'\n'}
+          appear here.
+        </Text>
+      </View>
+      <View style={styles.emptyButtonContainer}>
+        <TouchableOpacity style={styles.addFavoritesButton} onPress={handleAddFavoritesNow}>
+          <Text style={styles.addFavoritesButtonText}>Add Favourites Now</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+  // Product Component
+  const Product = ({ item, index }) => (
+    <TouchableOpacity
+      onPress={() => handleProductPress(item)}
+      style={[
+        styles.productContainer,
+        { marginRight: index % 2 === 0 ? '2%' : 0 }
+      ]}
+    >
+      <View style={styles.productImageContainer}>
+        <Image source={{ uri: item.image }} style={styles.productImage} />
+        {editMode && (
+          <TouchableOpacity 
+            style={styles.deleteIcon}
+            onPress={() => handleDeleteItem(item.id)}
+          >
+            <View style={styles.deleteIconContainer}>
+              <DeleteIcon size={16} color="#FFFFFF" />
+            </View>
+          </TouchableOpacity>
+        )}
+      </View>
+      <View style={styles.productInfo}>
+        <Text style={styles.productName}>{item.name}</Text>
+        <Text style={styles.productPrice}>US${item.price}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
+  // Product Modal Component
+  const ProductPopOver = ({ visible, onClose, product }) => (
     <Modal transparent visible={visible} animationType="fade">
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
@@ -100,7 +136,7 @@ const ProductPopOver = ({ visible, onClose, product, selectedQuantity, selectedS
                     styles.quantityOption,
                     selectedQuantity === item && styles.selectedQuantityOption
                   ]}
-                  onPress={() => onQuantityChange(item)}
+                  onPress={() => setSelectedQuantity(item)}
                 >
                   <Text style={[
                     styles.quantityText,
@@ -126,7 +162,7 @@ const ProductPopOver = ({ visible, onClose, product, selectedQuantity, selectedS
                     styles.sizeOption,
                     selectedSize === item && styles.selectedSizeOption
                   ]}
-                  onPress={() => onSizeChange(item)}
+                  onPress={() => setSelectedSize(item)}
                 >
                   <Text style={[
                     styles.sizeText,
@@ -145,90 +181,33 @@ const ProductPopOver = ({ visible, onClose, product, selectedQuantity, selectedS
             <Text style={styles.sizeChartText}>Size Chart</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.addToBagButton} onPress={onAddToBag}>
+          <TouchableOpacity style={styles.addToBagButton} onPress={toggleShowBag}>
             <Text style={styles.addToBagButtonText}>Add to Bag</Text>
           </TouchableOpacity>
         </View>
       </View>
     </Modal>
   );
-};
 
-// Bag Added Modal Component  
-const BagPopOver = ({ visible, onClose }) => (
-  <Modal transparent visible={visible} animationType="fade">
-    <View style={styles.bagModalOverlay}>
-      <View style={styles.bagModalContainer}>
-        <View style={styles.bagModalContent}>
-          <View style={styles.checkIconContainer}>
-            <CheckmarkIcon width={41} height={41} color="#4CAF50" />
+  // Bag Added Modal Component  
+  const BagPopOver = ({ visible, onClose }) => (
+    <Modal transparent visible={visible} animationType="fade">
+      <View style={styles.bagModalOverlay}>
+        <View style={styles.bagModalContainer}>
+          <View style={styles.bagModalContent}>
+            <View style={styles.checkIconContainer}>
+              <CheckmarkIcon width={41} height={41} color="#4CAF50" />
+            </View>
+            <Text style={styles.addedToBagText}>Added to Bag</Text>
           </View>
-          <Text style={styles.addedToBagText}>Added to Bag</Text>
-        </View>
-        <View style={styles.bagModalButtonContainer}>
-          <TouchableOpacity style={styles.viewBagButton} onPress={onClose}>
-            <Text style={styles.viewBagButtonText}>View Bag</Text>
-          </TouchableOpacity>
+          <View style={styles.bagModalButtonContainer}>
+            <TouchableOpacity style={styles.viewBagButton} onPress={onClose}>
+              <Text style={styles.viewBagButtonText}>View Bag</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
-  </Modal>
-);
-
-const Favourites = ({ navigation }) => {
-  const [editMode, setEditMode] = useState(false);
-  const { favorites, removeFromFavorites, addToFavorites } = useFavorites();
-  
-  const [showProductModal, setShowProductModal] = useState(false);
-  const [showAddToBagModal, setShowAddToBagModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [selectedQuantity, setSelectedQuantity] = useState(4);
-  const [selectedSize, setSelectedSize] = useState('L (W 10-13 / M 8-12)');
-
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
-
-  const handleEditToggle = () => {
-    setEditMode(!editMode);
-  };
-
-  const handleDeleteItem = (itemId) => {
-    removeFromFavorites(itemId);
-  };
-
-  const handleProductPress = (product) => {
-    if (!editMode) {
-      setSelectedProduct(product);
-      setShowProductModal(true);
-    }
-  };
-
-  const toggleShowBag = () => {
-    setShowAddToBagModal(true);
-    setShowProductModal(false);
-  };
-
-  const handleAddFavoritesNow = () => {
-    // Add a sample product when "Add Favourites Now" is pressed
-    const sampleProduct = {
-      id: Date.now(), // Use timestamp as unique ID
-      name: 'Air Jordan 1 Mid',
-      price: '125',
-      image: 'https://via.placeholder.com/184x184/CCC/000000?text=Sample+Shoe',
-      category: 'Shoes'
-    };
-    addToFavorites(sampleProduct);
-  };
-
-  const renderItem = ({ item, index }) => (
-    <Product 
-      item={item} 
-      index={index} 
-      editMode={editMode}
-      onPress={handleProductPress}
-      onDelete={handleDeleteItem}
-    />
+    </Modal>
   );
 
   return (
@@ -253,10 +232,10 @@ const Favourites = ({ navigation }) => {
         style={styles.productList}
         numColumns={2}
         keyExtractor={item => item.id.toString()}
-        contentContainerStyle={styles.productListContent}
+        contentContainerStyle={{ flexGrow: 1 }}
         data={favorites}
-        renderItem={renderItem}
-        ListEmptyComponent={<EmptyList onAddFavorites={handleAddFavoritesNow} />}
+        renderItem={({ item, index }) => <Product item={item} index={index} />}
+        ListEmptyComponent={<EmptyList />}
       />
 
       {/* Modals */}
@@ -264,11 +243,6 @@ const Favourites = ({ navigation }) => {
         visible={showProductModal}
         onClose={() => setShowProductModal(false)}
         product={selectedProduct}
-        selectedQuantity={selectedQuantity}
-        selectedSize={selectedSize}
-        onQuantityChange={setSelectedQuantity}
-        onSizeChange={setSelectedSize}
-        onAddToBag={toggleShowBag}
       />
       
       <BagPopOver
@@ -297,7 +271,10 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 8,
   },
-  // Removed backIcon style as it is no longer needed
+  backIcon: {
+    fontSize: 28,
+    color: '#000',
+  },
   headerTitle: {
     fontSize: 28,
     color: '#000',
@@ -321,6 +298,10 @@ const styles = StyleSheet.create({
   },
   heartIconContainer: {
     marginBottom: 20,
+  },
+  emptyHeartIcon: {
+    width: 60,
+    height: 60,
   },
   emptyTitle: {
     textAlign: 'center',
@@ -355,18 +336,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 24,
   },
-  productListContent: {
-    flexGrow: 1,
-  },
   productContainer: {
     width: '49%',
     marginBottom: 21,
-  },
-  productMargin: {
-    marginRight: 0,
-  },
-  productMarginRight: {
-    marginRight: '2%',
   },
   productImageContainer: {
     position: 'relative',
@@ -381,11 +353,11 @@ const styles = StyleSheet.create({
     right: 10,
     top: -5,
   },
-  deleteIconCircle: {
+  deleteIconContainer: {
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: '#FF3B30',
+    backgroundColor: '#CA3327',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -564,12 +536,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#E8F5E8',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
   },
   addedToBagText: {
     fontSize: 24,
     color: '#000',
     textAlign: 'center',
+    marginTop: 20,
   },
   bagModalButtonContainer: {
     position: 'absolute',

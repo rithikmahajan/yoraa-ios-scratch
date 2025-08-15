@@ -18,7 +18,7 @@ import {
   PromoSuccessModal,
   useBagState,
   bagStyles,
-} from '../bag';
+} from './bag';
 
 const BagScreen = ({ navigation, route }) => {
   const {
