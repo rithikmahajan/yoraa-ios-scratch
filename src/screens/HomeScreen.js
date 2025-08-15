@@ -9,8 +9,7 @@ import {
 } from 'react-native';
 import { FontWeights, Spacing } from '../constants';
 import SearchIconSvg from '../assets/icons/SearchIconSvg';
-import HeartIconSvg from '../assets/icons/HeartIconSvg';
-import { GlobalShoppingBagIcon, ForwardArrowIcon } from '../assets/icons';
+import { GlobalShoppingBagIcon, ForwardArrowIcon, HeartIcon } from '../assets/icons';
 import {
   SaleImageSvg,
   LifestyleImageSvg,
@@ -128,7 +127,7 @@ const HomeScreen = ({ navigation }) => {
             <SearchIconSvg width={24} height={24} color="#000000" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconButton} onPress={handleFavoritesPress}>
-            <HeartIconSvg width={23} height={21} color="#000000" />
+            <HeartIcon size={23} color="#000000" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconButton} onPress={handleCartPress}>
             <GlobalShoppingBagIcon width={23} height={23} color="#000000" />

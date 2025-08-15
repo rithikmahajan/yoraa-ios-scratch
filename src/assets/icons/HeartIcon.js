@@ -1,15 +1,15 @@
 import React from 'react';
 import Svg, { G, Path, Defs, ClipPath, Rect } from 'react-native-svg';
 
-const HeartIcon = ({ size = 34, color = '#000000', filled = false }) => {
+const HeartIcon = ({ size = 21, color = '#000000', filled = false }) => {
   const strokeColor = color;
   const fillColor = filled ? color : 'none';
   
   return (
-    <Svg width={size} height={size} viewBox="0 0 34 34" fill="none">
-      <G clipPath="url(#clip0_6844_10168)">
+    <Svg width={size} height={size} viewBox="0 0 21 21" fill="none">
+      <G clipPath="url(#clip0_10150_70)">
         <Path 
-          d="M16.9995 24.5L23.9808 17.4188C24.7134 16.6861 25.1251 15.6924 25.1251 14.6563C25.1251 13.6201 24.7134 12.6264 23.9808 11.8938C23.2481 11.1611 22.2544 10.7495 21.2183 10.7495C20.1821 10.7495 19.1884 11.1611 18.4558 11.8938L16.9995 13.25L15.5433 11.8938C14.8106 11.1611 13.8169 10.7495 12.7808 10.7495C11.7446 10.7495 10.7509 11.1611 10.0183 11.8938C9.28563 12.6264 8.87402 13.6201 8.87402 14.6563C8.87402 15.6924 9.28563 16.6861 10.0183 17.4188L16.9995 24.5Z" 
+          d="M10.4999 17.7793L17.2759 10.9063C17.987 10.1952 18.3865 9.23075 18.3865 8.22509C18.3865 7.21942 17.987 6.25495 17.2759 5.54384C16.5647 4.83273 15.6003 4.43323 14.5946 4.43323C13.5889 4.43323 12.6245 4.83273 11.9134 5.54384L10.4999 6.8602L9.08651 5.54384C8.3754 4.83273 7.41093 4.43323 6.40526 4.43323C5.3996 4.43323 4.43513 4.83273 3.72401 5.54384C3.0129 6.25495 2.6134 7.21942 2.6134 8.22509C2.6134 9.23075 3.0129 10.1952 3.72401 10.9063L10.4999 17.7793Z" 
           stroke={strokeColor} 
           fill={fillColor}
           strokeLinecap="round" 
@@ -17,8 +17,8 @@ const HeartIcon = ({ size = 34, color = '#000000', filled = false }) => {
         />
       </G>
       <Defs>
-        <ClipPath id="clip0_6844_10168">
-          <Rect width="20" height="20" fill="white" transform="translate(7 7)"/>
+        <ClipPath id="clip0_10150_70">
+          <Rect width="19.4118" height="19.4118" fill="white" transform="translate(0.794067 0.794067)"/>
         </ClipPath>
       </Defs>
     </Svg>

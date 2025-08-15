@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Svg, { Path, G, Defs, ClipPath, Rect } from 'react-native-svg';
+import { HeartIcon } from '../assets/icons';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -36,17 +37,6 @@ const SearchIcon = ({ color = '#000000' }) => (
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-    />
-  </Svg>
-);
-
-const HeartIcon = ({ filled = false, color = '#000000' }) => (
-  <Svg width={20} height={18} viewBox="0 0 20 18" fill="none">
-    <Path
-      d="M2.69832 2.69832C0.433893 4.96274 0.433895 8.6341 2.69832 10.8985L11.4813 16.6815L11.5417 16.6211L11.6021 16.6816L20.3851 10.8986C22.6495 8.63417 22.6495 4.96281 20.3851 2.69839C18.1207 0.433968 14.4493 0.43397 12.1849 2.69839L11.8953 2.98798C11.7 3.18324 11.3834 3.18324 11.1882 2.98798L10.8985 2.69832C8.6341 0.433894 4.96274 0.433895 2.69832 2.69832Z"
-      stroke={color}
-      strokeWidth="1.5"
-      fill={filled ? color : "none"}
     />
   </Svg>
 );
@@ -300,7 +290,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
               style={styles.floatingHeartIcon}
               onPress={toggleFavorite}
             >
-              <HeartIcon filled={isFavorite} color={isFavorite ? '#FF0000' : '#000000'} />
+              <HeartIcon size={20} filled={isFavorite} color={isFavorite ? '#FF0000' : '#000000'} />
             </TouchableOpacity>
             
             {/* Floating cart icon */}

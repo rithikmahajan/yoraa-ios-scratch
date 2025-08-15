@@ -12,7 +12,7 @@ import {
 import BackButton from '../components/BackButton';
 import { FontWeights } from '../constants';
 import { useFavorites } from '../contexts/FavoritesContext';
-import { HeartIconSvg, DeleteIcon, CheckmarkIcon } from '../assets/icons';
+import { HeartIcon, DeleteIcon, CheckmarkIcon } from '../assets/icons';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -21,7 +21,7 @@ const EmptyList = ({ onAddFavorites }) => (
   <View style={styles.emptyContainer}>
     <View style={styles.emptyContent}>
       <View style={styles.heartIconContainer}>
-        <HeartIconSvg width={60} height={60} color="#14142B" />
+        <HeartIcon size={60} color="#14142B" />
       </View>
       <Text style={styles.emptyTitle}>
         Your Favourites is empty.{'\n'}

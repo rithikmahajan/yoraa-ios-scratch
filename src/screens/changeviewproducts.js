@@ -10,7 +10,7 @@ import {
 import Svg, { Path } from 'react-native-svg';
 import { FontSizes, FontWeights, Spacing } from '../constants';
 import SearchIconSvg from '../assets/icons/SearchIconSvg';
-import HeartIconSvg from '../assets/icons/HeartIconSvg';
+import { HeartIcon } from '../assets/icons';
 import FilterIconNew from '../assets/icons/FilterIconNew';
 import GlobalCartIcon from '../components/GlobalCartIcon';
 import BackButton from '../components/BackButton';
@@ -436,9 +436,9 @@ const ChangeViewProducts = ({ navigation, category = 'Sale' }) => {
           style={styles.favoriteButton}
           onPress={() => toggleFavorite(item.id)}
         >
-          <HeartIconSvg
-            width={isCompact ? 18 : 20}
-            height={isCompact ? 16 : 18}
+          <HeartIcon
+            size={isCompact ? 18 : 20}
+            filled={favorites.has(item.id)}
             color={favorites.has(item.id) ? '#FF0000' : '#000000'}
           />
         </TouchableOpacity>

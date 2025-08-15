@@ -10,6 +10,7 @@ import {
 import { Spacing, BorderRadius, Shadows } from '../constants';
 import Svg, { Path } from 'react-native-svg';
 import GlobalCartIcon from '../components/GlobalCartIcon';
+import { HeartIcon } from '../assets/icons';
 
 // SVG Icon Components
 const BackIcon = ({ color = '#000000' }) => (
@@ -32,18 +33,6 @@ const SearchIcon = ({ color = '#262626' }) => (
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"
-    />
-  </Svg>
-);
-
-const HeartIcon = ({ filled = false, color = '#000000' }) => (
-  <Svg width={13} height={12} viewBox="0 0 13 12" fill="none">
-    <Path
-      d="M6.68786 10.6254L11.5747 5.66849C12.0876 5.15562 12.3757 4.46003 12.3757 3.73474C12.3757 3.00944 12.0876 2.31385 11.5747 1.80099C11.0619 1.28812 10.3663 1 9.64099 1C8.91569 1 8.2201 1.28812 7.70724 1.80099L6.68786 2.75036L5.66849 1.80099C5.15562 1.28812 4.46003 1 3.73474 1C3.00944 1 2.31385 1.28812 1.80099 1.80099C1.28812 2.31385 1 3.00944 1 3.73474C1 4.46003 1.28812 5.15562 1.80099 5.66849L6.68786 10.6254Z"
-      stroke={color}
-      fill={filled ? color : 'none'}
-      strokeLinecap="round"
-      strokeLinejoin="round"
     />
   </Svg>
 );
@@ -144,7 +133,7 @@ const ShopScreen = ({ navigation }) => {
           style={styles.favoriteButton}
           onPress={() => toggleFavorite(item.id)}
         >
-          <HeartIcon filled={favorites.has(item.id)} />
+          <HeartIcon size={21} filled={favorites.has(item.id)} />
         </TouchableOpacity>
         <GlobalCartIcon 
           size={16} 

@@ -12,6 +12,7 @@ import {
 import { FontWeights, Spacing } from '../constants';
 import { useFavorites } from '../contexts/FavoritesContext';
 import BackButton from '../components/BackButton';
+import { HeartIcon } from '../assets/icons';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -65,11 +66,7 @@ const Favourites = ({ navigation }) => {
     <View style={styles.emptyContainer}>
       <View style={styles.emptyContent}>
         <View style={styles.heartIconContainer}>
-          <Image 
-            source={require('../assets/icons/heart-empty.png')} 
-            style={styles.emptyHeartIcon}
-            resizeMode="contain"
-          />
+          <HeartIcon size={60} color="#14142B" />
         </View>
         <Text style={styles.emptyTitle}>
           Your Favourites is empty.{'\n'}

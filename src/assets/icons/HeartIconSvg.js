@@ -1,15 +1,23 @@
 import React from 'react';
-import Svg, { Path } from 'react-native-svg';
+import Svg, { Path, G, Defs, ClipPath, Rect } from 'react-native-svg';
 
-const HeartIconSvg = ({ width = 24, height = 24, color = '#000000' }) => {
+const HeartIconSvg = ({ width = 21, height = 21, color = '#000000', filled = false }) => {
   return (
-    <Svg width={width} height={height} viewBox="0 0 23 21" fill="none">
-      <Path
-        d="M2.69832 2.69832C0.433893 4.96274 0.433895 8.6341 2.69832 10.8985L11.4813 19.6815L11.5417 19.6211L11.6021 19.6816L20.3851 10.8986C22.6495 8.63417 22.6495 4.96281 20.3851 2.69839C18.1207 0.433968 14.4493 0.43397 12.1849 2.69839L11.8953 2.98798C11.7 3.18324 11.3834 3.18324 11.1882 2.98798L10.8985 2.69832C8.6341 0.433894 4.96274 0.433895 2.69832 2.69832Z"
-        stroke={color}
-        strokeWidth="1.5"
-        fill="none"
-      />
+    <Svg width={width} height={height} viewBox="0 0 21 21" fill="none">
+      <G clipPath="url(#clip0_10150_70)">
+        <Path
+          d="M10.4999 17.7793L17.2759 10.9063C17.987 10.1952 18.3865 9.23075 18.3865 8.22509C18.3865 7.21942 17.987 6.25495 17.2759 5.54384C16.5647 4.83273 15.6003 4.43323 14.5946 4.43323C13.5889 4.43323 12.6245 4.83273 11.9134 5.54384L10.4999 6.8602L9.08651 5.54384C8.3754 4.83273 7.41093 4.43323 6.40526 4.43323C5.3996 4.43323 4.43513 4.83273 3.72401 5.54384C3.0129 6.25495 2.6134 7.21942 2.6134 8.22509C2.6134 9.23075 3.0129 10.1952 3.72401 10.9063L10.4999 17.7793Z"
+          stroke={color}
+          fill={filled ? color : 'none'}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </G>
+      <Defs>
+        <ClipPath id="clip0_10150_70">
+          <Rect width="19.4118" height="19.4118" fill="white" transform="translate(0.794067 0.794067)"/>
+        </ClipPath>
+      </Defs>
     </Svg>
   );
 };
